@@ -258,3 +258,17 @@ class Request:
 if __name__ == '__main__':
 	
 	print 
+
+"""
+
+https://answers.atlassian.com/questions/33156779/how-to-post-a-card-using-hipchat-api
+
+class OAUTH:
+	
+	def __url__ (self, subdomain = '{{EXAMPLE}}'):
+		return String.cconcat(["https://", subdomain, "hipchat", "com"], ".")
+
+	def __init__ (self, **kwargs):
+		self.url = self.__url__(kwargs.get("subdomain", "{{EXAMPLE}}"))
+		self.version = self.__ 
+"""
