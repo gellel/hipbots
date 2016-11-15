@@ -26,6 +26,10 @@ import re
 __FILEPATH__ = os.path.dirname(os.path.realpath('__file__'))
 
 
+### HELP FILES FROM HIPCHAT
+### https://www.hipchat.com/docs/apiv2/method/send_room_notification
+
+
 class String:
 	### formatting options
 	PURPLE = '\033[95m'
