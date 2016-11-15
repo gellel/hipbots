@@ -42,41 +42,72 @@ class String:
 	REG = r"\{\{(?:[\w\s\d]*|[$&\+,\:\;\=\?@#\|'\<\>\.^\*\(\)%!-\/]*)*\}\}"
 	### regexp for matching string.extname
 	EXT = r"^.+\.{1}\w+$"
-	### concatenate multiple arguments by string character
+	
 	@staticmethod
 	def cconcat (strlist, character = ""):
+		### @description: concatenate multiple arguments by string character
+		### @param: {strlist} is type {list}
+		### @character {character} is type {string}
+		### @return: is type {string}
 		return character.join(filter(None, strlist))
-	### concatenate multiple arguments to a single string
+	
 	@staticmethod
 	def concat (*args):
+		### @description: concatenate multiple arguments to a single string seperated by whitespace
+		### @param: {args} is type {comma spaced strings}
+		### @return: is type {string}
 		return " ".join(filter(None, args))
-	### wrap string in constructor with formatting syntax
+	
 	def tag (self, context = None):
-		if context is None:
-			if self.context:
-				context = self.context
+		### @description: wrap string in constructor (or supplied as argument) with formatting syntax ({{context}})
+		### @param: {context} is type {string}
+		### @return: is type {string}
+		### confirm context not supplied
+		if not context and self.context:
+			### set base string
+			context = self.context
+		### return formatted string
 		return self.cconcat(["{{", context, "}}"])
-	### prints a multiple line string with formatting
+	
 	def wrap (self, width = 60):
+		### @description: prints a multiple line string with formatting
+		### @param: {width} is type {integer}
+		### @return: is type {string}
 		print '\n'.join(line.strip() for line in re.findall(r'.{1,'+ str(width) +'}(?:\s+|$)', self.__process__()) )
-	### prints a single line formatted string
+	
 	def line (self):
+		### @description: prints a single line formatted string
+		### @return: is type {string}
 		print self.__process__()
-	### return entire formatted string using supplied styling
+	
 	def get (self, context = {}):
+		### @description: return entire formatted string using supplied styling
+		### @param: {context} is type {dictionary}
+		### @return: is type {string}
 		### fetch returned processed context
 		return self.__process__(context)
-	### return substring/string with styling attached
+	
 	def __format__ (self, string, attributes):
+		### @description: returns substring/string with styling attached
+		### @param: {string} is type {string}
+		### @param: {attributes} is type {dictionary}
+		### @return is type {string}
 		### iterate through attribute dict and try to match value to formatting
 		for attribute in attributes:
+			### attempt to find matching style from constants
 			attr = getattr(self, str.upper(attributes[attribute]), None)
+			### confirm if attribute styling found
 			if attr:
-				string = attr + string + self.END
+				### format string with styling
+				string = self.cconcat([attr, string, self.END])
 		### return formatted string
 		return string
-	### return string with {{}} removed and styling attached
+	
 	def __substitute__ (self, string, attributes = {}):
+		### @description: return string with {{}} removed and styling attached
+		### @param: {string} is type {string}
+		### @param: {attributes} is type {dictionary}
+		### @return is type {string}
 		### match {{str}} substring
 		matches = re.findall(self.REG, string, re.DOTALL)
 		### iterate through substrings
@@ -91,8 +122,11 @@ class String:
 			string = re.sub(matches[i]['original'], matches[i]['formatted'], string)
 		### return string with formatting replacing any "{{" or "}}" that exists in original string
 		return re.sub(r"{{|}}", "", string)
-	### return formatted string or strings depending on config context supplied (list or dict)
+	
 	def __process__ (self, context = {}):
+		### @description: return formatted string or strings depending on config context supplied (list or dict)
+		### @param: {attributes} is type {dictionary}
+		### @return: is type {string} 
 		### check if context isn't a default
 		if not bool(context):
 			### check if Class was give a constructor dict
@@ -115,77 +149,104 @@ class String:
 		else:
 			### return the complete string with formatting
 			return self.__substitute__(context['str'], context['attr'])
-	### return the type of the context
+	
 	def __type__ (self):
+		### @description: confirm the type of the context (for multiple formatted strings of single string)
+		### @return: is type {string}
 		return type(self.context)
-	### return the context supplied
-	def __self__ (self):
-		return self.context
-	### constructor 
+	
 	def __init__ (self, context = {}):
+		### @description: class constructor
+		### @param: {context} is type {dictionary} or is type {list}
+		### set base string context 
 		self.context = context
 
 
 
 class OAuth:
 
-
-	def params (self):
+	
+	def AUTH_QUERY (self):
+		### @description: sets query string for HTTP request
+		### @return: is type {dictionary}
 		### set query string for authorisation
 		return { "auth_token": self.auth }
 
-	def type (self):
+	def AUTH_TYPE (self):
+		### @description: sets HTTP request header from self type
+		### @return: is type {dictionary}
 		### set content type from supplied
 		return { "Content-Type": self.type }
 
-	def url (self):
+	def AUTH_URL (self):
+		### @description: construct base url for oauth request
+		### @return: is type {string}
 		### concatenate strs to produce complete request URL
-		return String.cconcat([String.cconcat([String.cconcat(["https://", self.organisation]), "hipchat", "com"], "."), "/", self.version, "/", "room", "/", self.id, "/notification"])
-	### constructor
+		return String.cconcat([String.cconcat([String.cconcat(["https://", self.subdomain]), "hipchat", "com"], "."), "/", self.version, "/", "room", "/", self.id, "/notification"])
+
 	def __init__ (self, **kwargs):
-		self.organisation = kwargs.get("organisation", "{{SUB_NAME}}")
+		### @description: class constructor
+		### set sub domain for request string
+		self.subdomain = kwargs.get("subdomain", "{{SUB_DOMAIN}}")
+		### set room id for message delivery
 		self.id = kwargs.get("id", "{{ROOM_ID}}")
+		### set HipChat API version
 		self.version = kwargs.get("version", "{{API_VERSION}}")
+		### set oauth token supplied from HipChat
 		self.auth = kwargs.get("auth", "{{AUTH_TOKEN}}")
+		### set request type to HipChat server (default is json)
 		self.type = kwargs.get("type", "application/json")
 
 
 class Card:
-	### set config value
-	def __value__ (self, **kwargs):
+	
+	def value (self, **kwargs):
+		### @description: sets keys and values for attributes object
 		### @param {url} is type {string}
 		### @param {style} is type {string}
 		### @param {label} is type {string}
-		return { "url": kwargs.get("url", "https://www.google/{{value}}"), "style": kwargs.get("style", "lozenge-complete"), "label": kwargs.get("label", "Google label") }
-	### set config icon
-	def __icon__ (self, **kwargs):
+		### @return: is type {dictionary}
+		return { "url": kwargs.get("url", "https://{{ATTRIBUTES_VALUE_URL}}"), "style": kwargs.get("style", "lozenge-complete"), "label": kwargs.get("label", "{{attributes}}{{label}}") }
+
+	def icon (self, **kwargs):
+		### @description: sets keys and values for icon object; can be shared for object:attributes, object:activity
 		### @params {url} is type {string}
 		### @params {url@2x} is type {string}
-		return { "url": kwargs.get("url", self.DEFAULT_IMG), "url@2x": kwargs.get("url@2x", self.DEFAULT_IMG)}
-	### set description
-	def __desc__ (self, **kwargs):
+		### @return: is type {dictionary}
+		return { "url": kwargs.get("url", "{{DEFAULT_ICON}}.png"), "url@2x": kwargs.get("url@2x", "{{RETINA_ICON}}.png")}
+
+	def description (self, **kwargs):
+		### @description: sets keys and values for description object
 		### @params {format} is type {string}
 		### @params {value} is type {string}
-		return { "format": kwargs.get("format", "html"), "value": kwargs.get("value", "this is a <strong>HTML</strong> description") }
-	### set config thumbail 
-	def __thumbnail__ (self, **kwargs):
+		### @return: is type {dictionary}
+		return { "format": kwargs.get("format", "html"), "value": kwargs.get("value", "<strong>{{EXAMPLE DESCRIPTION}}</strong>") }
+
+	def thumbnail (self, **kwargs):
+		### @description: sets thumbail image for card
 		### @params {url} is type {string}
 		### @params {width} is type {integer} or {string}
 		### @params {height} is type {integer} or {string}
-		return { "url": kwargs.get("url", self.DEFAULT_IMG), "width": kwargs.get("width", 500), "height": kwargs.get("height", 500) }
-	### set config activity
-	def __activity__ (self, **kwargs):
+		### @return: is type {dictionary}
+		return { "url": kwargs.get("url", "{{DEFAULT_THUMBNAIL}}.png"), "width": kwargs.get("width", 200), "height": kwargs.get("height", 200) }
+
+	def activity (self, **kwargs):
+		### @description: sets key values for attributes object; shares icon config function
 		### @params {html} is type {string}
 		### @params {icon} is type {dict}
-		return { "html": kwargs.get("html", "<strong>activity<strong> HTML"), "icon": self.__icon__(**kwargs.get("icon", {})) }
-	### set config attributes
-	def __attributes__ (self, **kwargs):
+		### @return: is type {dictionary}
+		return { "html": kwargs.get("html", "<em>{{EXAMPLE ACTIVTITY}}<em>"), "icon": self.icon(**kwargs.get("icon", {})) }
+
+	def attributes (self, **kwargs):
+		### @description: sets key values for attributes object
 		### @param {value} is type {dict}
 		### @param {icon} is type {dict}
 		### @param {label} is type {string}
-		return { "value": self.__value__(**kwargs.get("value", {})), "icon": self.__icon__(**kwargs.get("icon", {})), "label": kwargs.get("label", "attributes label") }
-	### constructor
+		### @return: is type {dictionary}
+		return { "value": self.value(**kwargs.get("value", {})), "icon": self.icon(**kwargs.get("icon", {})), "label": kwargs.get("label", "{{EXAMPLE_ATTRIBUTES_LABEL}}") }
+
 	def __init__ (self, **kwargs):
+		### @description: class constructor
 		### @params {id} is {integer}
 		### @params {description} is type {dict}
 		### @params {format} is type {string}
@@ -195,39 +256,51 @@ class Card:
 		### @params {activity} is type {dict}
 		### @params {attributes} is type {dict}
 		### set base id 
-		self.id = kwargs.get("id", 1)
+		self.id = kwargs.get("id", None)
 		### set base icon
-		self.icon = self.__icon__(**kwargs.get("icon", {}))
+		self.icon = self.icon(**kwargs.get("icon", {}))
 		### set description key dict 
-		self.description = self.__desc__(**kwargs.get("description", {}))
+		self.description = self.description(**kwargs.get("description", {}))
 		### set base format size for card
 		self.format = kwargs.get("format", "medium")
 		### set primary click-out url
-		self.url = kwargs.get("url", "https://www.google.com/")
+		self.url = kwargs.get("url", "https://{{EXAMPLE_SITE_URL}}.com/")
 		### set card title
-		self.title = kwargs.get("title", "Search on Google")
+		self.title = kwargs.get("title", "{{EXAMPLE_TITLE}}")
 		### set card thumnail image
-		self.thumbnail = self.__thumbnail__(**kwargs.get("thumbnail", {}))
+		self.thumbnail = self.thumbnail(**kwargs.get("thumbnail", {}))
 		### set card activity operation
-		self.activity = self.__activity__(**kwargs.get("activity", {}))
+		self.activity = self.activity(**kwargs.get("activity", {}))
 		### set card attributes
-		self.attributes = self.__attributes__(**kwargs.get("attributes", {}))
-		### set card default image
-		self.DEFAULT_IMG = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2000px-Google_%22G%22_Logo.svg.png"
-
+		self.attributes = self.attributes(**kwargs.get("attributes", {}))
 
 
 
 class Config:
-	### create card object 
-	def __card__ (self, **kwargs):
-		### confirm that kwarg was set as undefined handler
-		if 'f' in kwargs and not bool(kwargs['f']):
-			return {}
-		### build card
-		return Card(**kwargs).create()
-	### constructor
+
+	def construct (self, response_data = "json"):
+		### @description: creates formatted body for HTTP request to hipchat
+		### @param: {response_data} is type {string}
+		### @return: is type {string}
+
+		### confirm type of data to be sent
+		if response_data == "json" or response_data == "application/json":
+			## set empty dictionary to contain fixed
+			j = {}
+			### iterate over self dict
+			for i in self.__dict__:
+				### confirm valid value
+				if bool(self.__dict__[i]):
+					### update new dict
+					j.update({i: self.__dict__[i]})
+			### return complete
+			return json.dumps(j)
+
+		### return default HTML
+		return self.HTML 
+
 	def __init__ (self, **kwargs):
+		### @description: class constructor
 		### @params {message_format} is type {string}
 		### @params {color} is type {string}
 		### @params {attach_to} is type {integer?}
@@ -235,7 +308,7 @@ class Config:
 		### @params {message} is type {string}
 		### @params {card} is type {dict}
 		### determines how the message is treated by our server and rendered inside HipChat applications
-		self.message_format = kwargs.get("message_format", "html")
+		self.message_format = kwargs.get("message_format", "text")		
 		### background color for message
 		self.color = kwargs.get("color", "random")
 		### the message id to to attach this notification to, for example if this notification is in response to a particular message. for supported clients, this will display the notification in the context of the referenced message specified by attach_to parameter. if this is not possible to attach the notification, it will be rendered as an unattached notification. the message must be in the same room as that the notification is sent to
@@ -243,32 +316,17 @@ class Config:
 		### whether this message should trigger a user notification (change the tab color, play a sound, notify mobile phones, etc). each recipient's notification preferences are taken into account
 		self.notify = kwargs.get("notify", "false")
 		### the message body for notification
-		self.message = kwargs.get("message", "This is a test message.")
+		self.message = kwargs.get("message", "Sample Text")
 		### set an optional card object 
-		self.card = self.__card__(**kwargs.get("card", {'f':False}))
-
-
-class Request:
-
-	def __init__ (self, **kwargs):
-		pass
+		self.card = kwargs.get("card", {})
+		### set HTML if supplied 
+		self.HTML = kwargs.get("HTML", "<strong>HTML</strong>")
 
 
 
 if __name__ == '__main__':
+
+	oauth = OAuth(subdomain = "yahoo", id = "2914538", version = "v2", auth = "JHXe6BwCu4exNEpMaKFtgSiUnHD3F1oAq7vI8cPj", type = "application/json")
 	
-	print 
+	r = requests.post(oauth.AUTH_URL(), data = Config(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
 
-"""
-
-https://answers.atlassian.com/questions/33156779/how-to-post-a-card-using-hipchat-api
-
-class OAUTH:
-	
-	def __url__ (self, subdomain = '{{EXAMPLE}}'):
-		return String.cconcat(["https://", subdomain, "hipchat", "com"], ".")
-
-	def __init__ (self, **kwargs):
-		self.url = self.__url__(kwargs.get("subdomain", "{{EXAMPLE}}"))
-		self.version = self.__ 
-"""
