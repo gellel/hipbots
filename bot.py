@@ -326,7 +326,7 @@ class Config:
 
 if __name__ == '__main__':
 
-	oauth = OAuth(subdomain = "yahoo", id = "2914538", version = "v2", auth = "JHXe6BwCu4exNEpMaKFtgSiUnHD3F1oAq7vI8cPj", type = "application/json")
+	oauth = OAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
 	
 	r = requests.post(oauth.AUTH_URL(), data = Config(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
 
