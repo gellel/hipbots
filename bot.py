@@ -30,6 +30,8 @@ __FILEPATH__ = os.path.dirname(os.path.realpath('__file__'))
 ### https://www.hipchat.com/docs/apiv2/method/send_room_notification
 
 
+
+
 class JSON:
 	
 	def fetch (self, method = "strs"):
@@ -88,6 +90,8 @@ class JSON:
 		self.context = context
 
 
+
+
 class List:
 	
 	def fetch (self, **kwargs):
@@ -105,7 +109,7 @@ class List:
 			### return empty for possible evaluator
 			return []
 
-	def __d__ (self, context):
+	def __type__ (self, context):
 		### @description: handles context to default to list
 		### @param: {context} is {*} expects {list}
 		### @return: is type {list}
@@ -115,7 +119,7 @@ class List:
 	def __init__ (self, context = []):
 		### @description: class constructor
 		### set correct context to be list
-		self.context = self.__d__(context)
+		self.context = self.__type__(context)
 
 
 
@@ -284,14 +288,203 @@ class Responder (String):
 	def __init__ (self, **kwargs):
 		### @description: class constructor
 		### set default name for responder in terminal
-		self.name = kwargs.pop('name', 'system')
+		self.name = kwargs.get('name', 'system')
 		### set default styling for responder in terminal
-		self.style = kwargs.pop('style', {'style':'underline','weight':'bold'})
+		self.style = kwargs.get('style', {'style':'underline','weight':'bold'})
 		### set default seperator between responder name and its message in terminal
-		self.seperator = kwargs.pop('seperator', ':')
+		self.seperator = kwargs.get('seperator', ':')
 
 
-class OAuth:
+
+
+class Request (String):
+	
+	def open (self):
+		### @description: method for asking the user to input one of two provided options
+		### @return: is type {boolean}
+		### prompt user for input returning text submitted or NoneType if empty
+		self.response = self.__prompt__()
+		### confirm if response was equal to the confirmation string
+		if self.response == self.confirm:
+			### return true if user input matches the supplied confirm string
+			return True
+		### confirm if response was equal to the rejection string
+		elif self.response == self.reject:
+			### return false if the user input matches the supplied reject string
+			return False
+		### prompt user that the supplied input wasn't considered valid
+		else:
+			### concatenate string with formatting
+			print self.__response__(self.concat("command", self.get({'str': self.tag(str(self.response)), 'attr':{'weight':'bold'}}), "unrecognised"))
+			### recall the function
+			return self.open()
+	
+	def __option__ (self):
+		### @description: format the strings defining the options available for the user
+		### @return: is type {string}
+		### return formatted string with the supplied confirmation and rejection choices
+		return self.get({'str': self.tag(self.cconcat([self.confirm, self.reject], "/")), 'attr':{'weight':'bold'}})
+	
+	def __prompt__ (self):
+		### @description: prompt the user to input one of the supplied action contexts
+		### @return: is type {string} or {None}
+		### request the user to input their text
+		response = raw_input(self.__response__(self.concat(self.get({'str':self.prompt,'attr':{'weight':'bold'}}), self.cconcat([self.__option__(), " "], ":")))) or None
+		### attempt to format the text to a uppercase string for easier comparison
+		try:
+			### return the uppercase string
+			return str.upper(response)
+		except:
+			### return NoneType if unsuccessful
+			return response
+	
+	def __response__ (self, string):
+		### @description: format a Responder response
+		### @param: {string} is type {string}
+		### @return: is type {string}
+		return self.system.response(string)
+
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### set default response handlers for input command
+		self.prompt = kwargs.get("prompt", "please type either")
+		### set default response confirmation string
+		self.confirm = str.upper(kwargs.pop("confirm", "yes"))
+		### set default response rejection string
+		self.reject = str.upper(kwargs.pop("reject", "no"))
+		### initialise responder class
+		self.system = Responder(name = kwargs.get('name', None), style = kwargs.get('style', None), seperator = kwargs.get('seperator', None))
+
+
+
+
+class Set (String):
+	
+	def open (self):
+		### @description: create dictionary with returned response and boolean
+		### @return: is type {dictionary}
+		### check if supplied request a string
+		if type(self.request) is str:
+			### format string to request for single entity type
+			self.request_string = self.request
+		### check if supplied request is a list
+		elif type(self.request) is list:			
+			### format message as a multiple option choice
+			### concatenate request string
+			self.request_string = self.cconcat(self.request, "/")
+		else:
+			### return response handler
+			return {'bool': False, 'response': None}
+		### prompt user to input the requested type
+		return self.__prompt__()
+	
+	def __compare__ (self):
+		### @description: evaluate user string against potential options
+		### @return: is type {dictionary}
+		### if request type is a string
+		if type(self.request) is str:
+			### proceed to confirmation
+			return self.__confirm__()
+		### if request type is a list of mutliple sections
+		elif type(self.request) is list:
+			### iterate over list of options within supplied list
+			for i in range(0, len(self.request)):
+				### remove formatting from listed string
+				match_string = re.sub(r"{{|}}", "", self.request[i])
+				### compare if the supplied string is equal to the options within the list
+				if str.upper(match_string) == str.upper(self.user):
+					### if match is found proceed to confirmation
+					return self.__confirm__(match_string)
+			### if no match occurred notify user that their input wasn't found
+			self.__sys__(self.concat("user input", self.get({'str': self.tag(str.upper(self.user)), 'attr':{'weight':'bold'}}), "did not match", self.request_string))
+			### prompt user to reattempt selection
+			if Request(prompt = "try again?").open():
+				### recall user input handler
+				return self.__prompt__()
+			### if user selected to not continue
+			else:
+				### return response handler
+				return {'bool': False, 'response': None}
+	
+	def __confirm__ (self, response = None):
+		### @description: confirm if the provided input was the correct selection
+		### @param: {response} is type {string}
+		### @return: is type {dictionary}
+		### if string was not provided to function
+		if not response:
+			### set response string as the user string provided in single option conformation
+			response = self.user
+		### prompt user to confirm their inputted text
+		self.__sys__(self.concat("is", self.get({'str': self.tag(response), 'attr': {'weight': 'bold'}}), "the correct input for", self.cconcat([self.get({'str':self.response, 'attr':{'weight':'bold'}}), " "], "?") ))
+		### if user selected to keep input
+		if Request().open():
+			### return response handler
+			return {'bool': True, 'response': response}
+		### if user opted to not keep input
+		else:
+			### prompt user to change input
+			if Request(prompt = "try again?").open():
+				### recall user input handler
+				return self.__prompt__()
+			### if user did not choose to change input
+			else:
+				### return response handler
+				return {'bool': False, 'response': None}
+	
+	def __prompt__ (self):
+		### @description: prompts user to input their desired value for setter class
+		### @return: is type {dictionary}	
+		### print message asking user to input their desired value for the supplied options
+		self.user = self.__input__(self.__sys__(self.concat(self.cconcat([self.concat(self.request_string), " "], ":")), False))
+		### if returned input was empty or undefined
+		if not self.user:
+			### notify user that the required input cannot be empty or None type
+			self.__sys__(self.get({'str': "user input cannot be {{NONE}}", 'attr':{'weight':'bold'}}))
+			### prompt user to reattempt to declare their input
+			if Request(prompt = "try again?").open():
+				### recall function
+				return self.__prompt__()
+			### if user chose not to re-enter their selection
+			else:
+				### return response handler
+				return {'bool': False, 'response': None}
+		### if user supplied a string
+		else:
+			### compare provided string to possible ptions
+			return self.__compare__()
+	
+	def __input__ (self, string):
+		### @description: collects input from user
+		### @return: is type {string} or {None}
+		### prompt user to input string
+		return raw_input(str(string)) or None
+	
+	def __sys__ (self, message, printed = True):
+		### @description: returns string or prints the message as system to terminal 
+		### @param: {message} is type {string} and is optional; defaults to {None}
+		### @param: {printed} is type {boolean}
+		### @return: is type {string} or {None}
+		### format string with formatting if required
+		message = self.system.response(self.get({'str':message, 'attr': {'weight':'bold'}}))
+		### print string 
+		if printed:
+			print message
+		### return string
+		return message
+
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### set request string context for user input e.g: "please enter the value you wish to confirm"
+		self.request = kwargs.get('request', None)
+		### set the confirmation for response to user after context e.g: "is the value x correct?"
+		self.response = kwargs.get('response', None)
+		### initialise responder
+		self.system = Responder(name = kwargs.get('name', None), style = kwargs.get('style', None), seperator = kwargs.get('seperator', None))
+
+
+
+
+class HipChatOAuth:
 
 	def AUTH_QUERY (self):
 		### @description: sets query string for HTTP request
@@ -325,7 +518,9 @@ class OAuth:
 		self.type = kwargs.get("type", "application/json")
 
 
-class Card:
+
+
+class HipChatCard:
 	
 	def value (self, **kwargs):
 		### @description: sets keys and values for attributes object
@@ -403,13 +598,13 @@ class Card:
 
 
 
-class Config:
+
+class HipChatPost:
 
 	def construct (self, response_data = "json"):
 		### @description: creates formatted body for HTTP request to hipchat
 		### @param: {response_data} is type {string}
 		### @return: is type {string}
-
 		### confirm type of data to be sent
 		if response_data == "json" or response_data == "application/json":
 			## set empty dictionary to contain fixed
@@ -422,7 +617,6 @@ class Config:
 					j.update({i: self.__dict__[i]})
 			### return complete
 			return json.dumps(j)
-
 		### return default HTML
 		return self.HTML 
 
@@ -453,8 +647,8 @@ class Config:
 
 if __name__ == '__main__':
 
-	oauth = OAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
+	oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
 	
-	r = requests.post(oauth.AUTH_URL(), data = Config(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
+	r = requests.post(oauth.AUTH_URL(), data = HipChatPost(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
 
 	print Responder().response()
