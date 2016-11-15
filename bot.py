@@ -33,6 +33,8 @@ __FILEPATH__ = os.path.dirname(os.path.realpath('__file__'))
 
 
 class JSON:
+
+	### @about: helper class for getting and parsing JSON data
 	
 	def fetch (self, method = "strs"):
 		### @description: attempt to fetch formatted json from string or file
@@ -93,6 +95,8 @@ class JSON:
 
 
 class List:
+
+	### @about: helper class for fetching items within list
 	
 	def fetch (self, **kwargs):
 		### @description: fetch index of list item without traceback
@@ -125,6 +129,8 @@ class List:
 
 
 class String:
+
+	### @about: helper class for formatting prettier strings
 
 	### colour formatting options
 	PURPLE = '\033[95m'
@@ -262,6 +268,8 @@ class String:
 
 
 class Lexicon (String):
+
+	### @about: class for creating randomised sentences from difference string fragments
 	
 	def create (self):
 		### @description: creates lexical text
@@ -293,7 +301,7 @@ class Lexicon (String):
 				### obtain random punctuation from list
 				context['punctuate'] = self.__lexical__({'t': context['punctuate']}, 't')
 			### append punctuation to the formatted string
-			context['formatted'] = (context['formatted'] + context['punctuate'])
+			context['formatted'] = String.cconcat([context['formatted'], context['punctuate']])
 		### return formatted string including optional punctuation
 		return context['formatted']
 
@@ -306,9 +314,9 @@ class Lexicon (String):
 			### return formatted string
 			return self.__construct__(context)
 		else:
-			### if LX was provided a int or float attempt to run formatting
+			### confirm LX was provided a int or float attempt to run formatting
 			if (type(context['optional']) is int) or (type(context['optional']) is float):
-				### if number returned was equal to zero format string
+				### confirm number returned was equal to zero format string
 				if not bool(random.randrange(int(context['optional']))):
 					return self.__construct__(context)
 		### return empty string if context dict did not pass optional
@@ -378,6 +386,8 @@ class Lexicon (String):
 
 
 class LX:
+
+	### @about: builds strings from supplied variations
 	
 	def create (self):
 		### @description: create formatted dictionary from self
@@ -428,23 +438,25 @@ class LX:
 		### @param: {key} is type {list} or {class:Lexicon}
 		### @param: {value} is type {string}
 		### @param: {attr} is type {dictionary}
-		### @param: {punctuate} is type {string}
-		### @param: {optional} is type {string}
+		### @param: {punctuate} is type {list} or {string}
+		### @param: {optional} is type {integer} or {float} or {boolean}
 		### set base key for dictionary
-		self.key = self.__format__(kwargs.pop('key', {}))
+		self.key = self.__format__(kwargs.get('key', {}))
 		### set base value for dictionary
-		self.value = kwargs.pop('value', 't')
+		self.value = kwargs.get('value', 't')
 		### set base attributes for string
-		self.attr = kwargs.pop('attr', {})
+		self.attr = kwargs.get('attr', {})
 		### set base punctuation for string
-		self.punctuate = kwargs.pop('punctuate', None)
+		self.punctuate = kwargs.get('punctuate', None)
 		### set base optional for string
-		self.optional = kwargs.pop('optional', False)
+		self.optional = kwargs.get('optional', False)
 
 
 
 
 class Responder (String):	
+
+	### @about: creates message printed with "system:" prefixed to beginning to simulate two way communication
 	
 	def response (self, message = "I am totally not a robot!", attr = {}):
 		### @description: creates a string (optionally filtered) prefixed by the name of the responder
@@ -479,6 +491,8 @@ class Responder (String):
 
 
 class Request (String):
+
+	### @about: creates input response system for handling binary user responses
 	
 	def open (self):
 		### @description: method for asking the user to input one of two provided options
@@ -540,6 +554,8 @@ class Request (String):
 
 
 class Set (String):
+
+	### @about: creates input system for handling input to match expected value or new defined value
 	
 	def open (self):
 		### @description: request user to input into terminal
@@ -655,6 +671,8 @@ class Set (String):
 
 class HipChatOAuth:
 
+	### @about: creates http requirements for sending communications to HipChat server via OAuth
+
 	def AUTH_QUERY (self):
 		### @description: sets query string for HTTP request
 		### @return: is type {dictionary}
@@ -690,6 +708,8 @@ class HipChatOAuth:
 
 
 class HipChatCard:
+
+	### @about: creates "cards" for use in HipChat application
 	
 	def value (self, **kwargs):
 		### @description: sets keys and values for attributes object
@@ -770,6 +790,8 @@ class HipChatCard:
 
 class HipChatPost:
 
+	### @about: creates formatted data to be sent to HipChat server within HTTP request
+
 	def construct (self, response_data = "json"):
 		### @description: creates formatted body for HTTP request to hipchat
 		### @param: {response_data} is type {string}
@@ -816,9 +838,12 @@ class HipChatPost:
 
 if __name__ == '__main__':
 
-	#Set(request = ["A", "B", "C"]).open()
+	a = LX(key = ["a", "b", "c"], punctuate = ["?", "!", "."], optional = 3).create()
+	b = LX(key = ["d", "e", "f"], punctuate = ["!!!!"], optional = 1).create()
 
-	#print String().get({"str": "{{LEL}}", "attr": {"weight":"bold"}})
+	print Lexicon([l, z]).create()
+
+	#Set(request = ["A", "B", "C"]).open()
 
 	oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
 	
