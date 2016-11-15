@@ -30,6 +30,94 @@ __FILEPATH__ = os.path.dirname(os.path.realpath('__file__'))
 ### https://www.hipchat.com/docs/apiv2/method/send_room_notification
 
 
+class JSON:
+	
+	def fetch (self, method = "strs"):
+		### @description: attempt to fetch formatted json from string or file
+		### @param: {method} is type {string}
+		### @return: is type {string}
+		### determine which method to operate
+		return self.__method__(method)
+	
+	def __method__ (self, method):
+		### @description: determine method to parse json
+		### @param: {method} is type {string}
+		### @return: is type {string}
+		### format method string to match class function string pattern
+		method = String.cconcat(["__", method, "__" ])
+		### confirm if self has the method defined within self
+		if hasattr(self, method):
+			### call found function
+			return getattr(self, method)(self.context)
+	
+	def __strs__ (self, context):
+		### @description: attempt to parse json from string
+		### @param: {context} is type {string} as type {json}
+		### attempt to call json load as string method
+		try:
+			### return formatted json as dict
+			return json.loads(context)
+		### handle exception error for failing to load json
+		except:
+			### return False type for error handling
+			return False
+	
+	def __file__ (self, context):
+		### @description: attempt to call json loads as string method
+		### @param: {context} is type {string}
+		### @return: is type {dictionary} or {boolean:false}
+		### attempt to load supplied file instance as context argument
+		try:
+			### attempt to load string path / file instance
+			with open(context) as file:
+				### attempt to load file contents as json
+				try:
+					return json.load(file)
+				### handle exception error for failing to parse json
+				except:
+					### return False type for error handling
+					return False
+		### handle exception error for failing to open file in context
+		except:
+			### return False type for error handling
+			return False
+	
+	def __init__ (self, context = '{"example":"json"}'):
+		### @description: class constructor
+		### set context for fetch attempt 
+		self.context = context
+
+
+class List:
+	
+	def fetch (self, **kwargs):
+		### @description: fetch index of list item without traceback
+		### @param: {index} is type {integer}
+		### @return: is type {*}
+		### set index reference
+		i = kwargs.get("index", 0)
+		### attempt to fetch and return list item without error if out of range
+		try:
+			### return list item
+			return self.context[i]
+		### handle exception
+		except:
+			### return empty for possible evaluator
+			return []
+
+	def __d__ (self, context):
+		### @description: handles context to default to list
+		### @param: {context} is {*} expects {list}
+		### @return: is type {list}
+		### confirm returned
+		return context if type(context) is list else []
+
+	def __init__ (self, context = []):
+		### @description: class constructor
+		### set correct context to be list
+		self.context = self.__d__(context)
+
+
 class String:
 	### formatting options
 	PURPLE = '\033[95m'
