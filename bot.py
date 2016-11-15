@@ -261,6 +261,73 @@ class String:
 
 
 
+class LX:
+	
+	def create (self):
+		### @description: create formatted dictionary from self
+		### @return: is type {dictionary}
+		return self.__dict__
+	
+	def __format__ (self, key):
+		### @description: create format key to be list
+		### @param: {key} is type {list} or {class:Lexicon}
+		### @return: is type {dictionary}
+		### process single supplied object
+		if not type(key) is list:
+			### convert object type to be string 
+			return self.__type__(key)
+		else:
+			### iterate list supplied as key
+			for i in range(0, len(key)):
+				### convert object type to be string 
+				key[i] = self.__type__(key[i])
+			### return valid dictionary object
+			return {'t': key }
+	
+	def __type__ (self, context):
+		### @description: create formatted instance as string
+		### @param: {context} is type {list} or {class:Lexicon}
+		### @return: is type {dictionary}
+		### process single object
+		if not type(context) is list:
+			### check if object is instance of Lexicon
+			if isinstance(context, Lexicon):
+				### process and return Lexical string
+				context = context.create()
+			### return formatted string
+			return context
+		### process multiple instances
+		else:
+			### iterate over objects
+			for i in range(0, len(context)):
+				### check if object is instance of Lexicon
+				if isinstance(context[i], Lexicon):
+					### process and return Lexical string
+					context[i] = context[i].create()
+			### return formatted string
+			return context
+	
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### @param: {key} is type {list} or {class:Lexicon}
+		### @param: {value} is type {string}
+		### @param: {attr} is type {dictionary}
+		### @param: {punctuate} is type {string}
+		### @param: {optional} is type {string}
+		### set base key for dictionary
+		self.key = self.__format__(kwargs.pop('key', {}))
+		### set base value for dictionary
+		self.value = kwargs.pop('value', 't')
+		### set base attributes for string
+		self.attr = kwargs.pop('attr', {})
+		### set base punctuation for string
+		self.punctuate = kwargs.pop('punctuate', None)
+		### set base optional for string
+		self.optional = kwargs.pop('optional', False)
+
+
+
+
 class Responder (String):	
 	
 	def response (self, message = "I am totally not a robot!", attr = {}):
@@ -468,6 +535,8 @@ class Set (String):
 		self.system = Responder(**kwargs)
 
 
+
+
 class HipChatOAuth:
 
 	def AUTH_QUERY (self):
@@ -631,11 +700,11 @@ class HipChatPost:
 
 if __name__ == '__main__':
 
-	Set(request = ["A", "B", "C"]).open()
+	#Set(request = ["A", "B", "C"]).open()
 
 	#print String().get({"str": "{{LEL}}", "attr": {"weight":"bold"}})
 
-	#oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
+	oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
 	
 	#r = requests.post(oauth.AUTH_URL(), data = HipChatPost(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
 
