@@ -261,6 +261,122 @@ class String:
 
 
 
+class Lexicon (String):
+	
+	def create (self):
+		### @description: creates lexical text
+		### @return: is type {string}
+		### format context object
+		return self.__format__()
+
+	def __lexical__ (self, key, value):
+		### @description: creates string from pseudo random selection
+		### @param: {key} is type {dictionary}
+		### @param: {value} is type {string}
+		### @return: is type {string}
+		return key[value][random.randrange(len(key[value]))]
+	
+	def __construct__ (self, context):
+		### @description: create formatted string based on LX configuration
+		### @param: {context} is type {dictionary}
+		### @return: is type {string}
+		### obtain random string
+		context['formatted'] = self.__lexical__(context['key'], context['value'])
+		### format string with colours, weight, underline if attr dictionary 
+		if bool(context['attr']):
+			### call String class
+			context['formatted'] = self.get({'str': String.tag(context['formatted']), 'attr': context['attr']})
+		### append string with puncutation
+		if bool(context['punctuate']):
+			### select from list of punctuation if supplied
+			if type(context['punctuate']) is list:
+				### obtain random punctuation from list
+				context['punctuate'] = self.__lexical__({'t': context['punctuate']}, 't')
+			### append punctuation to the formatted string
+			context['formatted'] = (context['formatted'] + context['punctuate'])
+		### return formatted string including optional punctuation
+		return context['formatted']
+
+	def __optional__ (self, context):
+		### @description: create formatted string if random number generated was not considered a boolean value
+		### @param: {context} is type {dictionary}
+		### @return: is type {string}
+		### confirm if LX dict optional was set as false format string
+		if not context['optional']:
+			### return formatted string
+			return self.__construct__(context)
+		else:
+			### if LX was provided a int or float attempt to run formatting
+			if (type(context['optional']) is int) or (type(context['optional']) is float):
+				### if number returned was equal to zero format string
+				if not bool(random.randrange(int(context['optional']))):
+					return self.__construct__(context)
+		### return empty string if context dict did not pass optional
+		return ""
+	
+	def __process__ (self, context):
+		### @description: create lexicon string whether or not it was formatted
+		### @param: {context} is type {list} or {dictionary}
+		### set temp list for holding processed strings
+		processed = []
+		### process a single item object
+		if not type(context) is list:
+			### check if single item was optionally formatted
+			processed.append(self.__optional__(context))
+		### process multiple objects
+		else:
+			### iterate over the context object
+			for i in range(0, len(context)):
+				### check if single item was optionally formatted
+				processed.append(self.__optional__(context[i]))
+		### return seperated string
+		return " ".join(filter(None, processed))
+	
+	def __type__ (self, context):
+		### @description: create formatted instance as dictionary
+		### @param: {context} is type {list} or {dict} or {class:Lexicon}
+		### @return: is type {dictionary}
+		### process objects that are not list type
+		if not type(context) is list:
+			### process individual item
+			if type(context) is dict:	
+				### parse dictionary as named arguments to LX class
+				context = LX(**context).create()
+			### process items that are instances of classes LX or Lexicon
+			elif isinstance(context, LX) or isinstance(context, Lexicon):
+				### call class operator to return string or formatted dictionary
+				context = context.create()
+		### process items as list
+		else:
+			### parse list as the key to LX class and return formatted dictionary
+			context = LX(key = context).create()
+		### return formatted object
+		return context
+	
+	def __format__ (self):
+		### @description: format self to be valid Lexicon data
+		### @return is type {dictionary}
+		### process single item object
+		if not type(self.context) is list:
+			### format type object data
+			self.context = self.__type__(self.context)
+		### process multiple objects
+		else:
+			### iterate over object
+			for i in range(0, len(self.context)):
+				### format type object data
+				self.context[i] = self.__type__(self.context[i])
+		### process formatted data
+		return self.__process__(self.context)
+	
+	def __init__ (self, context = {}):
+		### @description: class constructor
+		### @param: {context} is type {list} or {dictionary}
+		self.context = context
+
+
+
+
 class LX:
 	
 	def create (self):
