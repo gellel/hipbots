@@ -271,7 +271,7 @@ class Lexicon (String):
 
 	### @about: class for creating randomised sentences from difference string fragments
 	
-	def create (self):
+	def construct (self):
 		### @description: creates lexical text
 		### @return: is type {string}
 		### format context object
@@ -349,15 +349,15 @@ class Lexicon (String):
 			### process individual item
 			if type(context) is dict:	
 				### parse dictionary as named arguments to LX class
-				context = LX(**context).create()
+				context = LX(**context).construct()
 			### process items that are instances of classes LX or Lexicon
 			elif isinstance(context, LX) or isinstance(context, Lexicon):
 				### call class operator to return string or formatted dictionary
-				context = context.create()
+				context = context.construct()
 		### process items as list
 		else:
 			### parse list as the key to LX class and return formatted dictionary
-			context = LX(key = context).create()
+			context = LX(key = context).construct()
 		### return formatted object
 		return context
 	
@@ -389,7 +389,7 @@ class LX:
 
 	### @about: builds strings from supplied variations
 	
-	def create (self):
+	def construct (self):
 		### @description: create formatted dictionary from self
 		### @return: is type {dictionary}
 		return self.__dict__
@@ -419,7 +419,7 @@ class LX:
 			### check if object is instance of Lexicon
 			if isinstance(context, Lexicon):
 				### process and return Lexical string
-				context = context.create()
+				context = context.construct()
 			### return formatted string
 			return context
 		### process multiple instances
@@ -429,7 +429,7 @@ class LX:
 				### check if object is instance of Lexicon
 				if isinstance(context[i], Lexicon):
 					### process and return Lexical string
-					context[i] = context[i].create()
+					context[i] = context[i].construct()
 			### return formatted string
 			return context
 	
@@ -794,6 +794,11 @@ class HipChatNotify:
 
 	### @about: creates formatted data to be sent to HipChat as a type of notification using HTTP request
 
+	### set constant for HipChat API endpoint reference
+	HIPCHAT_API_ENDPOINT = "https://{{subdomain}}.hipchat.com/{{api_version}}/room/{{hipchat_room_id}}/notification"
+	### set constant for HTTP method
+	HTTP_METHOD = "POST"
+
 	def construct (self, response_data = "json"):
 		### @description: creates formatted body for HTTP request to hipchat
 		### @param: {response_data} is type {string}
@@ -839,23 +844,43 @@ class HipChatNotify:
 
 
 
+class HipChatTopic:
+
+	### @about: creates the subject for the room
+
+	### set constant for HipChat API endpoint reference
+	HIPCHAT_API_ENDPOINT = "https://{{subdomain}}.hipchat.com/{{api_version}}/room/{{hipchat_room_id}}/topic"
+	### set constant for HTTP method
+	HTTP_METHOD = "PUT"
+
+
+	def construct (self):
+		### @description: returns formatted string
+		### @return: is type {string}
+		return self.subject
+
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### @params {subject} is type {string}
+		self.subject = kwargs.get("subject", Lexicon([LX(key = ["Let's", "Shall we", "I think we should", "Let's all", "Why don't we"]), LX(key = ["chat about", "talk about", "discuss"]), LX(key = ["cats", "dogs", "stuff", "ice-cream", "pizza", "TV shows", "conspiracy theories"], punctuate = ["!", ".", "?"])]).construct())
+
+
+
 class Dialogue:
 
 	### @about: creates a randomised sentence from JSON data
 
 	def __init__ (self):
+		### @description: class constructor
 		pass
 
 
 if __name__ == '__main__':
 
-	#a = LX(key = ["Hi", "Hello", "What's up", "What-it-do", "Hey guys", "Pika-boo"], punctuate = ["?", "!", "."], optional = 3).create()
-	#b = LX(key = ["How are you", "Are you doing okay", "What's new", "Will you tell me something interesting"], punctuate = ["?"], optional = False).create()
-
-	#l = Lexicon([a, b]).create()
-
-	#Set(request = ["A", "B", "C"]).open()
 
 	oauth = HipChatOAuth(subdomain = "{{SUBDOMAIN}}", room = "{{ROOMID}}", api_version = "v2", api_endpoint = "notification", auth = "{{AUTH_KEY}}", type = "application/json")
 	
 	r = requests.post(oauth.AUTH_URL(), data = HipChatNotify(message = "testing again!").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
+	
+
+	
