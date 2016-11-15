@@ -689,16 +689,18 @@ class HipChatOAuth:
 		### @description: construct base url for oauth request
 		### @return: is type {string}
 		### concatenate strs to produce complete request URL
-		return String.cconcat([String.cconcat([String.cconcat(["https://", self.subdomain]), "hipchat", "com"], "."), "/", self.version, "/", "room", "/", self.id, "/notification"])
+		return String.cconcat([String.cconcat([String.cconcat(["https://", self.subdomain]), "hipchat", "com"], "."), "/", self.api_version, "/", "room", "/", self.room, "/", self.api_endpoint])
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
 		### set sub domain for request string
 		self.subdomain = kwargs.get("subdomain", "{{SUB_DOMAIN}}")
 		### set room id for message delivery
-		self.id = kwargs.get("id", "{{ROOM_ID}}")
+		self.room = kwargs.get("room", "{{ROOM_ID}}")
 		### set HipChat API version
-		self.version = kwargs.get("version", "{{API_VERSION}}")
+		self.api_version = kwargs.get("api_version", "{{API_VERSION}}")
+		### set HipChat API endpoint
+		self.api_endpoint = kwargs.get("api_endpoint", "notification")
 		### set oauth token supplied from HipChat
 		self.auth = kwargs.get("auth", "{{AUTH_TOKEN}}")
 		### set request type to HipChat server (default is json)
@@ -788,9 +790,9 @@ class HipChatCard:
 
 
 
-class HipChatPost:
+class HipChatNotify:
 
-	### @about: creates formatted data to be sent to HipChat server within HTTP request
+	### @about: creates formatted data to be sent to HipChat as a type of notification using HTTP request
 
 	def construct (self, response_data = "json"):
 		### @description: creates formatted body for HTTP request to hipchat
@@ -836,17 +838,24 @@ class HipChatPost:
 
 
 
+
+class Dialogue:
+
+	### @about: creates a randomised sentence from JSON data
+
+	def __init__ (self):
+		pass
+
+
 if __name__ == '__main__':
 
-	a = LX(key = ["a", "b", "c"], punctuate = ["?", "!", "."], optional = 3).create()
-	b = LX(key = ["d", "e", "f"], punctuate = ["!!!!"], optional = 1).create()
+	#a = LX(key = ["Hi", "Hello", "What's up", "What-it-do", "Hey guys", "Pika-boo"], punctuate = ["?", "!", "."], optional = 3).create()
+	#b = LX(key = ["How are you", "Are you doing okay", "What's new", "Will you tell me something interesting"], punctuate = ["?"], optional = False).create()
 
-	print Lexicon([l, z]).create()
+	#l = Lexicon([a, b]).create()
 
 	#Set(request = ["A", "B", "C"]).open()
 
-	oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
+	oauth = HipChatOAuth(subdomain = "{{SUBDOMAIN}}", room = "{{ROOMID}}", api_version = "v2", api_endpoint = "notification", auth = "{{AUTH_KEY}}", type = "application/json")
 	
-	#r = requests.post(oauth.AUTH_URL(), data = HipChatPost(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
-
-	#print Responder().response()
+	r = requests.post(oauth.AUTH_URL(), data = HipChatNotify(message = "testing again!").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
