@@ -157,16 +157,13 @@ class String:
 		### @return: is type {string}
 		return " ".join(filter(None, args))
 	
-	def tag (self, context = None):
+	@staticmethod
+	def tag (context = ""):
 		### @description: wrap string in constructor (or supplied as argument) with formatting syntax ({{context}})
 		### @param: {context} is type {string}
 		### @return: is type {string}
-		### confirm context not supplied
-		if not context and self.context:
-			### set base string
-			context = self.context
 		### return formatted string
-		return self.cconcat(["{{", context, "}}"])
+		return String.cconcat(["{{", context, "}}"])
 	
 	def wrap (self, width = 60):
 		### @description: prints a multiple line string with formatting
@@ -186,19 +183,20 @@ class String:
 		### fetch returned processed context
 		return self.__process__(context)
 	
-	def __format__ (self, string, attributes):
+	def __format__ (self, string, attributes = {}):
 		### @description: returns substring/string with styling attached
 		### @param: {string} is type {string}
 		### @param: {attributes} is type {dictionary}
 		### @return is type {string}
 		### iterate through attribute dict and try to match value to formatting
-		for attribute in attributes:
-			### attempt to find matching style from constants
-			attr = getattr(self, str.upper(attributes[attribute]), None)
-			### confirm if attribute styling found
-			if attr:
-				### format string with styling
-				string = self.cconcat([attr, string, self.END])
+		if bool(attributes):
+			for attribute in attributes:
+				### attempt to find matching style from constants
+				attr = getattr(self, str.upper(attributes[attribute]), None)
+				### confirm if attribute styling found
+				if attr:
+					### format string with styling
+					string = String.cconcat([attr, string, self.END])
 		### return formatted string
 		return string
 	
@@ -244,7 +242,7 @@ class String:
 				### append formatted strings to temp list
 				strs.append(self.__substitute__(context[i]['str'], context[i]['attr']))
 			### return the complete string with formatting
-			return self.concat(strs)
+			return String.concat(strs)
 		else:
 			### return the complete string with formatting
 			return self.__substitute__(context['str'], context['attr'])
@@ -270,7 +268,7 @@ class Responder (String):
 		### @param: {message} is type {string}
 		### @return: is type {string} 
 		### return formatted concatenated string
-		return self.concat(self.cconcat([self.__name__(), self.seperator]), self.__message__(message, attr))
+		return String.concat(String.cconcat([self.__name__(), self.seperator]), self.__message__(message, attr))
 	
 	def __message__ (self, message = "destroy all humans!", attr = {}):
 		### @description private method for fetching the formatted string for the message part of robot response
@@ -283,7 +281,7 @@ class Responder (String):
 		### @description: private method for fetching and formatting the string that defines the robot's name
 		### @return: is type {string}
 		### encapsulate name of responder in formatting syntax, instantiate to String class
-		return self.get({'str': self.tag(self.name), 'attr': self.style})
+		return self.get({'str': String.tag(self.name), 'attr': self.style})
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
@@ -315,7 +313,7 @@ class Request (String):
 		### prompt user that the supplied input wasn't considered valid
 		else:
 			### concatenate string with formatting
-			print self.__response__(self.concat("command", self.get({'str': self.tag(str(self.response)), 'attr':{'weight':'bold'}}), "unrecognised"))
+			print self.__response__(String.concat("command", self.get({'str': String.tag(str(self.response)), 'attr':{'weight':'bold'}}), "unrecognised"))
 			### recall the function
 			return self.open()
 	
@@ -323,13 +321,13 @@ class Request (String):
 		### @description: format the strings defining the options available for the user
 		### @return: is type {string}
 		### return formatted string with the supplied confirmation and rejection choices
-		return self.get({'str': self.tag(self.cconcat([self.confirm, self.reject], "/")), 'attr':{'weight':'bold'}})
+		return self.get({'str': String.tag(String.cconcat([self.confirm, self.reject], "/")), 'attr':{'weight':'bold'}})
 	
 	def __prompt__ (self):
 		### @description: prompt the user to input one of the supplied action contexts
 		### @return: is type {string} or {None}
 		### request the user to input their text
-		response = raw_input(self.__response__(self.concat(self.get({'str':self.prompt,'attr':{'weight':'bold'}}), self.cconcat([self.__option__(), " "], ":")))) or None
+		response = raw_input(self.__response__(String.concat(self.get({'str':self.prompt,'attr':{'weight':'bold'}}), String.cconcat([self.__option__(), " "], ":")))) or None
 		### attempt to format the text to a uppercase string for easier comparison
 		try:
 			### return the uppercase string
@@ -349,11 +347,11 @@ class Request (String):
 		### set default response handlers for input command
 		self.prompt = kwargs.get("prompt", "please type either")
 		### set default response confirmation string
-		self.confirm = str.upper(kwargs.pop("confirm", "yes"))
+		self.confirm = str.upper(kwargs.get("confirm", "yes"))
 		### set default response rejection string
-		self.reject = str.upper(kwargs.pop("reject", "no"))
+		self.reject = str.upper(kwargs.get("reject", "no"))
 		### initialise responder class
-		self.system = Responder(name = kwargs.get('name', None), style = kwargs.get('style', None), seperator = kwargs.get('seperator', None))
+		self.system = Responder(**kwargs)
 
 
 
@@ -361,30 +359,45 @@ class Request (String):
 class Set (String):
 	
 	def open (self):
-		### @description: create dictionary with returned response and boolean
-		### @return: is type {dictionary}
-		### check if supplied request a string
+		### @description: request user to input into terminal
+		### @return: is type {string} or {None}
+		### confirm request is a single string
 		if type(self.request) is str:
-			### format string to request for single entity type
-			self.request_string = self.request
-		### check if supplied request is a list
-		elif type(self.request) is list:			
-			### format message as a multiple option choice
-			### concatenate request string
-			self.request_string = self.cconcat(self.request, "/")
+			### prompt user for input and return formatted result
+			return self.__prompt__(self.request)
+		### confirm request is multiple optional
+		elif type(self.request) is list:
+			### prompt user for input and return formatted result
+			return self.__prompt__(String.cconcat(self.request, "/"))
+
+	def __prompt__ (self, prompt):
+		### @description: request user to input value into terminal
+		### @param: {prompt} is type {string}
+		response = self.__input__(self.__sys__(String.concat(String.cconcat([String.concat("please enter", prompt), " "], ":")), False))
+		### confirm if returned input was empty or undefined
+		if not response:
+			### notify user that the required input cannot be empty or None type
+			self.__sys__(self.get({'str': "user input cannot be {{NONE}}", 'attr':{'weight':'bold'}}))
+			### prompt user to reattempt to declare their input
+			if Request(prompt = "try again?").open():
+				### recall function
+				return self.__prompt__(prompt)
+			### if user chose not to re-enter their selection return response handler
+			else:
+				return None
+		### otherwise if user supplied a string compare provided string to possible ptions
 		else:
-			### return response handler
-			return {'bool': False, 'response': None}
-		### prompt user to input the requested type
-		return self.__prompt__()
-	
-	def __compare__ (self):
+			return self.__compare__(response, prompt)
+
+
+	def __compare__ (self, response, prompt):
 		### @description: evaluate user string against potential options
-		### @return: is type {dictionary}
+		### @param: {response} is type {string}
+		### @param: {prompt} is type {string}
 		### if request type is a string
 		if type(self.request) is str:
 			### proceed to confirmation
-			return self.__confirm__()
+			return self.__confirm__(response, prompt)
 		### if request type is a list of mutliple sections
 		elif type(self.request) is list:
 			### iterate over list of options within supplied list
@@ -392,78 +405,49 @@ class Set (String):
 				### remove formatting from listed string
 				match_string = re.sub(r"{{|}}", "", self.request[i])
 				### compare if the supplied string is equal to the options within the list
-				if str.upper(match_string) == str.upper(self.user):
+				if str.upper(match_string) == str.upper(response):
 					### if match is found proceed to confirmation
-					return self.__confirm__(match_string)
+					return self.__confirm__(match_string, prompt)
 			### if no match occurred notify user that their input wasn't found
-			self.__sys__(self.concat("user input", self.get({'str': self.tag(str.upper(self.user)), 'attr':{'weight':'bold'}}), "did not match", self.request_string))
+			self.__sys__(self.concat("user input", self.get({'str': self.tag(str.upper(response)), 'attr':{'weight':'bold'}}), "did not match", prompt))
 			### prompt user to reattempt selection
 			if Request(prompt = "try again?").open():
 				### recall user input handler
-				return self.__prompt__()
-			### if user selected to not continue
+				return self.__prompt__(prompt)
+			### if user selected to not continue return response handler
 			else:
-				### return response handler
-				return {'bool': False, 'response': None}
-	
-	def __confirm__ (self, response = None):
-		### @description: confirm if the provided input was the correct selection
-		### @param: {response} is type {string}
-		### @return: is type {dictionary}
-		### if string was not provided to function
-		if not response:
-			### set response string as the user string provided in single option conformation
-			response = self.user
+				return None
+
+	### confirm if the provided input was the correct selection
+	def __confirm__ (self, response, prompt):
 		### prompt user to confirm their inputted text
 		self.__sys__(self.concat("is", self.get({'str': self.tag(response), 'attr': {'weight': 'bold'}}), "the correct input for", self.cconcat([self.get({'str':self.response, 'attr':{'weight':'bold'}}), " "], "?") ))
 		### if user selected to keep input
 		if Request().open():
 			### return response handler
-			return {'bool': True, 'response': response}
+			return response
 		### if user opted to not keep input
 		else:
 			### prompt user to change input
 			if Request(prompt = "try again?").open():
 				### recall user input handler
-				return self.__prompt__()
+				return self.__prompt__(prompt)
 			### if user did not choose to change input
 			else:
 				### return response handler
-				return {'bool': False, 'response': None}
-	
-	def __prompt__ (self):
-		### @description: prompts user to input their desired value for setter class
-		### @return: is type {dictionary}	
-		### print message asking user to input their desired value for the supplied options
-		self.user = self.__input__(self.__sys__(self.concat(self.cconcat([self.concat(self.request_string), " "], ":")), False))
-		### if returned input was empty or undefined
-		if not self.user:
-			### notify user that the required input cannot be empty or None type
-			self.__sys__(self.get({'str': "user input cannot be {{NONE}}", 'attr':{'weight':'bold'}}))
-			### prompt user to reattempt to declare their input
-			if Request(prompt = "try again?").open():
-				### recall function
-				return self.__prompt__()
-			### if user chose not to re-enter their selection
-			else:
-				### return response handler
-				return {'bool': False, 'response': None}
-		### if user supplied a string
-		else:
-			### compare provided string to possible ptions
-			return self.__compare__()
-	
-	def __input__ (self, string):
-		### @description: collects input from user
+				return None
+
+	def __input__ (self, prompt):
+		### @description: print input for user in terminal
+		### @param: {prompt} is type {string}
 		### @return: is type {string} or {None}
 		### prompt user to input string
-		return raw_input(str(string)) or None
-	
+		return raw_input(str(prompt)) or None
+
 	def __sys__ (self, message, printed = True):
-		### @description: returns string or prints the message as system to terminal 
-		### @param: {message} is type {string} and is optional; defaults to {None}
+		### @description: return message and optionally print as system to terminal
+		### @param: {message} is type {string}
 		### @param: {printed} is type {boolean}
-		### @return: is type {string} or {None}
 		### format string with formatting if required
 		message = self.system.response(self.get({'str':message, 'attr': {'weight':'bold'}}))
 		### print string 
@@ -474,14 +458,14 @@ class Set (String):
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
+		### @param: {request} is type {string} or {list}{string}
+		### @param: {response} is type {string}
 		### set request string context for user input e.g: "please enter the value you wish to confirm"
-		self.request = kwargs.get('request', None)
+		self.request = kwargs.get('request', "{{sample}} for response")
 		### set the confirmation for response to user after context e.g: "is the value x correct?"
-		self.response = kwargs.get('response', None)
+		self.response = kwargs.get('response', "{{sample}}")
 		### initialise responder
-		self.system = Responder(name = kwargs.get('name', None), style = kwargs.get('style', None), seperator = kwargs.get('seperator', None))
-
-
+		self.system = Responder(**kwargs)
 
 
 class HipChatOAuth:
@@ -647,8 +631,12 @@ class HipChatPost:
 
 if __name__ == '__main__':
 
-	oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
-	
-	r = requests.post(oauth.AUTH_URL(), data = HipChatPost(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
+	Set(request = ["A", "B", "C"]).open()
 
-	print Responder().response()
+	#print String().get({"str": "{{LEL}}", "attr": {"weight":"bold"}})
+
+	#oauth = HipChatOAuth(subdomain = "{{HIDDEN}}", id = "{{HIDDEN}}", version = "v2", auth = "{{HIDDEN}}", type = "application/json")
+	
+	#r = requests.post(oauth.AUTH_URL(), data = HipChatPost(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
+
+	#print Responder().response()
