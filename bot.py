@@ -700,7 +700,7 @@ class HipChatOAuth:
 		### set HipChat API version
 		self.api_version = kwargs.get("api_version", "{{API_VERSION}}")
 		### set HipChat API endpoint
-		self.api_endpoint = kwargs.get("api_endpoint", "notification")
+		self.api_endpoint = kwargs.get("api_endpoint", "{{API_ENDPOINT}}")
 		### set oauth token supplied from HipChat
 		self.auth = kwargs.get("auth", "{{AUTH_TOKEN}}")
 		### set request type to HipChat server (default is json)
