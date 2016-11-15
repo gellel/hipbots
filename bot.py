@@ -118,8 +118,11 @@ class List:
 		self.context = self.__d__(context)
 
 
+
+
 class String:
-	### formatting options
+
+	### colour formatting options
 	PURPLE = '\033[95m'
 	CYAN = '\033[96m'
 	DARKCYAN = '\033[36m'
@@ -255,9 +258,41 @@ class String:
 
 
 
+
+class Responder (String):	
+	
+	def response (self, message = "I am totally not a robot!", attr = {}):
+		### @description: creates a string (optionally filtered) prefixed by the name of the responder
+		### @param: {message} is type {string}
+		### @return: is type {string} 
+		### return formatted concatenated string
+		return self.concat(self.cconcat([self.__name__(), self.seperator]), self.__message__(message, attr))
+	
+	def __message__ (self, message = "destroy all humans!", attr = {}):
+		### @description private method for fetching the formatted string for the message part of robot response
+		### @param: {attr} is type {dictionary}
+		### @return: is type {string}
+		### call inherited class of string to format string
+		return self.get({'str': message, 'attr': attr})
+	
+	def __name__ (self):
+		### @description: private method for fetching and formatting the string that defines the robot's name
+		### @return: is type {string}
+		### encapsulate name of responder in formatting syntax, instantiate to String class
+		return self.get({'str': self.tag(self.name), 'attr': self.style})
+
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### set default name for responder in terminal
+		self.name = kwargs.pop('name', 'system')
+		### set default styling for responder in terminal
+		self.style = kwargs.pop('style', {'style':'underline','weight':'bold'})
+		### set default seperator between responder name and its message in terminal
+		self.seperator = kwargs.pop('seperator', ':')
+
+
 class OAuth:
 
-	
 	def AUTH_QUERY (self):
 		### @description: sets query string for HTTP request
 		### @return: is type {dictionary}
@@ -422,3 +457,4 @@ if __name__ == '__main__':
 	
 	r = requests.post(oauth.AUTH_URL(), data = Config(message = "hello world.").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
 
+	print Responder().response()
