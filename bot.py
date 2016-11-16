@@ -5,16 +5,12 @@
 ###################################
 ### python scripts dependencies ###
 ###################################
-### py subprocess class package
-import subprocess
 ### py requests class package
 import requests
 ### py random class package
 import random
 ### py json class package
 import json
-### py pwd class package
-import pwd
 ### py system class package
 import sys
 ### py os class package
@@ -24,10 +20,6 @@ import re
 
 ### script exe base file directory
 __FILEPATH__ = os.path.dirname(os.path.realpath('__file__'))
-
-
-### HELP FILES FROM HIPCHAT
-### https://www.hipchat.com/docs/apiv2/method/send_room_notification
 
 
 
@@ -269,7 +261,7 @@ class String:
 
 class Lexicon (String):
 
-	### @about: class for creating randomised sentences from difference string fragments
+	### @about: class for creating pseudo randomised sentences from string fragments
 	
 	def construct (self):
 		### @description: creates lexical text
@@ -387,7 +379,7 @@ class Lexicon (String):
 
 class LX:
 
-	### @about: builds strings from supplied variations
+	### @about: builds dictionary to assist lexicon in producing a randomised formatted string
 	
 	def construct (self):
 		### @description: create formatted dictionary from self
@@ -529,6 +521,7 @@ class Request (String):
 		try:
 			### return the uppercase string
 			return str.upper(response)
+		### handle exception
 		except:
 			### return NoneType if unsuccessful
 			return response
@@ -555,7 +548,7 @@ class Request (String):
 
 class Set (String):
 
-	### @about: creates input system for handling input to match expected value or new defined value
+	### @about: creates prompt system for managing users input to match expected or define value
 	
 	def open (self):
 		### @description: request user to input into terminal
@@ -572,6 +565,8 @@ class Set (String):
 	def __prompt__ (self, prompt):
 		### @description: request user to input value into terminal
 		### @param: {prompt} is type {string}
+		### @return: is type {string} or {None}
+		### get response from terminal
 		response = self.__input__(self.__sys__(String.concat(String.cconcat([String.concat("please enter", prompt), " "], ":")), False))
 		### confirm if returned input was empty or undefined
 		if not response:
@@ -587,7 +582,6 @@ class Set (String):
 		### otherwise if user supplied a string compare provided string to possible ptions
 		else:
 			return self.__compare__(response, prompt)
-
 
 	def __compare__ (self, response, prompt):
 		### @description: evaluate user string against potential options
@@ -669,218 +663,152 @@ class Set (String):
 
 
 
-class HipChatOAuth:
+class HTTP:
 
-	### @about: creates http requirements for sending communications to HipChat server via OAuth
+	### @about: helper class to construct http request
 
-	def AUTH_QUERY (self):
-		### @description: sets query string for HTTP request
+	### default HTTP request method
+	DEFAULT_TYPE = "POST"
+	### default HTTP request header content-type
+	DEFAULT_CONTENT_TYPE = "APPLICATION/JSON"
+
+	def send (self):
+		### @description: dispatches HTTP request
+		### @return: is type {}
+		### set base copy of self definitions
+		kwargs = self.__dict__.copy()
+		### discard unwanted key word arguments for requests.request method
+		map(kwargs.pop, ["request_url", "request_type"])
+		### set base request
+		r = requests
+		### attempt http dispatch
+		r.request(self.request_type, self.request_url, **kwargs)
+		### return request
+		return r
+
+	def __headers__ (self, **kwargs):
+		### @description: set HTTP headers for request
+		### @param: {headers} is type {list} or {dictionary}
 		### @return: is type {dictionary}
-		### set query string for authorisation
-		return { "auth_token": self.auth }
+		### set base content type for headers 
+		content = {'Content-Type': self.__content__(kwargs.pop('content_type', self.DEFAULT_CONTENT_TYPE))}
+		### set headers to contain type of content if not supplied
+		headers = kwargs.get("headers", {})
+		### append headers if headers argument does not contain defined content-type
+		return dict(headers, **content) if not 'Content-Type' in headers else header
 
-	def AUTH_TYPE (self):
-		### @description: sets HTTP request header from self type
-		### @return: is type {dictionary}
-		### set content type from supplied
-		return { "Content-Type": self.type }
-
-	def AUTH_URL (self):
-		### @description: construct base url for oauth request
+	def __content__ (self, content = None):
+		### @description: set HTTP Content-Type header request type
+		### @param: {content} is type {string}
 		### @return: is type {string}
-		### concatenate strs to produce complete request URL
-		return String.cconcat([String.cconcat([String.cconcat(["https://", self.subdomain]), "hipchat", "com"], "."), "/", self.api_version, "/", "room", "/", self.room, "/", self.api_endpoint])
+		### confirm content is not NoneType
+		if bool(content):
+			### set base content types for HTTP request headers
+			types = ["application/json", "text/html", "text/plain", "application/x-www-form-urlencoded"]
+			### enumerate over length of types of content request headers
+			for i in range(0, len(types)):
+				### confirm supplied type matches supported
+				if types[i].upper() == content.upper():
+					### return set type
+					return types[i]
+		### return set default
+		return self.DEFAULT_CONTENT_TYPE.lower()
 
-	def __init__ (self, **kwargs):
-		### @description: class constructor
-		### set sub domain for request string
-		self.subdomain = kwargs.get("subdomain", "{{SUB_DOMAIN}}")
-		### set room id for message delivery
-		self.room = kwargs.get("room", "{{ROOM_ID}}")
-		### set HipChat API version
-		self.api_version = kwargs.get("api_version", "{{API_VERSION}}")
-		### set HipChat API endpoint
-		self.api_endpoint = kwargs.get("api_endpoint", "{{API_ENDPOINT}}")
-		### set oauth token supplied from HipChat
-		self.auth = kwargs.get("auth", "{{AUTH_TOKEN}}")
-		### set request type to HipChat server (default is json)
-		self.type = kwargs.get("type", "application/json")
-
-
-
-
-class HipChatCard:
-
-	### @about: creates "cards" for use in HipChat application
-	
-	def value (self, **kwargs):
-		### @description: sets keys and values for attributes object
-		### @param {url} is type {string}
-		### @param {style} is type {string}
-		### @param {label} is type {string}
-		### @return: is type {dictionary}
-		return { "url": kwargs.get("url", "https://{{ATTRIBUTES_VALUE_URL}}"), "style": kwargs.get("style", "lozenge-complete"), "label": kwargs.get("label", "{{attributes}}{{label}}") }
-
-	def icon (self, **kwargs):
-		### @description: sets keys and values for icon object; can be shared for object:attributes, object:activity
-		### @params {url} is type {string}
-		### @params {url@2x} is type {string}
-		### @return: is type {dictionary}
-		return { "url": kwargs.get("url", "{{DEFAULT_ICON}}.png"), "url@2x": kwargs.get("url@2x", "{{RETINA_ICON}}.png")}
-
-	def description (self, **kwargs):
-		### @description: sets keys and values for description object
-		### @params {format} is type {string}
-		### @params {value} is type {string}
-		### @return: is type {dictionary}
-		return { "format": kwargs.get("format", "html"), "value": kwargs.get("value", "<strong>{{EXAMPLE DESCRIPTION}}</strong>") }
-
-	def thumbnail (self, **kwargs):
-		### @description: sets thumbail image for card
-		### @params {url} is type {string}
-		### @params {width} is type {integer} or {string}
-		### @params {height} is type {integer} or {string}
-		### @return: is type {dictionary}
-		return { "url": kwargs.get("url", "{{DEFAULT_THUMBNAIL}}.png"), "width": kwargs.get("width", 200), "height": kwargs.get("height", 200) }
-
-	def activity (self, **kwargs):
-		### @description: sets key values for attributes object; shares icon config function
-		### @params {html} is type {string}
-		### @params {icon} is type {dict}
-		### @return: is type {dictionary}
-		return { "html": kwargs.get("html", "<em>{{EXAMPLE ACTIVTITY}}<em>"), "icon": self.icon(**kwargs.get("icon", {})) }
-
-	def attributes (self, **kwargs):
-		### @description: sets key values for attributes object
-		### @param {value} is type {dict}
-		### @param {icon} is type {dict}
-		### @param {label} is type {string}
-		### @return: is type {dictionary}
-		return { "value": self.value(**kwargs.get("value", {})), "icon": self.icon(**kwargs.get("icon", {})), "label": kwargs.get("label", "{{EXAMPLE_ATTRIBUTES_LABEL}}") }
-
-	def __init__ (self, **kwargs):
-		### @description: class constructor
-		### @params {id} is {integer}
-		### @params {description} is type {dict}
-		### @params {format} is type {string}
-		### @params {url} is type {string}
-		### @params {title} is type {string}
-		### @params {thumbail} is type {dict}
-		### @params {activity} is type {dict}
-		### @params {attributes} is type {dict}
-		### set base id 
-		self.id = kwargs.get("id", None)
-		### set base icon
-		self.icon = self.icon(**kwargs.get("icon", {}))
-		### set description key dict 
-		self.description = self.description(**kwargs.get("description", {}))
-		### set base format size for card
-		self.format = kwargs.get("format", "medium")
-		### set primary click-out url
-		self.url = kwargs.get("url", "https://{{EXAMPLE_SITE_URL}}.com/")
-		### set card title
-		self.title = kwargs.get("title", "{{EXAMPLE_TITLE}}")
-		### set card thumnail image
-		self.thumbnail = self.thumbnail(**kwargs.get("thumbnail", {}))
-		### set card activity operation
-		self.activity = self.activity(**kwargs.get("activity", {}))
-		### set card attributes
-		self.attributes = self.attributes(**kwargs.get("attributes", {}))
-
-
-
-
-class HipChatNotify:
-
-	### @about: creates formatted data to be sent to HipChat as a type of notification using HTTP request
-
-	### set constant for HipChat API endpoint reference
-	HIPCHAT_API_ENDPOINT = "https://{{subdomain}}.hipchat.com/{{api_version}}/room/{{hipchat_room_id}}/notification"
-	### set constant for HTTP method
-	HTTP_METHOD = "POST"
-
-	def construct (self, response_data = "json"):
-		### @description: creates formatted body for HTTP request to hipchat
-		### @param: {response_data} is type {string}
+	def __type__ (self, content = None):
+		### @description: set http request type
+		### @param: {content} is type {string}
 		### @return: is type {string}
-		### confirm type of data to be sent
-		if response_data == "json" or response_data == "application/json":
-			## set empty dictionary to contain fixed
-			j = {}
-			### iterate over self dict
-			for i in self.__dict__:
-				### confirm valid value
-				if bool(self.__dict__[i]):
-					### update new dict
-					j.update({i: self.__dict__[i]})
-			### return complete
-			return json.dumps(j)
-		### return default HTML
-		return self.HTML 
+		### confirm content is not NoneType
+		if bool(content):
+			### set base request types
+			types = ["get", "post", "put", "delete", "head", "options", "patch"]
+			### enumerate over length of types of content request headers
+			for i in range(0, len(types)):
+				### confirm supplied type matches supported
+				if types[i].upper() == content.upper():
+					### return set type
+					return types[i]
+		### return defined default
+		return self.DEFAULT_TYPE.lower()
+
+	def __json__ (self, **kwargs):
+		### @description: set formatted request body
+		### @param: {kwargs} is type {dictionary}
+		### @return: is type {dictionary} or {string}
+		return json.dumps(kwargs) if "__json__" in kwargs and bool(kwargs["__json__"]) else kwargs
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
-		### @params {message_format} is type {string}
-		### @params {color} is type {string}
-		### @params {attach_to} is type {integer?}
-		### @params {notify} is type {string}
-		### @params {message} is type {string}
-		### @params {card} is type {dict}
-		### determines how the message is treated by our server and rendered inside HipChat applications
-		self.message_format = kwargs.get("message_format", "text")		
-		### background color for message
-		self.color = kwargs.get("color", "random")
-		### the message id to to attach this notification to, for example if this notification is in response to a particular message. for supported clients, this will display the notification in the context of the referenced message specified by attach_to parameter. if this is not possible to attach the notification, it will be rendered as an unattached notification. the message must be in the same room as that the notification is sent to
-		self.attach_to = kwargs.get("attach_to", None)
-		### whether this message should trigger a user notification (change the tab color, play a sound, notify mobile phones, etc). each recipient's notification preferences are taken into account
-		self.notify = kwargs.get("notify", "false")
-		### the message body for notification
-		self.message = kwargs.get("message", "Sample Text")
-		### set an optional card object 
-		self.card = kwargs.get("card", {})
-		### set HTML if supplied 
-		self.HTML = kwargs.get("HTML", "<strong>HTML</strong>")
+		### @param: {request_url} is type {string}
+		### @param: {request_type} is type {string}
+		### @param: {proxies} is type {dictionary}
+		### @param: {query} is type {dictionary}
+		### @param: {timeout} is type {integer} or {float}
+		### @param: {verify} is type {boolean}
+		### @param: {stream} is type {boolean}
+		### @param: {allow_redirects} is type {boolean}
+		### @param: {cert} is type {string}
+		### @param: {data} is type {dictionary} or {string}
+		### @param: {json} is type {dictionary} or {string}
+		### @param: {headers} is type {dictionary}
+		### @param: {contentType} is type {string}
+		### set base url for http connection
+		self.request_url = kwargs.pop("url", "https://{{example}}.com/{{api}}{{endpoint}}") 
+		### set base method for http connection
+		self.request_type = self.__type__(kwargs.pop("type", None))
+		### set base proxies for http connection
+		self.proxies = kwargs.pop("proxies", {})
+		### set base query string for http url
+		self.params = kwargs.pop("query", {})
+		### set base timeout for http request
+		self.timeout = kwargs.pop("timeout", None)
+		### set base veritifcation for http request
+		self.verify = kwargs.pop("verify", True)
+		### set base response processing method for http request response
+		self.stream = kwargs.pop("stream", False)
+		### set base redirection usage for http request server handler
+		self.allow_redirects = kwargs.pop("allow_redirects", False)
+		### set base certificate for http request
+		self.cert = kwargs.pop("cert", None)
+		### set base request body for http request
+		self.data = self.__json__(**kwargs.pop("data", { "__json__": True }))
+		### set base request body for http request
+		self.json = self.__json__(**kwargs.pop("json", {}))
+		### set base headers for http request
+		self.headers = self.__headers__(**kwargs)
 
 
 
 
-class HipChatTopic:
+class HipChat:
 
-	### @about: creates the subject for the room
+	### @about: helper class to format url to connect to HipChat API endpoint
 
-	### set constant for HipChat API endpoint reference
-	HIPCHAT_API_ENDPOINT = "https://{{subdomain}}.hipchat.com/{{api_version}}/room/{{hipchat_room_id}}/topic"
-	### set constant for HTTP method
-	HTTP_METHOD = "PUT"
+	### default HipChat subdomain
+	DEFAULT_SUBDOMAIN = "{{subdomain}}"
+	### default HipChat API version
+	DEFAULT_VERSION = 2
+	### default HipChat room ID
+	DEFAULT_ROOM = "{{00000}}"
+	### default HipCHat API endpoint
+	DEFAULT_API = "{{sample/api}}"
 
-
-	def construct (self):
-		### @description: returns formatted string
-		### @return: is type {string}
-		return self.subject
+	def URL (self):
+		### @description: constructs formatted string for HipChat API requests
+		return String.cconcat([String.cconcat([String.cconcat(["https://", self.subdomain]), "hipchat", "com"], "."), "/", String.cconcat(["v", str(self.version)]), "/", "room", "/", self.room, "/", self.api])
 
 	def __init__ (self, **kwargs):
-		### @description: class constructor
-		### @params {subject} is type {string}
-		self.subject = kwargs.get("subject", Lexicon([LX(key = ["Let's", "Shall we", "I think we should", "Let's all", "Why don't we"]), LX(key = ["chat about", "talk about", "discuss"]), LX(key = ["cats", "dogs", "stuff", "ice-cream", "pizza", "TV shows", "conspiracy theories"], punctuate = ["!", ".", "?"])]).construct())
+		### set base subdomain for HipChat API
+		self.subdomain = kwargs.get("subdomain", self.DEFAULT_SUBDOMAIN)
+		### set base version for HipChat API
+		self.version = kwargs.get("version", self.DEFAULT_VERSION)
+		### set base room for HipChat API
+		self.room = kwargs.get("room", self.DEFAULT_ROOM)
+		### set base endpoint for HipChat API
+		self.api = kwargs.get("api", self.DEFAULT_API)
 
 
+if __name__ == "__main__":
 
-class Dialogue:
+	HTTP(url = HipChat(subdomain = None, version = 2, room = None, api = "notification").URL(), query = { "auth_token": None }, data = { "color": "random", "message": "Sample Text", "notify": "false", "message_format": "text", "__json__": True }).send()
 
-	### @about: creates a randomised sentence from JSON data
-
-	def __init__ (self):
-		### @description: class constructor
-		pass
-
-
-if __name__ == '__main__':
-
-
-	oauth = HipChatOAuth(subdomain = "{{SUBDOMAIN}}", room = "{{ROOMID}}", api_version = "v2", api_endpoint = "notification", auth = "{{AUTH_KEY}}", type = "application/json")
-	
-	r = requests.post(oauth.AUTH_URL(), data = HipChatNotify(message = "testing again!").construct(), headers = oauth.AUTH_TYPE(), params = oauth.AUTH_QUERY())
-	
-
-	
