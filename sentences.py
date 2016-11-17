@@ -17,11 +17,16 @@ class Sentence (String):
 	### creates complete string from pseudo randomly selected parts ###
 	###################################################################
 
-	def __init__ (self, **kwargs)
+	def create (self):
 		pass
+		
+	def __init__ (self, **kwargs):
+		### @description: class constructor
+		### @parameter: fragment, @type: <list>
+		self.fragments = kwargs.get("fragments", [{"string":"{{sample}}","optional":False,"attributes":["BOLD"]}])
 
 
 
 if __name__ == '__main__':
 
-	print Sentence
+	print Sentence().create()
