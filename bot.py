@@ -245,11 +245,6 @@ class String:
 			### return the complete string with formatting
 			return self.__substitute__(context['str'], context['attr'])
 	
-	def __type__ (self):
-		### @description: confirm the type of the context (for multiple formatted strings of single string)
-		### @return: is type {string}
-		return type(self.context)
-	
 	def __init__ (self, context = {}):
 		### @description: class constructor
 		### @param: {context} is type {dictionary} or is type {list}
@@ -581,9 +576,9 @@ class Set (String):
 				return None
 		### otherwise if user supplied a string compare provided string to possible ptions
 		else:
-			return self.__compare__(response, prompt)
+			return self.__test__(response, prompt)
 
-	def __compare__ (self, response, prompt):
+	def __test__ (self, response, prompt):
 		### @description: evaluate user string against potential options
 		### @param: {response} is type {string}
 		### @param: {prompt} is type {string}
@@ -810,5 +805,7 @@ class HipChat:
 
 if __name__ == "__main__":
 
-	HTTP(url = HipChat(subdomain = None, version = 2, room = None, api = "notification").URL(), query = { "auth_token": None }, data = { "color": "random", "message": "Sample Text", "notify": "false", "message_format": "text", "__json__": True }).send()
+	print String({"str":"lel", "attr":{}}).get()
+
+	#HTTP(url = HipChat(subdomain = None, version = 2, room = None, api = "notification").URL(), query = { "auth_token": None }, data = { "color": "green", "message": "Sample Text", "notify": "false", "message_format": "text", "__json__": True }).send()
 
