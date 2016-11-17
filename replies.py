@@ -43,26 +43,27 @@ class Reply (Message):
 				# return boolean false for result handler
 				return False
 		# handle incorrect string
-		print self.create(self.concat(self.__format__(prompt or "empty", ["BOLD"]), self.unmatched))		
+		print self.create(self.concat(self.__format__(prompt or "empty", ["BOLD"]), self.failed))		
 		# recursively call handler
 		return self.prompt()
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
 		### @parameter: message, @type: <string>
+		### @parameter: failed, @type: <string>
 		### @parameter: input_divider, @type: <string>
 		### @parameter: option_divider, @type: <string>
 		### @parameter: confirm, @type: <string>
 		### @parameter: reject, @type: <string>
 
 		# set prompt attribute; @default: <string>
-		self.message = kwargs.get("prompt", "shut down mainframe?")
-		# set unmatched attribute; @default: <string>
-		self.unmatched = kwargs.get("unmatched", "did not match required")
+		self.message = kwargs.get("message", "shut down mainframe?")
+		# set failed attribute; @default: <string>
+		self.failed = kwargs.get("failed", "did not match required")
 		# set input_divider attribute; @default: <string>
 		self.input_divider = kwargs.get("input_divider", ":")
 		# set option_divider attribute; @default: <string>
-		self.option_divider = kwargs.get("input_divider", "/")
+		self.option_divider = kwargs.get("option_divider", "/")
 		# set confirm attribute; @default: <string>
 		self.confirm = kwargs.get("confirm", "YES")
 		# set reject attribute; @default: <string>
