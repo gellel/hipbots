@@ -17,15 +17,12 @@ class Reply (Message):
 	### creates prefixed raw input handler to accept user input from one of two conditions ###
 	##########################################################################################
 
-	def prompt (self, message = None, confirm = None, reject = None):
+	def prompt (self):
 		### @description: protected method for asking user to input text that matches defined option
-		### @parameter: message, @type <string>, @optional
-		### @parameter: confirm, @type <string>, @optional
-		### @parameter: reject, @type <string>, @optional
 		### @returns: <boolean>
 
 		# request user input from terminal
-		return self.__input__(raw_input(super(Reply, self).create(super(Message, self).concat(message or self.message, super(Reply, self).cconcat([super(Message, self).cconcat([confirm or self.confirm, reject or self.reject], self.option_divider), self.input_divider, " "])))) or None)
+		return self.__input__(raw_input(super(Reply, self).create(super(Message, self).concat(self.message, super(Reply, self).cconcat([super(Message, self).cconcat([self.confirm, self.reject], self.option_divider), self.input_divider, " "])))) or None)
 
 	def __input__ (self, prompt = None):
 		### @description: private method for confirming receieved input against cases and types

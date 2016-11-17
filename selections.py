@@ -12,6 +12,32 @@ from messages import Message
 
 class Select (Message):
 
+	def prompt (self):
+		### @description: protected method for asking user to input text that matches defined option
+		### @returns: <boolean>
+
+		# request user input from terminal
+		return self.__input__(raw_input(super(Select, self).create(super(Message, self).concat(self.message, super(Select, self).cconcat([super(Message, self).cconcat(self.selections, self.option_divider), self.input_divider, " "])))) or None)
+
+	def __input__ (self, prompt = None):
+		### @description: private method for confirming receieved input against cases and types
+		### @parameter: prompt, @type {string}
+		### @returns: <string>
+
+		# confirm type of input is string
+		if type(prompt) is str:
+			# initialise loop to process defined selections
+			for i in range(0, len(self.selections)):
+				# confirm match of string against selection
+				if self.selections[i].upper() == prompt.upper():
+					# return string for result handler
+					return self.selections[i]
+
+		# handle incorrect string
+		print self.create(self.concat(self.__format__(prompt or "empty", ["BOLD"]), self.failed))		
+		# recursively call handler
+		return self.prompt()
+
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
@@ -39,4 +65,4 @@ class Select (Message):
 
 if __name__ == '__main__':
 
-	print Select().__dict__
+	print Select().prompt()
