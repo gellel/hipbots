@@ -67,3 +67,4 @@ if __name__ == '__main__':
 
 	# create example selection
 	print Select(selections = ["pizza", "chocolate", "coffee"], name = "candy robot").prompt()
+	
