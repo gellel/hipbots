@@ -74,5 +74,4 @@ class Reply (Message):
 if __name__ == '__main__':
 	
 	# create example reply
-	print Reply().prompt()
-
+	print Reply(message = "delete all files?", name = "evil robot").prompt()
