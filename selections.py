@@ -65,4 +65,5 @@ class Select (Message):
 
 if __name__ == '__main__':
 
+	# create example selection
 	print Select().prompt()
