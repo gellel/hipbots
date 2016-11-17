@@ -10,6 +10,7 @@ from messages import Message
 
 
 
+
 class Select (Message):
 
 	def prompt (self):

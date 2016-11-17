@@ -10,6 +10,7 @@ from strings import String
 
 
 
+
 class Message (String):
 
 	#################################################
