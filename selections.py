@@ -13,6 +13,10 @@ from messages import Message
 
 class Select (Message):
 
+	#######################################################################################
+	### creates prefixed raw input handler to accept user input for multiple conditions ###
+	#######################################################################################
+
 	def prompt (self):
 		### @description: protected method for asking user to input text that matches defined option
 		### @returns: <boolean>

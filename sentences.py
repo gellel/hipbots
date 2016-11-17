@@ -13,6 +13,10 @@ from strings import String
 
 class Sentence (String):
 
+	###################################################################
+	### creates complete string from pseudo randomly selected parts ###
+	###################################################################
+
 	def __init__ (self, **kwargs)
 		pass
 
