@@ -64,9 +64,9 @@ class String (object):
 		### @returns: <string>
 
 		# create formatted strings using private method of class instance
-		return self.__strs__()
+		return self.__strs()
 
-	def __format__ (self, string = "sample", attributes = ["BOLD", "GREEN"]):
+	def __format (self, string = "sample", attributes = ["BOLD", "GREEN"]):
 		### @description: private method to encapsulate supplied string by attribute strings
 		### @parameter: string, @type: <string>
 		### @parameter: attributes, @type: <list>
@@ -81,7 +81,7 @@ class String (object):
 		# return formatted string
 		return string
 	
-	def __test__ (self, **kwargs):
+	def __test (self, **kwargs):
 		### @description: private method to processes strings and apply styling to required substrings
 		### @parameter: string, @type <string>
 		### @parameter: attributes, @type <string>
@@ -96,13 +96,13 @@ class String (object):
 			# set string to exclude prettify selector
 			substring = re.sub(self.FLT, "", matches[i])
 			# set string to include
-			prettified = self.__format__(substring, kwargs.get("attributes", []))
+			prettified = self.__format(substring, kwargs.get("attributes", []))
 			# refined string to be substituted string
 			string = re.sub(substring, prettified, string)
 		# return formatted string excluding selectors
 		return re.sub(self.FLT, "", string)
 
-	def __sets__ (self, string = "{{sample}}"):
+	def __dict (self, string = "{{sample}}"):
 		### @description: private method to set key word arguments for test
 		### @parameter: string, @type: <string>
 		### @returns: <string>
@@ -110,12 +110,12 @@ class String (object):
 		# supplies to private method "strs" dictionary if paramater "string" is type dictionary otherwise creates a new dictionary with the keys string and attributes
 		return string if type(string) is dict else { 'string': string, 'attributes': self.attributes }
 
-	def __strs__ (self):
+	def __strs (self):
 		### @description: private method to determine arguments for beautification
 		### @returns: <string>
 
 		# supplies to protected method "create" formatted string built from dictionary; selects to use either self.strings if self.string is not a defined value; attributes are chosen from either self.strings internal dictionary or base list for class instance 
-		return String.cconcat([self.__test__(string = self.string, attributes = self.attributes)], " ") if bool(self.string) and not bool(self.strings) else String.cconcat([self.__test__(**self.__sets__(string)) for string in self.strings], " ")
+		return String.cconcat([self.__test(string = self.string, attributes = self.attributes)], " ") if bool(self.string) and not bool(self.strings) else String.cconcat([self.__test(**self.__sets(string)) for string in self.strings], " ")
 	
 	def __init__ (self, **kwargs):
 		### @description: class constructor
@@ -133,7 +133,7 @@ class String (object):
 
 
 
-if __name__ == '__main__':
+if __name__ == '__main':
 	
 	# create example beautified string
 	print String(strings = ["{{here}} is {{sample}}", {"string":String.tag("text"),"attributes":["BOLD", "CYAN"]}, "with {{highlights}}"], attributes = ["BOLD", "BLUE"]).create()

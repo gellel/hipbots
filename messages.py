@@ -44,5 +44,7 @@ class Message (String):
 
 if __name__ == "__main__":
 
+	print dir(Message)
+
 	# create example message
 	print Message(name = "robot", seperator = ":").create("bleep! bloop!")

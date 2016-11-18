@@ -24,7 +24,7 @@ class Select (Message):
 		# request user input from terminal
 		return self.__input__(raw_input(super(Select, self).create(super(Message, self).concat(self.message, super(Select, self).cconcat([super(Message, self).cconcat(self.selections, self.option_divider), self.input_divider, " "])))) or None)
 
-	def __input__ (self, prompt = None):
+	def __input (self, prompt = None):
 		### @description: private method for confirming receieved input against cases and types
 		### @parameter: prompt, @type {string}
 		### @returns: <string>

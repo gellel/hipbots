@@ -22,9 +22,9 @@ class Reply (Message):
 		### @returns: <boolean>
 
 		# request user input from terminal
-		return self.__input__(raw_input(super(Reply, self).create(super(Message, self).concat(self.message, super(Reply, self).cconcat([super(Message, self).cconcat([self.confirm, self.reject], self.option_divider), self.input_divider, " "])))) or None)
+		return self.__input(raw_input(super(Reply, self).create(super(Message, self).concat(self.message, super(Reply, self).cconcat([super(Message, self).cconcat([self.confirm, self.reject], self.option_divider), self.input_divider, " "])))) or None)
 
-	def __input__ (self, prompt = None):
+	def __input (self, prompt = None):
 		### @description: private method for confirming receieved input against cases and types
 		### @parameter: prompt, @type {string}
 		### @returns: <boolean>

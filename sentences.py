@@ -19,6 +19,7 @@ class Sentence (String):
 
 	def create (self):
 		pass
+
 		
 	def __init__ (self, **kwargs):
 		### @description: class constructor
