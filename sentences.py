@@ -22,49 +22,61 @@ class Sentence (String):
 	def create (self):
 		### @description: protected method for creating pseudo random sentence from initialised strings
 		### @returns: <string>
-
 		# use inherited private method to concatenate strings create from init method on super.String
 		return super(Sentence, self).create()
 
-	def __test (self, fragments = []):
+	def __items (self, fragments = []):
 		### @description: private method for selecting items to be included in final output
 		### @parameter: fragments, @type: <list>
 		### @returns: <list>
 
-		# initialise loop to process fragments
+		# initialise loop to process all supplied fragments
 		for i in range(0, len(fragments)):
-			# set fragment index to filtered item
-			fragments[i] = self.__fragment(fragments[i])
-		# return filter list exlcuding non boolean values
+			# process sentence fragment
+			fragments[i] = self.__process(fragments[i])
+		# return list with none type removed
 		return filter(None, fragments)
 
-	def __fragment (self, fragment = None):
-		### @description: private method for breaking down nested fragments to create more varied returned string
-		### @parameter: fragment, @type: <string> or <dict> or <list>
-		
-		# confirm fragment is type list
-		if type(fragment) is list:
-			# set selection for fragement argument from pseudo random 
-			fragment = fragment[random.randrange(0, len(fragment))]
-		# confirm fragment is instance of Sentence class
-		elif isinstance(fragment, Sentence):
-			# set fragment to be constructed result
-			fragment = fragment.create()
-		# return filted fragment after it has been potentially processed by optional private method
-		return self.__optional(fragment) if type(fragment) is dict else fragment
-	
-	def __optional (self, fragment = False):
-		### @description: private method for determining whether fragment that is dictionary with key optional should be include based on psuedo random number generation
-		### @parameter: fragment, @type: <dict> or <string>
-		### @returns: <dict> or <boolean>
+	def __process (self, fragment = "sample"):
+		### @description: private function for processing supplied fragments
+		### @parameter: fragment, @type <list> @or <dict> @or <class:sentence> @or <string>
+		### @returns: <dict> @or <string>
 
-		# confirm that dict contains optional key and type is not none or false
+		# confirm type is list and contains length
+		if type(fragment) is list and bool(fragment):
+			# pseudo randomly select item
+			return self.__process(fragment[random.randrange(0, len(fragment))]) 
+		# confirm type is dict and contains keys
+		elif type(fragment) is dict and bool(fragment):
+			# process fragement dictionary requirements
+			fragment = self.__dict(fragment) if bool(fragment) else {}
+		# confirm type is instance of sentence class
+		elif isinstance(fragment, Sentence):
+			# construct sentence
+			fragment = fragment.create()
+		# return updated fragment
+		return fragment
+
+	def __dict (self, fragment = {}):
+		### @description: private method for editing dictionary key values for completed string item
+		### @parameter: fragment, @type <dict>
+		### @returns: <dict>
+
+		# confirm dict contains string
+		if not 'string' in fragment:
+			# return empty dict
+			return {}
+		# confirm dictionary contains key tag
+		if 'tag' in fragment and bool(fragment['tag']):
+			# edit string to contain beautification wrapper
+			fragment['string'] = self.tag(fragment['string'])
+		# confirm dictionary conatins key optional
 		if 'optional' in fragment and bool(fragment['optional']):
-			# generate pseudo random number from either boolean true or supplied integer
-			r = random.randrange(0, random.randrange(1, self.seed)) if type(fragment['optional']) is bool else random.randrange(0, fragment['optional'])
-			# set supplied fragment argument to false if random number is not zero
-			fragment = fragment if not r else False
-		# return updated fragement argument
+			# set random key
+			r = random.randrange(0, self.seed) if type(fragment['optional']) is bool else random.randrange(0, fragment['optional'])
+			# edit fragment to be empty dictionary if zero is not returned from pseudo random number generator
+			fragment = fragment if not r else {}
+		# return edited fragment
 		return fragment
 		
 	def __init__ (self, **kwargs):
@@ -75,11 +87,15 @@ class Sentence (String):
 		# set random seed attribute; @default <integer>
 		self.seed = kwargs.get("seed", random.randrange(2, 6))
 		# initialise inherited
-		super(Sentence, self).__init__(strings = self.__test(kwargs.get("fragments", [{"string":"{{Hi!}}","optional":True,"attributes":["BOLD"]}, {"string":"I am written in {{Python}}."}, ["How are you?", "Hope you are well!"], {"string":"Thanks for reading.","optional":4}])))
+		super(Sentence, self).__init__(strings = self.__items(kwargs.get("fragments", [{"string":"{{Hello}}","optional":True,"attributes":["BOLD"]}, "{{world}}!"])))
+
 
 
 
 if __name__ == '__main__':
 
-	# create example sentence
-	print Sentence().create()
+	# create example pseudo random sentence
+	print Sentence(fragments = [["Hi there", ["Bonjour", "Guten Tag", "Hej"]], ["!", "."], {"string":"How are you", "attributes":["BOLD"], "tag":True}, "?", Sentence(fragments = [["I'm", "I am"], "doing", ["fine", "good", "great"], ["!", "."]]), Sentence(fragments = ["What's", ["new", "different"], [{"string":"today","tag":True}, {"string":"{{these}} days","attributes":["BOLD"]}], "?"]) ]).create()
+
+
+
