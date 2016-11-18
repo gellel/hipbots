@@ -115,7 +115,7 @@ class String (object):
 		### @returns: <string>
 
 		# supplies to protected method "create" formatted string built from dictionary; selects to use either self.strings if self.string is not a defined value; attributes are chosen from either self.strings internal dictionary or base list for class instance 
-		return String.cconcat([self.__test(string = self.string, attributes = self.attributes)], " ") if bool(self.string) and not bool(self.strings) else String.cconcat([self.__test(**self.__sets(string)) for string in self.strings], " ")
+		return String.cconcat([self.__test(string = self.string, attributes = self.attributes)], " ") if bool(self.string) and not bool(self.strings) else String.cconcat([self.__test(**self.__dict(string)) for string in self.strings], " ")
 	
 	def __init__ (self, **kwargs):
 		### @description: class constructor
