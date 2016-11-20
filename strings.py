@@ -133,7 +133,7 @@ class String (object):
 
 
 
-if __name__ == '__main':
+if __name__ == '__main__':
 	
 	# create example beautified string
-	print String(strings = ["{{here}} is {{sample}}", {"string":String.tag("text"),"attributes":["BOLD", "CYAN"]}, "with {{highlights}}"], attributes = ["BOLD", "BLUE"]).create()
+	print String(strings = ["{{Here}} is {{sample}}", {"string":String.tag("text"),"attributes":["BOLD", "CYAN"]}, "with {{highlights}}!"], attributes = ["BOLD", "BLUE"]).create()
