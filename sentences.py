@@ -22,6 +22,7 @@ class Sentence (String):
 	def create (self):
 		### @description: protected method for creating pseudo random sentence from initialised strings
 		### @returns: <string>
+		
 		# use inherited private method to concatenate strings create from init method on super.String
 		return super(Sentence, self).create()
 
@@ -96,6 +97,3 @@ if __name__ == '__main__':
 
 	# create example pseudo random sentence
 	print Sentence(fragments = [["Hi there", ["Bonjour", "Guten Tag", "Hej"]], ["!", "."], {"string":"How are you", "attributes":["BOLD"], "tag":True}, "?", Sentence(fragments = [["I'm", "I am"], "doing", ["fine", "good", "great"], ["!", "."]]), Sentence(fragments = ["What's", ["new", "different"], [{"string":"today","tag":True}, {"string":"{{these}} days","attributes":["BOLD"]}], "?"]) ]).create()
-
-
-
