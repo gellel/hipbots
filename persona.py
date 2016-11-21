@@ -11,9 +11,9 @@ from strs import String
 
 class Persona (String):
 
-	##########################################
-	### public clas named printed messages ###
-	##########################################
+	###########################################
+	### public class named printed messages ###
+	###########################################
 
 	def say (self, *args):
 		### @description: protected method for creating formatted string as a person
