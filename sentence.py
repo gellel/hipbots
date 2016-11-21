@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings class
-from string import String
+from strings import String
 ### py pseudo random 
 import random
 

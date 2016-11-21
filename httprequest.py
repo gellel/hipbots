@@ -147,4 +147,5 @@ class HTTP:
 if __name__ == '__main__':
 
 	# create example HTTP request wrapper
-	print HTTP(url = "HTTPs://en.wikipedia.org/w/api.php", type = "GET", query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).create()
+	print HTTP(url = "https://en.wikipedia.org/w/api.php", type = "GET", query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).create()
+	
