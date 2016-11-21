@@ -6,7 +6,9 @@
 ### python scripts dependencies ###
 ###################################
 ### import messages class
-from messages import Message
+from message import Message
+### import regexp class
+import re
 
 
 
@@ -22,7 +24,7 @@ class Select (Message):
 		### @returns: <boolean>
 
 		# request user input from terminal
-		return self.__input__(raw_input(super(Select, self).create(super(Message, self).concat(self.message, super(Select, self).cconcat([super(Message, self).cconcat(self.selections, self.option_divider), self.input_divider, " "])))) or None)
+		return self.__input(raw_input(super(Select, self).create(super(Message, self).concat(self.message, super(Select, self).cconcat([super(Message, self).cconcat(self.selections, self.option_divider), self.input_divider, " "])))) or None)
 
 	def __input (self, prompt = None):
 		### @description: private method for confirming receieved input against cases and types
@@ -34,15 +36,25 @@ class Select (Message):
 			# initialise loop to process defined selections
 			for i in range(0, len(self.selections)):
 				# confirm match of string against selection
-				if self.selections[i].upper() == prompt.upper():
-					# return string for result handler
-					return self.selections[i]
-
+				if bool(re.search(re.compile(prompt, re.IGNORECASE), self.selections[i])):
+					# return user string
+					return prompt
 		# handle incorrect string
-		print self.create(self.concat(self.__format__(prompt or "empty", ["BOLD"]), self.failed))		
+		print self.create(self.concat(super(Select, self).prettified(prompt or "empty", ["BOLD"]), self.failed))		
 		# recursively call handler
 		return self.prompt()
 
+	def __selection (self, selections = []):
+		### @description: beautifies selections with formatting
+		### @parameter: selection, @type: <list>
+		### @returns: <list>
+
+		# initalise loop over supplied selections
+		for i in range(0, len(selections)):
+			# set formatted selectiod
+			selections[i] = super(Select, self).prettified(**selections[i]) if type(selections[i]) is dict else selections[i]
+		# return updated selection
+		return selections
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
@@ -53,7 +65,7 @@ class Select (Message):
 		### @parameter: option_divider, @type: <string>
 
 		# set selections attribute; @default <list>
-		self.selections = kwargs.get("selections", ["a", "b", "c"])
+		self.selections = self.__selection(kwargs.get("selections", ["a", "b", "c"]))
 		# set prompt attribute; @default: <string>
 		self.message = kwargs.get("message", "select one of these options")
 		# set failed attribute; @default: <string>
@@ -71,4 +83,4 @@ class Select (Message):
 if __name__ == '__main__':
 
 	# create example selection
-	print Select(selections = ["pizza", "chocolate", "coffee"], name = "candy robot", attributes = ["BOLD", "PURPLE"]).prompt()
+	print Select(selections = ["pizza", {'string':"chocolate", 'attributes': ["BOLD"]}, "coffee"], name = "queen candybot", attributes = ["BOLD", "PURPLE"]).prompt()

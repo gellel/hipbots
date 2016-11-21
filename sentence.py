@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings class
-from strings import String
+from string import String
 ### py pseudo random 
 import random
 
@@ -96,4 +96,4 @@ class Sentence (String):
 if __name__ == '__main__':
 
 	# create example pseudo random sentence
-	print Sentence(fragments = [["Hi there", ["Bonjour", "Guten Tag", "Hej"]], ["!", "."], {"string":"How are you", "attributes":["BOLD"], "tag":True}, "?", Sentence(fragments = [["I'm", "I am"], "doing", ["fine", "good", "great"], ["!", "."]]), Sentence(fragments = ["What's", ["new", "different"], [{"string":"today","tag":True}, {"string":"{{these}} days","attributes":["BOLD"]}], "?"]) ]).create()
+	print Sentence(fragments = [["Hi there", ["Bonjour", "Guten Tag", "Hej"]], ["!", "."], {"string":"How are you", "attributes":["BOLD"], "tag":True}, "?", Sentence(fragments = [["I'm", "I am"], "doing", ["fine", "good", "great"], ["!", "."]]), Sentence(fragments = ["What's", ["new", "different", "changed", "happening"], [{"string":"today","tag":True}, {"string":"these {{days}}","attributes":["BOLD"]}], "?"]) ]).create()

@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import messages class
-from messages import Message
+from message import Message
 
 
 

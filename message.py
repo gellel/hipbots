@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings class
-from strings import String
+from string import String
 
 
 

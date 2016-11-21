@@ -32,8 +32,23 @@ class String (object):
 	FLT = r"{{|}}"
 
 	@staticmethod
+	def prettified (string = "sample", attributes = []):
+		### @description: public method to apply entire style to supplied string
+		### @parameter: string, @type: <string>
+		### @parameter: attributes, @type: <list>
+
+		# set base attributes arguments
+		arguments = attributes if type(attributes) is list else []
+		# initialise loop to apply styles
+		for i in range(0, len(attributes)):
+			# attempt to get attribute of class or set default to empty string and concatenate string using class public method 
+			string = String.cconcat([getattr(String, str(attributes[i]).upper(), ""), string, String.END])
+		# return string including display substrings
+		return string
+
+	@staticmethod
 	def cconcat (strings = [], character = ""):
-		### @description: protected method to concatenate characters by supplied character argument
+		### @description: public method to concatenate characters by supplied character argument
 		### @parameter: strings, @type: <list>
 		### @parameter: character, @type: <string>
 		### @returns: <string>
@@ -43,7 +58,7 @@ class String (object):
 
 	@staticmethod
 	def concat (*args):
-		### @description: protected method to concatenate arguments by seperated white space
+		### @description: public method to concatenate arguments by seperated white space
 		### @parameter: args, @type: <string>
 		### @returns: <string>
 
@@ -52,7 +67,7 @@ class String (object):
 
 	@staticmethod
 	def tag (string = "tagged example"):
-		### @description: protected method to encapsulate supplied string by highlighting markup
+		### @description: public method to encapsulate supplied string by highlighting markup
 		### @parameter: string, @type: <string>
 		### @returns: <string>
 
@@ -74,11 +89,9 @@ class String (object):
 
 		# initialise loop to process supplied attributes
 		for i in range(0, len(attributes)):
-			# attempt to get attribute of class or set default to empty string
-			attribute = getattr(self, str(attributes[i]).upper(), "")
-			# concatenate string using class public method 
-			string = String.cconcat([attribute, string, self.END])
-		# return formatted string
+			# get attribute of class or set default to empty string and concatenate string using class public method 
+			string = String.cconcat([getattr(self, str(attributes[i]).upper(), ""), string, self.END])
+		# return string including display substrings
 		return string
 	
 	def __test (self, **kwargs):
