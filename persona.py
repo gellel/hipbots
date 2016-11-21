@@ -55,11 +55,11 @@ class Persona (String):
 
 	def __list (self, *args):
 		### @description: private method for setting argument
-		### @parameter: <args>, @type: <list>, @default: <None>
+		### @parameter: <args>, @type: <list>, @default: <tuple>
 		### @return: @type: <list>
-
-		# define base list
-		return args if type(args) is list else ["BOLD", "UNDERLINE"] 
+		
+		# set base list
+		return sum(list(args), [])
 
 	def __str (self, arg = None, fallback = ""):
 		### @descrption: private method for setting argument as string
@@ -80,7 +80,7 @@ class Persona (String):
 		self.separator = self.__str(kwargs.get("separator", None), ":")
 		# set string style attributes for prefixed name, @parameter: <style>, @type: <list>, @default: <list>
 		self.style = self.__list(kwargs.get("style", None))
-
+		print self.style
 
 
 
