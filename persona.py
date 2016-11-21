@@ -80,7 +80,7 @@ class Persona (String):
 		self.separator = self.__str(kwargs.get("separator", None), ":")
 		# set string style attributes for prefixed name, @parameter: <style>, @type: <list>, @default: <list>
 		self.style = self.__list(kwargs.get("style", None))
-		print self.style
+
 
 
 
