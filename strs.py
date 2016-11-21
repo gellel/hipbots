@@ -47,7 +47,7 @@ class String (object):
 		### @return: @type: <str>
 
 		# join string using whitespace
-		return cconcat(list(strings), " ")
+		return String.cconcat(list(strings), " ")
 
 	@staticmethod
 	def GetStyles ():
