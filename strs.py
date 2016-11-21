@@ -50,7 +50,7 @@ class String (object):
 		return cconcat(list(strings), " ")
 
 	@staticmethod
-	def styles ():
+	def GetStyles ():
 		### @description: public function for getting dict of terminal colours and formatting
 		### @return: @type <dict>
 
@@ -58,37 +58,37 @@ class String (object):
 		return { 'PURPLE': String.PURPLE, 'CYAN': String.CYAN, 'DARKCYAN': String.DARKCYAN, 'BLUE': String.BLUE, 'GREEN': String.GREEN, 'YELLOW': String.YELLOW, 'RED': String.RED, 'BOLD': String.BOLD, 'UNDERLINE': String.UNDERLINE }
 
 	@staticmethod
-	def stylise (string = None, attribute = None):
+	def SetStyle (string = None, attribute = None):
 		### @description: public function for setting style formatting around string for terminal ouput
 		### @parameter: <string>, @type: <str>
 		### @parameter: <attribute>, @type: <str>
 		### @return: @type: <str>
 
 		# join string with attribute and attribute end
-		return String.cconcat([attribute or String.BOLD, string or String.syntax(String.SAMPLE), String.END])
+		return String.cconcat([attribute or String.BOLD, string or String.Syntax(String.SAMPLE), String.END])
 
 	@staticmethod
-	def syntax (string = None):
+	def Syntax (string = None):
 		### @description: public function for setting syntax for strings
 		### @parameter: <string>, @type: <str>
 		### @return: @type: <str>
 
-		# join string using "{{" and "}}"
+		# join string using "{{" and "}}" to create "{{sample text}}"
 		return String.cconcat(["{{", string or String.SAMPLE, "}}"])
 
 	@staticmethod
-	def format (string = None, attributes = None):
+	def Pretty (string = None, attributes = None):
 		### @description: public method for setting terminal style to required text
 		### @parameter: <string>, @type: <str>
 		### @parameter: <attributes>, @type: <list>
 		### @return: @type <list>
 
 		# set base string
-		string = string if type(string) is str and bool(string) else String.syntax(String.SAMPLE)
+		string = string if type(string) is str and bool(string) else String.Syntax(String.SAMPLE)
 		# set base attributes
 		attributes = attributes if type(attributes) is list else ["BOLD"]
 		# set base reference to styles
-		styles = String.styles()
+		styles = String.GetStyles()
 		# find strings containing string style syntax 
 		strings = re.findall(String.FILTER, string, re.DOTALL)
 		# initialise loop to process selected texts
@@ -102,7 +102,7 @@ class String (object):
 				# confirm style attribute
 				if attributes[k].upper() in styles:
 					# set formatted string
-					edited = String.stylise(edited, styles[attributes[k].upper()])
+					edited = String.SetStyle(edited, styles[attributes[k].upper()])
 			# set original string to include substituted and formatted string reference
 			string = re.sub(substring, edited, string)
 		# find syntax strings and substitute with null
@@ -113,5 +113,4 @@ class String (object):
 if __name__ == '__main__':
 
 	# format example string
-	print String.format()
-	
+	print String.Pretty()
