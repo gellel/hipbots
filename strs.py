@@ -33,8 +33,8 @@ class String (object):
 	@staticmethod
 	def cconcat (strings = [], character = ""):
 		### @description: public function for concatenating a list of strings by supplied character
-		### @parameter: <strings>, @type: <list>
-		### @parameter: <character>, @type: <str>
+		### @parameter: <strings>, @type: <list>, @default: <list>
+		### @parameter: <character>, @type: <str>, @default: <str>
 		### @return: @type: <list>
 
 		# join strings using converted character reference
@@ -43,7 +43,7 @@ class String (object):
 	@staticmethod
 	def concat (*strings):
 		### @description: public function for concatenating multiple string arguments by empty space
-		### @parameter: <strings>, @type: <str>
+		### @parameter: <strings>, @type: <str>, @default: <None>
 		### @return: @type: <str>
 
 		# join string using whitespace
@@ -60,8 +60,8 @@ class String (object):
 	@staticmethod
 	def SetStyle (string = None, attribute = None):
 		### @description: public function for setting style formatting around string for terminal ouput
-		### @parameter: <string>, @type: <str>
-		### @parameter: <attribute>, @type: <str>
+		### @parameter: <string>, @type: <str>, @default: <None>
+		### @parameter: <attribute>, @type: <str>, @default: <None>
 		### @return: @type: <str>
 
 		# join string with attribute and attribute end
@@ -70,7 +70,7 @@ class String (object):
 	@staticmethod
 	def Syntax (string = None):
 		### @description: public function for setting syntax for strings
-		### @parameter: <string>, @type: <str>
+		### @parameter: <string>, @type: <str>, @default: <None>
 		### @return: @type: <str>
 
 		# join string using "{{" and "}}" to create "{{sample text}}"
@@ -79,9 +79,9 @@ class String (object):
 	@staticmethod
 	def Pretty (string = None, attributes = None):
 		### @description: public method for setting terminal style to required text
-		### @parameter: <string>, @type: <str>
-		### @parameter: <attributes>, @type: <list>
-		### @return: @type <list>
+		### @parameter: <string>, @type: <str>, @default: <None>
+		### @parameter: <attributes>, @type: <list>, @default: <None>
+		### @return: @type <str>
 
 		# set base string
 		string = string if type(string) is str and bool(string) else String.Syntax(String.SAMPLE)
