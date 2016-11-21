@@ -11,6 +11,10 @@ import re
 
 class String (object):
 
+	##########################################
+	### public class for string formatting ###
+	##########################################
+
 	SAMPLE = "SAMPLE"
 	PURPLE = '\033[95m'
 	CYAN = '\033[96m'
@@ -101,11 +105,13 @@ class String (object):
 					edited = String.stylise(edited, styles[attributes[k].upper()])
 			# set original string to include substituted and formatted string reference
 			string = re.sub(substring, edited, string)
-		# find syntax strings and replace with empty strings
+		# find syntax strings and substitute with null
 		return re.sub(r'{{|}}', "", string)
 
 
 
 if __name__ == '__main__':
 
+	# format example string
 	print String.format()
+	
