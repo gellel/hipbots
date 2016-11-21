@@ -20,16 +20,18 @@ class Persona (String):
 		### @parameter: <args>, @type: <list>, @default: <None>
 		### @return: @type <str>
 
-		# set base string for output
-		string = ""
 		# set args to list
 		args = list(args)
 		# initialise loop to process arguments
 		for i in range(0, len(args)):
 			# edit argument to contain formatting if required
-			args[i] = super(MSG, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
-		# join strings by white space string
-		return super(MSG, self).cconcat(args, " ")
+			args[i] = super(Persona, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
+		# set complete name with sep syntax
+		name = super(Persona, self).Syntax(super(Persona, self).cconcat([self.name, self.separator]))
+		# set style to name
+		name = super(Persona, self).Pretty(name, self.style)
+		# join name with message
+		return super(Persona, self).concat(name, super(Persona, self).cconcat(args, " "))
 
 	def __dict (self, arg):
 		### @description: private method for setting dict items to enable stylisation
@@ -45,7 +47,7 @@ class Persona (String):
 		# confirm tag key exits
 		if 'tag' in arg and bool(arg['tag']):
 			# set string to contain syntax wrapper
-			arg['string'] = super(MSG, self).Syntax(arg['string'])
+			arg['string'] = super(Persona, self).Syntax(arg['string'])
 		# edit copied dict to exclude tag key value pair
 		map(arg.pop, ["tag"])
 		# define base dict
@@ -74,8 +76,8 @@ class Persona (String):
 
 		# set message prefixed name, @parameter: <name>, @type: <str>, @default: <None>
 		self.name = self.__str(kwargs.get("name", None), "system")
-		# set seperator character between prefixed name and output string, @parameter: <seperator>, @type: <str>, @default: <None>
-		self.seperator = self.__str(kwargs.get("seperator", None), ":")
+		# set separator character between prefixed name and output string, @parameter: <separator>, @type: <str>, @default: <None>
+		self.separator = self.__str(kwargs.get("separator", None), ":")
 		# set string style attributes for prefixed name, @parameter: <style>, @type: <list>, @default: <list>
 		self.style = self.__list(kwargs.get("style", None))
 
@@ -85,4 +87,4 @@ class Persona (String):
 if __name__ == '__main__':
 
 	# formatted named message
-	print Person().say("hello", {"string":"yall","attributes":["RED"],'tag'})
+	print Persona(name = "clockwerk", separator = ":", style = ["BOLD", "GREEN"]).say({"string":"bleep!","attributes":["BLUE", "BOLD"],"tag":True}, {"string":"bloop!","attributes":["RED", "BOLD"],"tag":True}, "I am a robot!")
