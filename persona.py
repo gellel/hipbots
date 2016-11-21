@@ -9,14 +9,14 @@
 from strs import String
 
 
-class MSG (String):
+class Persona (String):
 
 	##########################################
 	### public clas named printed messages ###
 	##########################################
 
-	def send (self, *args):
-		### @description: protected method for creating formatted string
+	def say (self, *args):
+		### @description: protected method for creating formatted string as a person
 		### @parameter: <args>, @type: <list>, @default: <None>
 		### @return: @type <str>
 
@@ -84,5 +84,5 @@ class MSG (String):
 
 if __name__ == '__main__':
 
-	# format named message
-	print MSG().send("hello", {"string":"yall","attributes":["RED"],'tag'})
+	# formatted named message
+	print Person().say("hello", {"string":"yall","attributes":["RED"],'tag'})
