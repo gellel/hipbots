@@ -34,5 +34,5 @@ class Binary (Persona):
 
 if __name__ == '__main__':
 
+	# formatted named raw input
 	print Binary().say()
-	
