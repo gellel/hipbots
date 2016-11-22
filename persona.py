@@ -57,9 +57,9 @@ class Persona (String):
 		### @description: private method for setting argument
 		### @parameter: <args>, @type: <list>, @default: <tuple>
 		### @return: @type: <list>
-		
+
 		# set base list
-		return sum(list(args), [])
+		return sum(filter(None, list(args)), [])
 
 	def __str (self, arg = None, fallback = ""):
 		### @descrption: private method for setting argument as string
@@ -74,12 +74,15 @@ class Persona (String):
 		### @descrption: class constructor
 		### @parameters: <kwargs>, @type: <dict>
 
-		# set message prefixed name, @parameter: <name>, @type: <str>, @default: <None>
+		# set message prefixed name
+		# @parameter: <name>, @type: <str>, @default: <None>
 		self.name = self.__str(kwargs.get("name", None), "system")
-		# set separator character between prefixed name and output string, @parameter: <separator>, @type: <str>, @default: <None>
+		# set separator character between prefixed name and output string 
+		# @parameter: <separator>, @type: <str>, @default: <None>
 		self.separator = self.__str(kwargs.get("separator", None), ":")
-		# set string style attributes for prefixed name, @parameter: <style>, @type: <list>, @default: <list>
-		self.style = self.__list(kwargs.get("style", None))
+		# set string style attributes for prefixed name 
+		# @parameter: <style>, @type: <list>, @default: <list>
+		self.style = self.__list(kwargs.get("style"))
 
 
 
@@ -87,4 +90,4 @@ class Persona (String):
 if __name__ == '__main__':
 
 	# formatted named message
-	print Persona(name = "clockwerk", separator = ":", style = ["BOLD", "GREEN"]).say({"string":"bleep!","attributes":["BLUE", "BOLD"],"tag":True}, {"string":"bloop!","attributes":["RED", "BOLD"],"tag":True}, "I am a robot!")
+	print Persona(name = "clockwerk", separator = ":", style = ["BOLD"]).say({"string":"bleep!","attributes":["BLUE", "BOLD"],"tag":True}, {"string":"bloop!","attributes":["RED", "BOLD"],"tag":True}, "I am a robot!")
