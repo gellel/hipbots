@@ -23,7 +23,9 @@ class Binary (Persona):
 		### @parameter: <options>, @type: <list>
 		pass
 
-	def __input (self, message):
+	def __input (self, message = None):
+		### @description: private method to construct raw input handler
+		### @parameter: <message>, @type: <str>, @default: <None>
 		pass
 
 	def __init__ (self, **kwargs):
