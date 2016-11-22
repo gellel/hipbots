@@ -17,8 +17,13 @@ class Binary (Persona):
 	### public class for named input prompts ###
 	############################################
 
-	@staticmethod
 	def prompt (**kwargs):
+		### @description: protected method for creating stylised user input
+		### @parameter: <request>, @type: <str>
+		### @parameter: <options>, @type: <list>
+		pass
+
+	def __input (self, message):
 		pass
 
 	def __init__ (self, **kwargs):
@@ -30,6 +35,8 @@ class Binary (Persona):
 		# @parameter: <separator>, @type: <str>, @default: <None>
 		# @parameter: <style>, @type: <list>, @default: <None>
 		super(Binary, self).__init__(name = kwargs.get("name"), separator = kwargs.get("separator"), style = kwargs.get("style"))
+
+
 
 
 if __name__ == '__main__':
