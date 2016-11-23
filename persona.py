@@ -26,13 +26,18 @@ class Persona (String):
 		for i in range(0, len(args)):
 			# edit argument to contain formatting if required
 			args[i] = super(Persona, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
-		# set complete name with sep syntax
-		name = super(Persona, self).Syntax(super(Persona, self).cconcat([self.name, self.separator]))
-		# set style to name
-		name = super(Persona, self).Pretty(name, self.style)
 		# join name with message
-		return super(Persona, self).concat(name, super(Persona, self).cconcat(args, " "))
+		return super(Persona, self).concat(self.__name(), super(Persona, self).cconcat(args, " "))
 
+	def __name (self):
+		### @description: private method for creating formatted personas name
+		### @return: @type: <str>
+
+		# set base name
+		name = super(Persona, self).Syntax(super(Persona, self).cconcat([self.name, self.separator]))
+		# set base styled
+		return super(Persona, self).Pretty(name, self.style)
+	
 	def __dict (self, arg):
 		### @description: private method for setting dict items to enable stylisation
 		### @parameter: <arg>, @type: <dict>, @default: <None>
@@ -91,3 +96,4 @@ if __name__ == '__main__':
 
 	# formatted named message
 	print Persona(name = "clockwerk", separator = ":", style = ["BOLD"]).say({"string":"bleep!","attributes":["BLUE", "BOLD"],"tag":True}, {"string":"bloop!","attributes":["RED", "BOLD"],"tag":True}, "I am a robot!")
+	

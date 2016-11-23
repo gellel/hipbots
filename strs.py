@@ -77,6 +77,15 @@ class String (object):
 		return String.cconcat(["{{", string or String.SAMPLE, "}}"])
 
 	@staticmethod
+	def Clean (string = None):
+		### @description: public function for removing syntax from strings
+		### @parameter: <string>, @type: <str>, @default: <None>
+		### @return: @type: <str>
+
+		# find syntax strings and substitute with null
+		return re.sub(r'{{|}}', "", string or String.SAMPLE)
+
+	@staticmethod
 	def Pretty (string = None, attributes = None):
 		### @description: public method for setting terminal style to required text
 		### @parameter: <string>, @type: <str>, @default: <None>
