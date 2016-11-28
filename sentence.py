@@ -27,7 +27,7 @@ class Sentence (String):
 	def __process (self, fragments):
 		### @description: private method for selecting items to be included in final output
 		### @parameter: fragments, @type: <list>
-		### @returns: <str>
+		### @return: @type: <str>
 
 		# initialise loop to process text fragments
 		for i in range(0, len(fragments)):
@@ -39,7 +39,7 @@ class Sentence (String):
 	def __option (self, fragment):
 		### @description: private function for setting inclusion status of string fragment
 		### @paramater: <fragment>, @type: <dict>
-		### @return: <dict>
+		### @return: @type: <dict>
 
 		# confirm dictionary conatins key optional
 		if 'optional' in fragment and bool(fragment['optional']):
@@ -100,4 +100,3 @@ if __name__ == '__main__':
 
 	# create example pseudo random sentence
 	print Sentence(fragments = [['Hi there', ['Bonjour', 'Guten Tag', 'Hej']], ['!', '.'], { 'string': 'How are you', 'attributes': ['BOLD'], 'tag': True }, '?', Sentence(fragments = [['I\'m', 'I am'], 'doing', ['fine', 'good', 'great'], ['!', '.']]), Sentence(fragments = ['What\'s', ['new', 'different', 'changed', 'happening'], [{ 'string': 'today', 'tag': True }, { 'string': 'these {{days}}', 'attributes': ['BOLD'] }], '?']) ]).randomize()
-	
