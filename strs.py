@@ -86,14 +86,17 @@ class String (object):
 		return re.sub(String.SYNTAX, '', string or String.SAMPLE)
 
 	@staticmethod
-	def Pretty (string = None, attributes = None):
+	def Pretty (string = None, attributes = None, tag = None):
 		### @description: public method for setting terminal style to required text
 		### @parameter: <string>, @type: <str>, @default: <None>
 		### @parameter: <attributes>, @type: <list>, @default: <None>
+		### @parameter: <tag>, @type: <bool>, @default: <None>
 		### @return: @type <str>
 
 		# set base string
-		string = string if type(string) is str and bool(string) else String.Syntax(String.SAMPLE)
+		string = string if type(string) is str and bool(string) else String.SAMPLE
+		# set syntax wrap
+		string = String.Syntax(string) if bool(tag) else string
 		# set base attributes
 		attributes = attributes if type(attributes) is list else ['BOLD']
 		# set base reference to styles
@@ -123,4 +126,3 @@ if __name__ == '__main__':
 
 	# format example string
 	print String.Pretty()
-	
