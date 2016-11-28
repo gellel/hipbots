@@ -100,3 +100,4 @@ if __name__ == '__main__':
 
 	# create example pseudo random sentence
 	print Sentence(fragments = [['Hi there', ['Bonjour', 'Guten Tag', 'Hej']], ['!', '.'], { 'string': 'How are you', 'attributes': ['BOLD'], 'tag': True }, '?', Sentence(fragments = [['I\'m', 'I am'], 'doing', ['fine', 'good', 'great'], ['!', '.']]), Sentence(fragments = ['What\'s', ['new', 'different', 'changed', 'happening'], [{ 'string': 'today', 'tag': True }, { 'string': 'these {{days}}', 'attributes': ['BOLD'] }], '?']) ]).randomize()
+	
