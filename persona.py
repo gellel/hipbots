@@ -18,7 +18,7 @@ class Persona (String):
 	def say (self, *args):
 		### @description: protected method for creating formatted string as a person
 		### @parameter: <args>, @type: <list>, @default: <None>
-		### @return: @type <str>
+		### @return: @type: <str>
 
 		# set supplied arguments to python list
 		args = list(args)
@@ -44,7 +44,7 @@ class Persona (String):
 		### @return: @type: <dict>
 
 		# set dictionary key string as defined pair use String default
-		arg['string'] = str(arg['string']) if not None else String.SAMPLE
+		arg['string'] = str(arg['string']) if not None else super(Persona, self).SAMPLE
 		# set style attibutes for dictionary
 		arg['attributes'] = list(arg['attributes']) if type(arg['attributes']) is list or type(arg['attributes']) is tuple else ['BOLD']
 		# supply constructed dictionary
