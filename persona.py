@@ -88,3 +88,4 @@ if __name__ == '__main__':
 
 	# formatted named message
 	print Persona(name = 'clockwerk', separator = ':', style = ['BOLD']).say({ 'string': 'bleep!', 'attributes': ['BLUE', 'BOLD'], 'tag': True }, { 'string': 'bloop!', 'attributes': ['RED', 'BOLD'], 'tag': True }, 'I am a robot!')
+	
