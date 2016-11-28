@@ -141,7 +141,7 @@ class Entity (Persona):
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type: <str>
 
-		# case dict to str if else assume str
+		# cast dict to str if else assume str
 		return arg['string'] if type(arg) is dict else arg
 
 	def __init__ (self, **kwargs):
