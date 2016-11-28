@@ -102,15 +102,15 @@ class Entity (Persona):
 		### @return: @type: <str>
 
 		# set user input
-		return raw_input(super(Entity, self).say(super(Entity, self).concat(kwargs.get('request'), super(Entity, self).cconcat([super(Entity, self).cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), " "]))))
+		return raw_input(super(Entity, self).say(super(Entity, self).concat(kwargs.get('request'), super(Entity, self).cconcat([super(Entity, self).cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), ' ']))))
 
-	def __format (self, request):
-		### @description: private method for beautifying request argument
-		### @parameter: <request>, @type: <dict/str>, @default: <str>
+	def __format (self, arg):
+		### @description: private method for beautifying wildcard argument
+		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type <str>
 
 		# set beautiful string
-		return super(Entity, self).Pretty(**self.__dict(request))
+		return super(Entity, self).Pretty(**self.__dict(arg))
 
 	def __syntax (self, arg = {}):
 		### @description: private method for editing string to contain style tag
@@ -124,7 +124,7 @@ class Entity (Persona):
 			# set style syntax
 			arg['string'] = super(Entity, self).Syntax(arg['string'])
 			# delete key tag
-			arg.pop("tag")
+			arg.pop('tag')
 		# set updated arg
 		return arg
 
