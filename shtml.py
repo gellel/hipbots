@@ -27,7 +27,7 @@ class HTML (String):
 		# set base node
 		node = node or HTML.TAG
 		# encase supplied string with HTML syntax
-		return String.cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
+		return HTML.cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
 	@staticmethod
 	def attributes (attributes = None):
@@ -38,7 +38,7 @@ class HTML (String):
 		# set base attributes
 		attributes = attributes or HTML.ATTRIBUTES
 		# set each key in attributes to be joined by equals and quotations
-		return String.cconcat([' ', String.cconcat([String.cconcat([str(attr), '=', '"', attributes[attr], '"']) for attr in attributes], " ")])
+		return HTML.cconcat([' ', HTML.cconcat([HTML.cconcat([str(attr), '=', '"', attributes[attr], '"']) for attr in attributes], " ")])
 	
 	@staticmethod
 	def create (**kwargs):
@@ -66,4 +66,3 @@ if __name__ == '__main__':
 
 	# build example HTML
 	print HTML.create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
-	
