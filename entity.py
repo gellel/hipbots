@@ -111,31 +111,15 @@ class Entity (Persona):
 		# set beautiful string
 		return super(Entity, self).Pretty(**self.__dict(arg))
 
-	def __syntax (self, arg = {}):
-		### @description: private method for editing string to contain style tag
-		### @parameter: <arg>, @type: <dict>, @default: <dict>
-		### @return: @type: <dict>
-
-		# confirm arg contains string or set default
-		arg = self.__dict(arg) if not 'string' in arg else arg
-		# confirm tag required
-		if 'tag' in arg and bool(arg['tag']):
-			# set style syntax
-			arg['string'] = super(Entity, self).Syntax(arg['string'])
-			# delete key tag
-			arg.pop('tag')
-		# set updated arg
-		return arg
-
 	def __dict (self, arg = 'sample'):
 		### @description: private method for casting argument to string.pretty kwargs
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type: <dict>
 
 		# cast argument to dict if argument is string otherwise assume dict
-		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else self.__syntax(arg)
+		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else arg
 
-	def __str (self, arg = {'string':'sameple'}):
+	def __str (self, arg = { 'string': 'sample' }):
 		### @description: private method for casting argument to string
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type: <str>
