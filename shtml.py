@@ -64,3 +64,4 @@ if __name__ == '__main__':
 
 	# build example HTML
 	print HTML.create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
+	
