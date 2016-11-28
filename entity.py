@@ -16,7 +16,7 @@ class Entity (Persona):
 	####################################################################
 
 	def ask (self, *args, **kwargs):
-		### @description: protected method for requesting input from user under a persona
+		### @description: protected function for requesting input from user under a persona
 		### @parameter: <args>, @type: <tuple>
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
@@ -53,7 +53,7 @@ class Entity (Persona):
 		return self.__strin(request = request, confirm = confirm, reject = reject, null = null, separator = separator, divider = divider, selection_options = selection_options, selection_beautiful = selection_beautiful, confirmation_options = confirmation_options, confirmation_beautiful = confirmation_beautiful, accept = accept, decline = decline)
 
 	def __strin (self, **kwargs):
-		### @description: private method for requesting input to match selection options
+		### @description: private function for requesting input to match selection options
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
 
@@ -73,7 +73,7 @@ class Entity (Persona):
 		return self.__strin(**kwargs)
 
 	def __strout (self, arg, **kwargs):
-		### @description: private method for confirming returned selection
+		### @description: private function for confirming returned selection
 		### @parameter: <arg>, @type: <str>
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
@@ -104,7 +104,7 @@ class Entity (Persona):
 		return raw_input(super(Entity, self).say(super(Entity, self).concat(kwargs.get('request'), super(Entity, self).cconcat([super(Entity, self).cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), ' ']))))
 
 	def __format (self, arg = {}):
-		### @description: private method for beautifying wildcard argument
+		### @description: private function for beautifying wildcard argument
 		### @parameter: <arg>, @type: <dict/str>, @default: <dict>
 		### @return: @type: <str>
 
@@ -112,7 +112,7 @@ class Entity (Persona):
 		return super(Entity, self).Pretty(**self.__dict(arg))
 
 	def __dict (self, arg = 'sample'):
-		### @description: private method for casting argument to string.pretty kwargs
+		### @description: private function for casting argument to string.pretty kwargs
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type: <dict>
 
@@ -120,7 +120,7 @@ class Entity (Persona):
 		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else arg
 
 	def __str (self, arg = { 'string': 'sample' }):
-		### @description: private method for casting argument to string
+		### @description: private function for casting argument to string
 		### @parameter: <arg>, @type: <dict/str>, @default: <dict>
 		### @return: @type: <str>
 
@@ -141,4 +141,3 @@ if __name__ == '__main__':
 
 	# entity named request
 	print Entity(**Persona().__dict__).ask({ 'string': 'A', 'attributes': ['BOLD'], 'tag': True }, { 'string': 'B', 'attributes': ['BOLD'], 'tag': True }, request = 'please enter one option', confirm = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'correct?'], ' '), reject = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'is incorrect.'], ' '), accept = {'string': 'YES', 'attributes': ['GREEN','BOLD'], 'tag': True }, decline =  'NO')
-	

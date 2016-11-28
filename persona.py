@@ -16,7 +16,7 @@ class Persona (String):
 	###########################################
 
 	def say (self, *args):
-		### @description: protected method for creating formatted string as a person
+		### @description: protected function for creating formatted string as a person
 		### @parameter: <args>, @type: <list>, @default: <None>
 		### @return: @type: <str>
 
@@ -30,7 +30,7 @@ class Persona (String):
 		return super(Persona, self).concat(self.__name(), super(Persona, self).cconcat(args, ' '))
 
 	def __name (self):
-		### @description: private method for creating formatted personas name
+		### @description: private function for creating formatted personas name
 		### @return: @type: <str>
 
 		# set base prefixed name for console output
@@ -39,7 +39,7 @@ class Persona (String):
 		return super(Persona, self).Pretty(name, self.style)
 	
 	def __dict (self, arg = {}):
-		### @description: private method for setting dict items to enable stylisation
+		### @description: private function for setting dict items to enable stylisation
 		### @parameter: <arg>, @type: <dict>, @default: <dict>
 		### @return: @type: <dict>
 
@@ -51,7 +51,7 @@ class Persona (String):
 		return arg 
 
 	def __list (self, *args):
-		### @description: private method for setting argument
+		### @description: private function for setting argument
 		### @parameter: <args>, @type: <list>, @default: <tuple>
 		### @return: @type: <list>
 
@@ -59,7 +59,7 @@ class Persona (String):
 		return sum(filter(None, list(args)), [])
 
 	def __str (self, arg = None, fallback = ''):
-		### @descrption: private method for setting argument as string
+		### @descrption: private function for setting argument as string
 		### @parameter: <arg>, @type: <str>, @default: <None>
 		### @parameter: <fallback>, @type: <str>, @default: <str>
 		### @return: @type: <str>
@@ -88,4 +88,3 @@ if __name__ == '__main__':
 
 	# formatted named message
 	print Persona(name = 'clockwerk', separator = ':', style = ['BOLD']).say({ 'string': 'bleep!', 'attributes': ['BLUE', 'BOLD'], 'tag': True }, { 'string': 'bloop!', 'attributes': ['RED', 'BOLD'], 'tag': True }, 'I am a robot!')
-	

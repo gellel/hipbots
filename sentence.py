@@ -18,14 +18,14 @@ class Sentence (String):
 	###################################################################
 
 	def randomize (self):
-		### @description: protected method for creating pseudo random sentence from initialised strings
+		### @description: protected function for creating pseudo random sentence from initialised strings
 		### @return: @type: <str>
 
 		# construct random string from supplied
 		return self.__process(self.fragments)
 
 	def __process (self, fragments = []):
-		### @description: private method for selecting items to be included in final output
+		### @description: private function for selecting items to be included in final output
 		### @parameter: fragments, @type: <list>, @default: <list>
 		### @return: @type: <str>
 
@@ -75,7 +75,7 @@ class Sentence (String):
 		return self.__option(fragment)
 
 	def __dict (self, arg = 'sample'):
-		### @description: private method for casting argument to string.pretty kwargs
+		### @description: private function for casting argument to string.pretty kwargs
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
 		### @return: @type: <dict>
 
@@ -100,4 +100,3 @@ if __name__ == '__main__':
 
 	# create example pseudo random sentence
 	print Sentence(fragments = [['Hi there', ['Bonjour', 'Guten Tag', 'Hej']], ['!', '.'], { 'string': 'How are you', 'attributes': ['BOLD'], 'tag': True }, '?', Sentence(fragments = [['I\'m', 'I am'], 'doing', ['fine', 'good', 'great'], ['!', '.']]), Sentence(fragments = ['What\'s', ['new', 'different', 'changed', 'happening'], [{ 'string': 'today', 'tag': True }, { 'string': 'these {{days}}', 'attributes': ['BOLD'] }], '?']) ]).randomize()
-	
