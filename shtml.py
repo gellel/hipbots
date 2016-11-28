@@ -44,14 +44,14 @@ class HTML (String):
 	def create (**kwargs):
 		### @description: public function for creating a template HTML string
 		### @parameter: <node>, @type: <str>, @default: <None>
-		### @parameter: <attributes>, @type: <dict>, @default: <None>
-		### @parameter: <contents>, @type: <str>, @default: <None>
+		### @parameter: <attributes>, @type: <dict>, @default: <str>
+		### @parameter: <contents>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
 		# set base attributes
 		attributes = kwargs.get('attributes', '')
 		# set base contents
-		contents = kwargs.get('contents')
+		contents = kwargs.get('contents', '')
 		# set base HTML string
 		node = HTML.node(kwargs.get('node', None)) % (HTML.attributes(attributes), '%s')
 		# construct
@@ -64,4 +64,3 @@ if __name__ == '__main__':
 
 	# build example HTML
 	print HTML.create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
-	
