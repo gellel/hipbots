@@ -52,7 +52,6 @@ class Entity (Persona):
 		# set user input
 		return self.__strin(request = request, confirm = confirm, reject = reject, null = null, separator = separator, divider = divider, selection_options = selection_options, selection_beautiful = selection_beautiful, confirmation_options = confirmation_options, confirmation_beautiful = confirmation_beautiful, accept = accept, decline = decline)
 
-
 	def __strin (self, **kwargs):
 		### @description: private method for requesting input to match selection options
 		### @parameter: <kwargs>, @type: <dict>
