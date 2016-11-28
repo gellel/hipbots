@@ -19,14 +19,14 @@ class Sentence (String):
 
 	def randomize (self):
 		### @description: protected method for creating pseudo random sentence from initialised strings
-		### @returns: <string>
+		### @return: @type: <str>
 
 		# construct random string from supplied
 		return self.__process(self.fragments)
 
-	def __process (self, fragments):
+	def __process (self, fragments = []):
 		### @description: private method for selecting items to be included in final output
-		### @parameter: fragments, @type: <list>
+		### @parameter: fragments, @type: <list>, @default: <list>
 		### @return: @type: <str>
 
 		# initialise loop to process text fragments
@@ -36,9 +36,9 @@ class Sentence (String):
 		# reduce fragments
 		return super(Sentence, self).cconcat(filter(None, [super(Sentence, self).Pretty(**arg) for arg in fragments]), ' ')
 
-	def __option (self, fragment):
+	def __option (self, fragment = {}):
 		### @description: private function for setting inclusion status of string fragment
-		### @paramater: <fragment>, @type: <dict>
+		### @paramater: <fragment>, @type: <dict>, @default: <None>
 		### @return: @type: <dict>
 
 		# confirm dictionary conatins key optional
@@ -52,7 +52,7 @@ class Sentence (String):
 
 	def __type (self, fragment = None):
 		### @description: private function for processing supplied fragments
-		### @parameter: <fragment>, @type: <str/dict/list/instance:Sentence>
+		### @parameter: <fragment>, @type: <str/dict/list/instance:Sentence>, @default: <None>
 		### @return: @type: <dict>
 
 		# confirm non string type
@@ -100,3 +100,4 @@ if __name__ == '__main__':
 
 	# create example pseudo random sentence
 	print Sentence(fragments = [['Hi there', ['Bonjour', 'Guten Tag', 'Hej']], ['!', '.'], { 'string': 'How are you', 'attributes': ['BOLD'], 'tag': True }, '?', Sentence(fragments = [['I\'m', 'I am'], 'doing', ['fine', 'good', 'great'], ['!', '.']]), Sentence(fragments = ['What\'s', ['new', 'different', 'changed', 'happening'], [{ 'string': 'today', 'tag': True }, { 'string': 'these {{days}}', 'attributes': ['BOLD'] }], '?']) ]).randomize()
+	
