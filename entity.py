@@ -7,8 +7,6 @@
 ###################################
 ### import personas
 from persona import Persona
-### import regular expressions
-import re
 
 
 class Entity (Persona):
