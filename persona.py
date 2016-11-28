@@ -20,34 +20,34 @@ class Persona (String):
 		### @parameter: <args>, @type: <list>, @default: <None>
 		### @return: @type <str>
 
-		# set args to list
+		# set supplied arguments to python list
 		args = list(args)
 		# initialise loop to process arguments
 		for i in range(0, len(args)):
-			# edit argument to contain formatting if required
+			# edit current argument to contain formatted string
 			args[i] = super(Persona, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
 		# join name with message
-		return super(Persona, self).concat(self.__name(), super(Persona, self).cconcat(args, " "))
+		return super(Persona, self).concat(self.__name(), super(Persona, self).cconcat(args, ' '))
 
 	def __name (self):
 		### @description: private method for creating formatted personas name
 		### @return: @type: <str>
 
-		# set base name
+		# set base prefixed name for console output
 		name = super(Persona, self).Syntax(super(Persona, self).cconcat([self.name, self.separator]))
-		# set base styled
+		# apply formatting attributes for name
 		return super(Persona, self).Pretty(name, self.style)
 	
-	def __dict (self, arg):
+	def __dict (self, arg = {}):
 		### @description: private method for setting dict items to enable stylisation
-		### @parameter: <arg>, @type: <dict>, @default: <None>
+		### @parameter: <arg>, @type: <dict>, @default: <dict>
 		### @return: @type: <dict>
 
-		# set base string key value pair
-		arg['string'] = str(arg['string']) if not None else "sample"
-		# set base attibutes key value pair
-		arg['attributes'] = list(arg['attributes']) if type(arg['attributes']) is list or type(arg['attributes']) is tuple else ["BOLD"]
-		# define base dict
+		# set dictionary key string as defined pair use String default
+		arg['string'] = str(arg['string']) if not None else String.SAMPLE
+		# set style attibutes for dictionary
+		arg['attributes'] = list(arg['attributes']) if type(arg['attributes']) is list or type(arg['attributes']) is tuple else ['BOLD']
+		# supply constructed dictionary
 		return arg 
 
 	def __list (self, *args):
@@ -55,16 +55,16 @@ class Persona (String):
 		### @parameter: <args>, @type: <list>, @default: <tuple>
 		### @return: @type: <list>
 
-		# set base list
+		# set base list from supplied arguments
 		return sum(filter(None, list(args)), [])
 
-	def __str (self, arg = None, fallback = ""):
+	def __str (self, arg = None, fallback = ''):
 		### @descrption: private method for setting argument as string
 		### @parameter: <arg>, @type: <str>, @default: <None>
 		### @parameter: <fallback>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
-		# set base string 
+		# set base string from argument or use supplied default
 		return str(arg) if arg is not None else str(fallback)
 
 	def __init__ (self, **kwargs):
@@ -73,13 +73,13 @@ class Persona (String):
 
 		# set message prefixed name
 		# @parameter: <name>, @type: <str>, @default: <None>
-		self.name = self.__str(kwargs.get("name", None), "system")
+		self.name = self.__str(kwargs.get('name', None), 'system')
 		# set separator character between prefixed name and output string 
 		# @parameter: <separator>, @type: <str>, @default: <None>
-		self.separator = self.__str(kwargs.get("separator", None), ":")
+		self.separator = self.__str(kwargs.get('separator', None), ':')
 		# set string style attributes for prefixed name 
 		# @parameter: <style>, @type: <list>, @default: <list>
-		self.style = self.__list(kwargs.get("style"))
+		self.style = self.__list(kwargs.get('style'))
 
 
 
@@ -87,5 +87,4 @@ class Persona (String):
 if __name__ == '__main__':
 
 	# formatted named message
-	print Persona(name = "clockwerk", separator = ":", style = ["BOLD"]).say({ "string": "bleep!", "attributes": ["BLUE", "BOLD"], "tag": True }, { "string": "bloop!", "attributes": ["RED", "BOLD"], "tag": True }, "I am a robot!")
-	
+	print Persona(name = 'clockwerk', separator = ':', style = ['BOLD']).say({ 'string': 'bleep!', 'attributes': ['BLUE', 'BOLD'], 'tag': True }, { 'string': 'bloop!', 'attributes': ['RED', 'BOLD'], 'tag': True }, 'I am a robot!')
