@@ -50,12 +50,10 @@ class HTML (String):
 
 		# set base attributes
 		attributes = kwargs.get('attributes', '')
-		# set base node
-		node = kwargs.get('node', None)
 		# set base contents
 		contents = kwargs.get('contents')
-		# set HTML string
-		node = HTML.node(node) % (HTML.attributes(attributes), '%s')
+		# set base HTML string
+		node = HTML.node(kwargs.get('node', None)) % (HTML.attributes(attributes), '%s')
 		# construct
 		return node % (contents if not hasattr(contents, '__call__') else contents())
 
@@ -66,4 +64,3 @@ if __name__ == '__main__':
 
 	# build example HTML
 	print HTML.create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
-	
