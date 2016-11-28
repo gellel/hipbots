@@ -15,7 +15,7 @@ class String (object):
 	### public class for string formatting ###
 	##########################################
 
-	SAMPLE = "SAMPLE"
+	SAMPLE = 'SAMPLE'
 	PURPLE = '\033[95m'
 	CYAN = '\033[96m'
 	DARKCYAN = '\033[36m'
@@ -26,12 +26,12 @@ class String (object):
 	BOLD = '\033[1m'
 	UNDERLINE = '\033[4m'
 	END = '\033[0m'
-	FILTER = r"\{\{{0,2}[^\{\{]+\}\}{0,2}"
-	EXTENSION = r"^.+\.{1}\w+$"
-	SYNTAX = r"{{|}}"
+	FILTER = r'\{\{{0,2}[^\{\{]+\}\}{0,2}'
+	EXTENSION = r'^.+\.{1}\w+$'
+	SYNTAX = r'{{|}}'
 
 	@staticmethod
-	def cconcat (strings = [], character = ""):
+	def cconcat (strings = [], character = ''):
 		### @description: public function for concatenating a list of strings by supplied character
 		### @parameter: <strings>, @type: <list>, @default: <list>
 		### @parameter: <character>, @type: <str>, @default: <str>
@@ -47,7 +47,7 @@ class String (object):
 		### @return: @type: <str>
 
 		# join string using whitespace
-		return String.cconcat(list(strings), " ")
+		return String.cconcat(list(strings), ' ')
 
 	@staticmethod
 	def GetStyles ():
@@ -74,7 +74,7 @@ class String (object):
 		### @return: @type: <str>
 
 		# join string using "{{" and "}}" to create "{{sample text}}"
-		return String.cconcat(["{{", string or String.SAMPLE, "}}"])
+		return String.cconcat(['{{', string or String.SAMPLE, '}}'])
 
 	@staticmethod
 	def Clean (string = None):
@@ -83,7 +83,7 @@ class String (object):
 		### @return: @type: <str>
 
 		# find syntax strings and substitute with null
-		return re.sub(r'{{|}}', "", string or String.SAMPLE)
+		return re.sub(String.SYNTAX, '', string or String.SAMPLE)
 
 	@staticmethod
 	def Pretty (string = None, attributes = None):
@@ -95,7 +95,7 @@ class String (object):
 		# set base string
 		string = string if type(string) is str and bool(string) else String.Syntax(String.SAMPLE)
 		# set base attributes
-		attributes = attributes if type(attributes) is list else ["BOLD"]
+		attributes = attributes if type(attributes) is list else ['BOLD']
 		# set base reference to styles
 		styles = String.GetStyles()
 		# find strings containing string style syntax 
@@ -103,7 +103,7 @@ class String (object):
 		# initialise loop to process selected texts
 		for i in range(0, len(strings)):
 			# find substring for matched item
-			substring = re.sub(String.SYNTAX, "", strings[i])
+			substring = re.sub(String.SYNTAX, '', strings[i])
 			# set edited string
 			edited = substring
 			# initialise loop to process styles for string
@@ -115,7 +115,7 @@ class String (object):
 			# set original string to include substituted and formatted string reference
 			string = re.sub(substring, edited, string)
 		# find syntax strings and substitute with null
-		return re.sub(r'{{|}}', "", string)
+		return re.sub(String.SYNTAX, '', string)
 
 
 
