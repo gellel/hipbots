@@ -107,7 +107,7 @@ class Entity (Persona):
 	def __format (self, arg):
 		### @description: private method for beautifying wildcard argument
 		### @parameter: <arg>, @type: <dict/str>, @default: <str>
-		### @return: @type <str>
+		### @return: @type: <str>
 
 		# set beautiful string
 		return super(Entity, self).Pretty(**self.__dict(arg))
@@ -115,7 +115,7 @@ class Entity (Persona):
 	def __syntax (self, arg = {}):
 		### @description: private method for editing string to contain style tag
 		### @parameter: <arg>, @type: <dict>, @default: <dict>
-		### @return: @type <dict>
+		### @return: @type: <dict>
 
 		# confirm arg contains string or set default
 		arg = self.__dict(arg) if not 'string' in arg else arg
