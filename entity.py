@@ -133,7 +133,7 @@ class Entity (Persona):
 		### @return: @type: <dict>
 
 		# cast argument to dict if argument is string otherwise assume dict
-		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else self.__syntax(arg)
+		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else super(Entity, self).__syntax(arg)
 
 	def __str (self, arg = {'string':'sameple'}):
 		### @description: private method for casting argument to string
