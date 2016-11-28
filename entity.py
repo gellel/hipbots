@@ -21,23 +21,23 @@ class Entity (Persona):
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
 
-		# set formatted request string
+		# set formatted request string for use in input request
 		request = self.__format(kwargs.pop('request', 'please enter your selection'))
-		# set formatted confirmation string
+		# set formatted confirmation string for using in confirmation request
 		confirm = self.__format(kwargs.pop('confirm', 'is {{%s}} the correct answer?'))
-		# set formatted reject string
+		# set formatted reject string for use to notify of failed input
 		reject = self.__format(kwargs.pop('reject', '{{%s}} is not an accepted option'))
-		# set option separator
+		# set option separator to break option listings
 		separator = self.__format(kwargs.pop('separator', '/'))
-		# set input divider 
+		# set input divider to break user input from requests
 		divider = self.__format(kwargs.pop('divider', ':'))
-		# set null string
+		# set null string to identify blank input
 		null = self.__format(kwargs.pop('null', 'empty'))
 		# set args to list
 		args = list(args)
-		# set accept string
+		# set accept string for confirmation request
 		accept = kwargs.get('accept', 'YES')
-		# set decline string
+		# set decline string for rejection request
 		decline = kwargs.get('decline', 'NO')
 		# set confirmations to list
 		confirms = [accept, decline]
@@ -49,7 +49,7 @@ class Entity (Persona):
 		confirmation_options = [super(Entity, self).Clean(self.__str(string)) for string in confirms]
 		# set confirmation string options
 		confirmation_beautiful = [super(Entity, self).Pretty(**self.__dict(option)) for option in confirms]		
-		# set user input
+		# get and return user input
 		return self.__strin(request = request, confirm = confirm, reject = reject, null = null, separator = separator, divider = divider, selection_options = selection_options, selection_beautiful = selection_beautiful, confirmation_options = confirmation_options, confirmation_beautiful = confirmation_beautiful, accept = accept, decline = decline)
 
 	def __strin (self, **kwargs):
@@ -61,11 +61,11 @@ class Entity (Persona):
 		options = kwargs.get('selection_options')
 		# set user input string
 		user = str(self.__input(request = kwargs.get('request'), selection = kwargs.get('selection_options'), beautified = kwargs.get('selection_beautiful'), divider = kwargs.get('divider'), separator = kwargs.get('separator')) or kwargs.get('null'))
-		# initialise loop to test strings
+		# initialise loop to test strings against user input
 		for i in range(0, len(options)):
 			# confirm selection in options
 			if user.upper() == options[i].upper():
-				# confirm selection
+				# set selection for handler
 				return self.__strout(user, **kwargs)
 		# notify that user input was not accepted
 		print super(Entity, self).say(kwargs.get('reject') % user)
@@ -84,7 +84,7 @@ class Entity (Persona):
 		user = str(self.__input(request = kwargs.get('confirm') % arg, selection = kwargs.get('confirmation_options'), beautified = kwargs.get('confirmation_beautiful'), divider = kwargs.get('divider'), separator = kwargs.get('separator')) or kwargs.get('null'))
 		# confirm user string matches confirmation string
 		if user.upper() == options[0].upper():
-			# set first input
+			# set selection for handler
 			return arg
 		# confirm user string matches rejection string
 		elif user.upper() == options[1].upper():
@@ -103,9 +103,9 @@ class Entity (Persona):
 		# set user input
 		return raw_input(super(Entity, self).say(super(Entity, self).concat(kwargs.get('request'), super(Entity, self).cconcat([super(Entity, self).cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), ' ']))))
 
-	def __format (self, arg):
+	def __format (self, arg = {}):
 		### @description: private method for beautifying wildcard argument
-		### @parameter: <arg>, @type: <dict/str>, @default: <str>
+		### @parameter: <arg>, @type: <dict/str>, @default: <dict>
 		### @return: @type: <str>
 
 		# set beautiful string
@@ -121,7 +121,7 @@ class Entity (Persona):
 
 	def __str (self, arg = { 'string': 'sample' }):
 		### @description: private method for casting argument to string
-		### @parameter: <arg>, @type: <dict/str>, @default: <str>
+		### @parameter: <arg>, @type: <dict/str>, @default: <dict>
 		### @return: @type: <str>
 
 		# cast dict to str if else assume str
@@ -141,4 +141,3 @@ if __name__ == '__main__':
 
 	# entity named request
 	print Entity(**Persona().__dict__).ask({ 'string': 'A', 'attributes': ['BOLD'], 'tag': True }, { 'string': 'B', 'attributes': ['BOLD'], 'tag': True }, request = 'please enter one option', confirm = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'correct?'], ' '), reject = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'is incorrect.'], ' '), accept = {'string': 'YES', 'attributes': ['GREEN','BOLD'], 'tag': True }, decline =  'NO')
-	
