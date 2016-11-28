@@ -47,14 +47,6 @@ class Persona (String):
 		arg['string'] = str(arg['string']) if not None else "sample"
 		# set base attibutes key value pair
 		arg['attributes'] = list(arg['attributes']) if type(arg['attributes']) is list or type(arg['attributes']) is tuple else ["BOLD"]
-		# set base tag key value pair
-		arg['tag'] = bool(arg['tag']) if 'tag' in arg else False
-		# confirm tag key exits
-		if 'tag' in arg and bool(arg['tag']):
-			# set string to contain syntax wrapper
-			arg['string'] = super(Persona, self).Syntax(arg['string'])
-		# edit copied dict to exclude tag key value pair
-		map(arg.pop, ["tag"])
 		# define base dict
 		return arg 
 
@@ -96,4 +88,3 @@ if __name__ == '__main__':
 
 	# formatted named message
 	print Persona(name = "clockwerk", separator = ":", style = ["BOLD"]).say({ "string": "bleep!", "attributes": ["BLUE", "BOLD"], "tag": True }, { "string": "bloop!", "attributes": ["RED", "BOLD"], "tag": True }, "I am a robot!")
-	
