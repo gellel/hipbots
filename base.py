@@ -7,10 +7,15 @@
 ###################################
 
 
-class Base:
+class Base (object):
 
-	def __str (self, arg):
-		### @description: private function to handle None arguments to string
+	############################################
+	### public class for argument formatting ###
+	############################################
+
+	@staticmethod
+	def SetStrType (arg):
+		### @description: public function to handle non strings to string
 		### @parameter: <arg>, @type: <*>, @default: <None>
 		### @return: @type: <str>
 
