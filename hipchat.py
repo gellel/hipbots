@@ -25,7 +25,7 @@ class HTML:
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if str(element).upper() in HTML.ELEMENTS else False
+		return True if HTML()._HTML__str(element).upper() in HTML.ELEMENTS else False
 
 	@staticmethod
 	def Attributes (**kwargs):
@@ -35,12 +35,34 @@ class HTML:
 		
 		# set base element
 		# @parameter: <element>, @type: <str>, @default: <str>
-		element = kwargs.get('element', 'A')
+		element = HTML()._HTML__str(kwargs.get('element', 'A'))
 		# set base attribute
 		# @parameter: <node>, @type: <str>, @default: <str>
-		attribute = kwargs.get('attribute', 'HREF')
+		attribute = HTML()._HTML__str(kwargs.get('attribute', 'HREF'))
 		# confirm attribute is supported
-		return True if str(element).upper() in HTML.ELEMENTS and attribute in HTML.ATTRIBUTES[str(element).upper()] else False
+		return True if element.upper() in HTML.ELEMENTS and attribute in HTML.ATTRIBUTES[element.upper()] else False
+
+	@staticmethod
+	def Base (**kwargs):
+		### @description: public function to select suitable substitute from allowed HTML tags
+		### @parameters: <kwargs>, @type: <dict>
+		### @return: @type: <dict>
+
+		# set base method
+		# @parameter: <tag>, @type: <str>, @default: <str>
+		tag = HTML()._HTML__str(kwargs.get('HTML'))
+		# set default HTML tag
+		tag = tag if HTML.Element(tag) else 'SPAN'
+		# set HTML
+		return { 'HTML': tag, 'attributes': HTML.ATTRIBUTES[tag] } 
+
+	def __str (self, arg):
+		### @description: private function to handle None arguments to string
+		### @parameter: <arg>, @type: <*>, @default: <None>
+		### @return: @type: <str>
+
+		# set base string
+		return str(arg) if type(arg) in [int, float, unicode, str] else ''
 
 
 
@@ -87,8 +109,14 @@ class REST (String):
 		return { 'HTTP_METHOD': request if REST.Method(request) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
 
 
+class API (String):
+
+	pass
 
 
 if __name__ == '__main__':
 	
+	# format HipChat HTML tag
+	print HTML.Base()
+	# format HipChat HTTP request 
 	print REST.Base()
