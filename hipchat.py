@@ -9,7 +9,7 @@
 from strs import String
 
 
-class HTML:
+class HTML (String):
 
 	########################################################
 	### public class for testing support HTML in HipChat ###
@@ -25,7 +25,7 @@ class HTML:
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if HTML()._HTML__str(element).upper() in HTML.ELEMENTS else False
+		return True if HTML.SetStrType(element).upper() in HTML.ELEMENTS else False
 
 	@staticmethod
 	def Attributes (**kwargs):
@@ -35,10 +35,10 @@ class HTML:
 		
 		# set base element
 		# @parameter: <element>, @type: <str>, @default: <str>
-		element = HTML()._HTML__str(kwargs.get('element', 'A'))
+		element = HTML.SetStrType(kwargs.get('element', 'A'))
 		# set base attribute
 		# @parameter: <node>, @type: <str>, @default: <str>
-		attribute = HTML()._HTML__str(kwargs.get('attribute', 'HREF'))
+		attribute = HTML.SetStrType(kwargs.get('attribute', 'HREF'))
 		# confirm attribute is supported
 		return True if element.upper() in HTML.ELEMENTS and attribute in HTML.ATTRIBUTES[element.upper()] else False
 
@@ -50,20 +50,12 @@ class HTML:
 
 		# set base method
 		# @parameter: <tag>, @type: <str>, @default: <str>
-		tag = HTML()._HTML__str(kwargs.get('HTML'))
+		tag = HTML.SetStrType(kwargs.get('tag'))
 		# set default HTML tag
 		tag = tag if HTML.Element(tag) else 'SPAN'
 		# set HTML
-		return { 'HTML': tag, 'attributes': HTML.ATTRIBUTES[tag] } 
+		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HTML.ATTRIBUTES[tag] } 
 
-	def __str (self, arg):
-		### @description: private function to handle None arguments to string
-		### @parameter: <arg>, @type: <*>, @default: <None>
-		### @return: @type: <str>
-
-		# set base string
-		return str(arg) if type(arg) in [int, float, unicode, str] else ''
-	
 
 
 class REST (String):
@@ -82,7 +74,7 @@ class REST (String):
 		### @return: @type: <bool>
 
 		# confirm HTTP method support
-		return True if arg in REST.METHOD else False
+		return True if REST.SetStrType(arg) in REST.METHOD else False
 
 	@staticmethod
 	def Content (arg = 'APPLICATION/JSON'):
@@ -91,7 +83,7 @@ class REST (String):
 		### @return: @type: <bool>
 
 		# confirm HTTP content-type method supported
-		return True if arg in REST.CONTENT else False
+		return True if REST.SetStrType(arg) in REST.CONTENT else False
 
 	@staticmethod
 	def Base (**kwargs):
@@ -117,6 +109,6 @@ class API (String):
 if __name__ == '__main__':
 	
 	# format HipChat HTML tag
-	print HTML.Base()
+	print HTML.Base(tag = 'IMG')
 	# format HipChat HTTP request 
 	print REST.Base()
