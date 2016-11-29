@@ -5,11 +5,13 @@
 ###################################
 ### python scripts dependencies ###
 ###################################
+### import base 
+from base import Base
 ### import regular expressions
 import re
 
 
-class String (object):
+class String (Base):
 
 	##########################################
 	### public class for string formatting ###
@@ -94,7 +96,7 @@ class String (object):
 		### @return: @type <str>
 
 		# set base string
-		string = string if type(string) is str and bool(string) else String.SAMPLE
+		string = string if bool(String.SetStrType(string)) else String.SAMPLE
 		# set syntax wrap
 		string = String.Syntax(string) if bool(tag) else string
 		# set base attributes
@@ -125,5 +127,5 @@ class String (object):
 if __name__ == '__main__':
 
 	# format example string
-	print String.Pretty()
+	print String.Pretty(tag = True)
 	
