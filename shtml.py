@@ -19,7 +19,7 @@ class HTML (String):
 	TAG = 'div'
 
 	@staticmethod
-	def node (node = None):
+	def Node (node = None):
 		### @description: public function for creating basic HTML tag
 		### @parameter: <node>, @type: <str>, @default: <None>
 		### @return: @type: <str>
@@ -30,7 +30,7 @@ class HTML (String):
 		return HTML.cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
 	@staticmethod
-	def attributes (attributes = None):
+	def Attributes (attributes = None):
 		### @description: public function for creating attributes string for HTML tags
 		### @parameter: <attributes>, @type: <dict>, @default: <None>
 		### @return: @type: <str>
@@ -41,7 +41,7 @@ class HTML (String):
 		return HTML.cconcat([' ', HTML.cconcat([HTML.cconcat([str(attr), '=', '"', attributes[attr], '"']) for attr in attributes], " ")])
 	
 	@staticmethod
-	def create (**kwargs):
+	def Create (**kwargs):
 		### @description: public function for creating a template HTML string
 		### @parameter: <node>, @type: <str>, @default: <None>
 		### @parameter: <attributes>, @type: <dict>, @default: <str>
@@ -63,5 +63,5 @@ class HTML (String):
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
+	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
 	

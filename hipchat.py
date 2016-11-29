@@ -5,6 +5,9 @@
 ###################################
 ### python scripts dependencies ###
 ###################################
+### import pretty strings
+from strs import String
+
 
 class HTML:
 
@@ -16,17 +19,17 @@ class HTML:
 	ATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
 
 	@staticmethod
-	def element (element = 'A'):
-		### @description: public function confirms HTML tag supported in HipChat
+	def Element (element = 'A'):
+		### @description: public function to confirm HTML tag supported in HipChat
 		### @parameter: <element>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
-		# confirm tag is supported 
+		# confirm HTML tag is supported 
 		return True if str(element).upper() in HTML.ELEMENTS else False
 
 	@staticmethod
-	def attributes (**kwargs):
-		### @description: public function confirms HTML attribute supported in HipChat
+	def Attributes (**kwargs):
+		### @description: public function to confirm HTML attribute supported in HipChat
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <bool>
 		
@@ -41,23 +44,47 @@ class HTML:
 
 
 
-class REST:
+class REST (String):
 
 	###################################################
 	### public class to construct REST API endpoint ###
 	###################################################
 
+	CONTENT = ['APPLICATION/JSON', 'APPLICATION/X-WWW-FORM-URLENCODED', 'TEXT/HTML', 'TEXT/PLAIN']
+	METHOD = ['GET', 'POST', 'PUT', 'HEAD', 'OPTIONS', 'PATCH', 'DELETE']
+
 	@staticmethod
-	def default (**kwargs):
+	def Method (arg = 'GET'):
+		### @description: public function to confirm HTTP method is supported
+		### @parameter: <arg>, @type: <str>, @default: <str>
+		### @return: @type: <bool>
+
+		# confirm HTTP method support
+		return True if arg in REST.METHOD else False
+
+	@staticmethod
+	def Content (arg = 'APPLICATION/JSON'):
+		### @description: public function to confirm HTTP content-type header is supported
+		### @parameter: <arg>, @type: <str>, @default: <str>
+		### @return: @type: <bool>
+
+		# confirm HTTP content-type method supported
+		return True if arg in REST.CONTENT else False
+
+	@staticmethod
+	def Default (**kwargs):
 		### @description: public function to select suitable substitute from allowed
 		### @parameters: <kwargs>, @type: <dict>
 		### @return: @type: <dict>
 
-		# set base request
-		request = kwargs.get('request', None)
-		# confirm request 
-
-
+		# set base method
+		# @parameter: <element>, @type: <str>, @default: <None>
+		request = kwargs.get('method')
+		# set base content
+		# @parameter: <element>, @type: <str>, @default: <None>
+		content = kwargs.get('content')
+		# set HTTP 
+		return { 'HTTP_METHOD': request if REST.Method, 'CONTENT_TYPE': content }
 
 
 
