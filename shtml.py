@@ -15,30 +15,46 @@ class HTML (String):
 	### public class for HTML string creation ###
 	#############################################
 
-	@staticmethod
-	def Node (node = None):
-		### @description: public function for creating basic HTML tag
+	def __node (self, node = None):
+		### @description: private function for creating basic HTML tag
 		### @parameter: <node>, @type: <str>, @default: <None>
 		### @return: @type: <str>
 
 		# set base node
-		node = node if bool(HTML.SetStrType(node)) else 'div'
+		node = HTML.SetStrType(node) or 'div'
 		# encase supplied string with HTML syntax
-		return HTML.cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
+		return HTML.Cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
-	@staticmethod
-	def Attributes (attributes = None):
-		### @description: public function for creating attributes string for HTML tags
+	def __attributes (self, attributes = None):
+		### @description: private function for creating attributes string for HTML tags
 		### @parameter: <attributes>, @type: <dict>, @default: <None>
 		### @return: @type: <str>
 
 		# set base attributes
 		attributes = attributes or { 'id': None }
 		# set each key in attributes to be joined by equals and quotations
-		return HTML.cconcat([' ', HTML.cconcat([HTML.cconcat([str(attr), '=', '"', HTML.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
+		return HTML.Cconcat([' ', HTML.Cconcat([HTML.Cconcat([attr, '=', '"', HTML.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
 	
 	@staticmethod
-	def Create (**kwargs):
+	def GetNodeString (node = None):
+		### @description: public function for creating basic HTML tag
+		### @parameter: <node>, @type: <str>, @default: <None>
+		### @return: @type: <str>
+
+		# create HTML element
+		return HTML()._HTML__node(node)
+
+	@staticmethod
+	def GetAttributeString (attributes = None):
+		### @description: private function for creating attributes string for HTML tags
+		### @parameter: <attributes>, @type: <str>, @default: <None>
+		### @return: @type: <str>
+
+		# create HTML element
+		return HTML()._HTML__attributes(attributes)
+
+	@staticmethod
+	def String (**kwargs):
 		### @description: public function for creating a template HTML string
 		### @parameter: <node>, @type: <str>, @default: <None>
 		### @parameter: <attributes>, @type: <dict>, @default: <str>
@@ -50,7 +66,7 @@ class HTML (String):
 		# set base contents
 		contents = kwargs.get('contents', '')
 		# set base HTML string
-		node = HTML.Node(kwargs.get('node', None)) % (HTML.Attributes(attributes), '%s')
+		node = HTML()._HTML__node(kwargs.get('node', None)) % (HTML()._HTML__attributes(attributes), '%s')
 		# construct
 		return node % (contents if not hasattr(contents, '__call__') else contents())
 
@@ -60,5 +76,5 @@ class HTML (String):
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Node) % ('', 'callback!')
+	print HTML.String(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.GetNodeString) % ('', 'callback!')
 	
