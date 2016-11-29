@@ -72,8 +72,8 @@ class REST (String):
 		return True if arg in REST.CONTENT else False
 
 	@staticmethod
-	def Default (**kwargs):
-		### @description: public function to select suitable substitute from allowed
+	def Base (**kwargs):
+		### @description: public function to select suitable substitute from allowed HTTP methods
 		### @parameters: <kwargs>, @type: <dict>
 		### @return: @type: <dict>
 
@@ -84,11 +84,11 @@ class REST (String):
 		# @parameter: <element>, @type: <str>, @default: <None>
 		content = kwargs.get('content')
 		# set HTTP 
-		return { 'HTTP_METHOD': request if REST.Method, 'CONTENT_TYPE': content }
+		return { 'HTTP_METHOD': request if REST.Method(request) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
 
 
 
 
 if __name__ == '__main__':
 	
-	print HTML.Attributes(element = 'SPAN')
+	print REST.Base()
