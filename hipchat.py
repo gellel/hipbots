@@ -91,4 +91,4 @@ class REST (String):
 
 if __name__ == '__main__':
 	
-	print HTML.attributes(element = 'SPAN')
+	print HTML.Attributes(element = 'SPAN')
