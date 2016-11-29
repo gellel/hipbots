@@ -19,7 +19,7 @@ class HTML (String):
 	ATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
 
 	@staticmethod
-	def Element (element = 'A'):
+	def HasTag (element = 'A'):
 		### @description: public function to confirm HTML tag supported in HipChat
 		### @parameter: <element>, @type: <str>, @default: <str>
 		### @return: @type: <str>
@@ -28,7 +28,7 @@ class HTML (String):
 		return True if HTML.SetStrType(element).upper() in HTML.ELEMENTS else False
 
 	@staticmethod
-	def Attributes (**kwargs):
+	def HasAttribute (**kwargs):
 		### @description: public function to confirm HTML attribute supported in HipChat
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <bool>
@@ -52,7 +52,7 @@ class HTML (String):
 		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = HTML.SetStrType(kwargs.get('tag'))
 		# set default HTML tag
-		tag = tag if HTML.Element(tag) else 'SPAN'
+		tag = tag if HTML.HasTag(tag) else 'SPAN'
 		# set HTML
 		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HTML.ATTRIBUTES[tag] } 
 
