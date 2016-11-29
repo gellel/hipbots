@@ -5,13 +5,27 @@
 ###################################
 ### python scripts dependencies ###
 ###################################
-### import args handler 
-from args import Args
 ### import regular expressions
 import re
 
 
-class String (Args):
+class Base (object):
+
+	###############################################
+	### public class for assisting string class ###
+	###############################################
+
+	@staticmethod
+	def SetStrType (arg):
+		### @description: public function to handle non strings to string
+		### @parameter: <arg>, @type: <*>, @default: <None>
+		### @return: @type: <str>
+
+		# set base string
+		return str(arg) if type(arg) in [int, float, unicode, str] else ''
+
+
+class String (Base):
 
 	##########################################
 	### public class for string formatting ###
