@@ -101,7 +101,7 @@ class Entity (Persona):
 		### @return: @type: <str>
 
 		# set user input
-		return raw_input(super(Entity, self).say(super(Entity, self).concat(kwargs.get('request'), super(Entity, self).cconcat([super(Entity, self).cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), ' ']))))
+		return raw_input(super(Entity, self).say(super(Entity, self).Concat(kwargs.get('request'), super(Entity, self).Cconcat([super(Entity, self).Cconcat(kwargs.get('beautified'), kwargs.get('separator')), kwargs.get('divider'), ' ']))))
 
 	def __format (self, arg = {}):
 		### @description: private function for beautifying wildcard argument
@@ -117,7 +117,7 @@ class Entity (Persona):
 		### @return: @type: <dict>
 
 		# cast argument to dict if argument is string otherwise assume dict
-		return { 'string': str(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else arg
+		return { 'string': super(Entity, self).SetStrType(arg), 'attributes': ['BOLD'] } if type(arg) is not dict else arg
 
 	def __str (self, arg = { 'string': 'sample' }):
 		### @description: private function for casting argument to string
@@ -140,4 +140,4 @@ class Entity (Persona):
 if __name__ == '__main__':
 
 	# entity named request
-	print Entity(**Persona().__dict__).ask({ 'string': 'A', 'attributes': ['BOLD'], 'tag': True }, { 'string': 'B', 'attributes': ['BOLD'], 'tag': True }, request = 'please enter one option', confirm = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'correct?'], ' '), reject = Entity.cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'is incorrect.'], ' '), accept = {'string': 'YES', 'attributes': ['GREEN','BOLD'], 'tag': True }, decline =  'NO')
+	print Entity(**Persona().__dict__).ask({ 'string': 1, 'attributes': ['BOLD'], 'tag': True }, { 'string': 'B', 'attributes': ['BOLD'], 'tag': True }, request = 'please enter one option', confirm = Entity.Cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'correct?'], ' '), reject = Entity.Cconcat(['user input', Entity.Pretty('{{%s}}', ['UNDERLINE']), 'is incorrect.'], ' '), accept = {'string': 'YES', 'attributes': ['GREEN','BOLD'], 'tag': True }, decline =  'NO')

@@ -47,7 +47,7 @@ class String (Base):
 	SYNTAX = r'{{|}}'
 
 	@staticmethod
-	def cconcat (strings = [], character = ''):
+	def Cconcat (strings = [], character = ''):
 		### @description: public function for concatenating a list of strings by supplied character
 		### @parameter: <strings>, @type: <list>, @default: <list>
 		### @parameter: <character>, @type: <str>, @default: <str>
@@ -57,13 +57,13 @@ class String (Base):
 		return str(character).join(filter(None, strings))
 
 	@staticmethod
-	def concat (*strings):
+	def Concat (*strings):
 		### @description: public function for concatenating multiple string arguments by empty space
 		### @parameter: <strings>, @type: <str>, @default: <None>
 		### @return: @type: <str>
 
 		# join string using whitespace
-		return String.cconcat(list(strings), ' ')
+		return String.Cconcat(list(strings), ' ')
 
 	@staticmethod
 	def GetStyles ():
@@ -81,7 +81,7 @@ class String (Base):
 		### @return: @type: <str>
 
 		# join string with attribute and attribute end
-		return String.cconcat([attribute or String.BOLD, string or String.Syntax(String.SAMPLE), String.END])
+		return String.Cconcat([attribute or String.BOLD, String.SetStrType(string) or String.Syntax(String.SAMPLE), String.END])
 
 	@staticmethod
 	def Syntax (string = None):
@@ -90,7 +90,7 @@ class String (Base):
 		### @return: @type: <str>
 
 		# join string using "{{" and "}}" to create "{{sample text}}"
-		return String.cconcat(['{{', string or String.SAMPLE, '}}'])
+		return String.Cconcat(['{{', String.SetStrType(string) or String.SAMPLE, '}}'])
 
 	@staticmethod
 	def Clean (string = None):
@@ -99,7 +99,7 @@ class String (Base):
 		### @return: @type: <str>
 
 		# find syntax strings and substitute with null
-		return re.sub(String.SYNTAX, '', string or String.SAMPLE)
+		return re.sub(String.SYNTAX, '', String.SetStrType(string) or String.SAMPLE)
 
 	@staticmethod
 	def Pretty (string = None, attributes = None, tag = None):
@@ -110,7 +110,7 @@ class String (Base):
 		### @return: @type <str>
 
 		# set base string
-		string = string if bool(String.SetStrType(string)) else String.SAMPLE
+		string = String.SetStrType(string) or String.SAMPLE
 		# set syntax wrap
 		string = String.Syntax(string) if bool(tag) else string
 		# set base attributes

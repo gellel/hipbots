@@ -27,14 +27,14 @@ class Persona (String):
 			# edit current argument to contain formatted string
 			args[i] = super(Persona, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
 		# join name with message
-		return super(Persona, self).concat(self.__name(), super(Persona, self).cconcat(args, ' '))
+		return super(Persona, self).Concat(self.__name(), super(Persona, self).Cconcat(args, ' '))
 
 	def __name (self):
 		### @description: private function for creating formatted personas name
 		### @return: @type: <str>
 
 		# set base prefixed name for console output
-		name = super(Persona, self).Syntax(super(Persona, self).cconcat([self.name, self.separator]))
+		name = super(Persona, self).Syntax(super(Persona, self).Cconcat([self.name, self.separator]))
 		# apply formatting attributes for name
 		return super(Persona, self).Pretty(name, self.style)
 	
@@ -58,14 +58,6 @@ class Persona (String):
 		# set base list from supplied arguments
 		return sum(filter(None, list(args)), [])
 
-	def __str (self, arg = None, fallback = ''):
-		### @descrption: private function for setting argument as string
-		### @parameter: <arg>, @type: <str>, @default: <None>
-		### @parameter: <fallback>, @type: <str>, @default: <str>
-		### @return: @type: <str>
-
-		# set base string from argument or use supplied default
-		return str(arg) if arg is not None else str(fallback)
 
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
@@ -73,10 +65,10 @@ class Persona (String):
 
 		# set message prefixed name
 		# @parameter: <name>, @type: <str>, @default: <None>
-		self.name = self.__str(kwargs.get('name', None), 'system')
+		self.name = super(Persona, self).SetStrType(kwargs.get('name', None)) or 'system'
 		# set separator character between prefixed name and output string 
 		# @parameter: <separator>, @type: <str>, @default: <None>
-		self.separator = self.__str(kwargs.get('separator', None), ':')
+		self.separator = super(Persona, self).SetStrType(kwargs.get('separator', None)) or ':'
 		# set string style attributes for prefixed name 
 		# @parameter: <style>, @type: <list>, @default: <list>
 		self.style = self.__list(kwargs.get('style'))
