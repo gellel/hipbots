@@ -63,7 +63,7 @@ class HTML:
 
 		# set base string
 		return str(arg) if type(arg) in [int, float, unicode, str] else ''
-
+	
 
 
 class REST (String):
