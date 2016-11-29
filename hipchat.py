@@ -92,13 +92,13 @@ class REST (String):
 		### @return: @type: <dict>
 
 		# set base method
-		# @parameter: <element>, @type: <str>, @default: <None>
-		request = kwargs.get('method')
+		# @parameter: <method>, @type: <str>, @default: <None>
+		method = kwargs.get('method')
 		# set base content
-		# @parameter: <element>, @type: <str>, @default: <None>
+		# @parameter: <content>, @type: <str>, @default: <None>
 		content = kwargs.get('content')
 		# set HTTP 
-		return { 'HTTP_METHOD': request if REST.Method(request) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
+		return { 'HTTP_METHOD': method if REST.Method(method) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
 
 
 class API (String):
