@@ -17,11 +17,11 @@ class Base (object):
 
 	@staticmethod
 	def SetStrType (arg):
-		### @description: public function to handle non strings to string
+		### @description: public function to edit argumments that are not castable to string as empty
 		### @parameter: <arg>, @type: <*>, @default: <None>
 		### @return: @type: <str>
 
-		# set base string
+		# set base string from argument
 		return str(arg) if type(arg) in [int, float, unicode, str] else ''
 
 
