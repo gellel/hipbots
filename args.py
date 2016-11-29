@@ -7,7 +7,7 @@
 ###################################
 
 
-class Base (object):
+class Args (object):
 
 	############################################
 	### public class for argument formatting ###
@@ -27,4 +27,4 @@ class Base (object):
 if __name__ == '__main__':
 
 	# display base operations
-	print dir(Base)
+	print dir(Args)

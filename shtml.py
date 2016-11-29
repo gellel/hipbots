@@ -15,9 +15,6 @@ class HTML (String):
 	### public class for HTML string creation ###
 	#############################################
 
-	ATTRIBUTES = { 'id': 'id', 'class': 'class' }
-	TAG = 'div'
-
 	@staticmethod
 	def Node (node = None):
 		### @description: public function for creating basic HTML tag
@@ -25,7 +22,7 @@ class HTML (String):
 		### @return: @type: <str>
 
 		# set base node
-		node = node or HTML.TAG
+		node = node if bool(HTML.SetStrType(node)) else 'div'
 		# encase supplied string with HTML syntax
 		return HTML.cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
@@ -36,9 +33,9 @@ class HTML (String):
 		### @return: @type: <str>
 
 		# set base attributes
-		attributes = attributes or HTML.ATTRIBUTES
+		attributes = attributes or { 'id': None }
 		# set each key in attributes to be joined by equals and quotations
-		return HTML.cconcat([' ', HTML.cconcat([HTML.cconcat([str(attr), '=', '"', attributes[attr], '"']) for attr in attributes], " ")])
+		return HTML.cconcat([' ', HTML.cconcat([HTML.cconcat([str(attr), '=', '"', HTML.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
 	
 	@staticmethod
 	def Create (**kwargs):
@@ -53,7 +50,7 @@ class HTML (String):
 		# set base contents
 		contents = kwargs.get('contents', '')
 		# set base HTML string
-		node = HTML.node(kwargs.get('node', None)) % (HTML.attributes(attributes), '%s')
+		node = HTML.Node(kwargs.get('node', None)) % (HTML.Attributes(attributes), '%s')
 		# construct
 		return node % (contents if not hasattr(contents, '__call__') else contents())
 
@@ -63,5 +60,5 @@ class HTML (String):
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.node) % ('', 'callback!')
+	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Node) % ('', 'callback!')
 	

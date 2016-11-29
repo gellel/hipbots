@@ -5,13 +5,13 @@
 ###################################
 ### python scripts dependencies ###
 ###################################
-### import base 
-from base import Base
+### import args handler 
+from args import Args
 ### import regular expressions
 import re
 
 
-class String (Base):
+class String (Args):
 
 	##########################################
 	### public class for string formatting ###
