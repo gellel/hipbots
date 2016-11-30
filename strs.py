@@ -39,7 +39,7 @@ class String (object):
 		# confirm argument is sequence type
 		if type(arg) in [list, tuple]:
 			# stringify sequence
-			return String.Cconcat(list(arg))
+			return String.Cconcat(list(arg), ' ')
 		# set base string from argument
 		return str(arg) if type(arg) in [int, float, unicode, str] else ''
 
@@ -138,5 +138,5 @@ class String (object):
 if __name__ == '__main__':
 
 	# format example string
-	print String.Pretty(tag = True)
+	print String.Pretty(string = ['hello', 'world'], tag = True)
 	
