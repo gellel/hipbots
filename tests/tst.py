@@ -33,9 +33,9 @@ class HTML:
 		### @return: @type: <str>
 
 		# set base attributes dict
-		attributes = attributes if type(attributes) is dict and bool(attributes) else {}
+		attributes = attributes if type(attributes) is dict and bool(attributes) else { 'id': None }
 		# set each dict key in attributes to be joined by equals and quotations
-		return String.Cconcat([' ', String.Cconcat([String.Cconcat([attr, '=', '"', String.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")]) if bool(attributes) else ''
+		return String.Cconcat([' ', String.Cconcat([String.Cconcat([attr, '=', '"', String.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
 
 	@staticmethod
 	def SetAttributes (**kwargs):
@@ -76,4 +76,4 @@ class HTML:
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', HTML.Create(tag = 'p', attributes = { 'id': 'nested' }, contents = '%s') % ('callback!'))
+	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', 'callback!')
