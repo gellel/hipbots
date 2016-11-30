@@ -120,3 +120,4 @@ if __name__ == '__main__':
 	print HIPHTML.GetTagAttributes('LI')
 	# get api endpoint for notifications
 	print REST.GetNotifyURL()
+	
