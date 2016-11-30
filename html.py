@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings
-from strs import String
+from strings import String
 
 
 class HTML:
@@ -16,15 +16,17 @@ class HTML:
 	#############################################
 	
 	@staticmethod
-	def Tag (tag = None):
+	def Tag (tag = None, **kwargs):
 		### @description: public function to create HTML string tag
 		### @parameter: <tag>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
+		# set base self close tag
+		# @parameter: <close>, @type: <bool>, @default: <False>
 		# set base string type
 		tag = String.SetStrType(tag, default = 'div').lower()
 		# encase tag string
-		return String.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>'])
+		return String.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>']) if not bool(kwargs.get('close', False)) else String.Cconcat(['<', tag, '%s', '/>', '%s'])
 
 	@staticmethod
 	def FormatAttributes (attributes = {}):
@@ -43,9 +45,11 @@ class HTML:
 		### @parameter: <dict>, @type: <dict>
 		### @return: @type: <str>
 
+		# set base self close tag
+		# @parameter: <close>, @type: <bool>, @default: <False>
 		# set base HTML tag
 		# @parameter: <tag>, @type: <str>, @default: <None>
-		tag = HTML.Tag(kwargs.get('tag'))
+		tag = HTML.Tag(kwargs.get('tag'), close = kwargs.get('close'))
 		# set base HTML attributes
 		# @parameter: <attributes>, @type: <dict>, @default: <None>
 		attributes = HTML.FormatAttributes(kwargs.get('attributes'))
@@ -66,7 +70,7 @@ class HTML:
 		# @parameter: <contents>, @type: <str>, @default: <str>
 		contents = kwargs.get('contents')
 		# set attributed HTML
-		node = HTML.SetAttributes(tag = kwargs.get('tag'), attributes = kwargs.get('attributes'))
+		node = HTML.SetAttributes(tag = kwargs.get('tag'), attributes = kwargs.get('attributes'), close = kwargs.get('close'))
 		# apply nesting
 		return node % (String.SetStrType(contents) if not hasattr(contents, '__call__') else contents())
 
@@ -76,4 +80,4 @@ class HTML:
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.Create(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', HTML.Create(tag = 'p', attributes = { 'id': 'nested' }, contents = '%s') % ('callback!'))
+	print HTML.Create(tag = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', HTML.Create(tag = 'p', attributes = { 'id': 'nested' }, contents = '%s') % ('callback!')), '\n', HTML.Create(tag = 'img', attributes = { 'src': 'path/to/img/.gif', 'width': '10px', 'height': '10px' }, close = True)
