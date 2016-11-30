@@ -54,7 +54,7 @@ class HIPHTML (STRHTML):
 		tag = HIPHTML.SetStrType(tag)
 		# set base HTML tag attributes
 		attributes = HIPHTML.HIP_ATTRIBUTES[tag.upper()] if tag.upper() in HIPHTML.HIP_ATTRIBUTES else []
-		# get attributes
+		# get attribute information
 		return { 'HTML_TAG': tag.upper(), 'TAG_ATTRIBUTES': attributes, 'TAG_SUPPORTED': HIPHTML.HasTag(tag.upper()) } 
 
 
