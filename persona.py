@@ -6,7 +6,7 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings
-from strs import String
+from strings import String
 
 
 class Persona (String):
