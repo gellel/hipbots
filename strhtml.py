@@ -16,7 +16,7 @@ class STRHTML (String):
 	#############################################
 
 	@staticmethod
-	def Tag (node = None):
+	def SetTag (node = None):
 		### @description: private function for creating basic HTML tag
 		### @parameter: <node>, @type: <str>, @default: <None>
 		### @return: @type: <str>
@@ -27,7 +27,7 @@ class STRHTML (String):
 		return STRHTML.Cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
 	@staticmethod
-	def Attr (attributes = None):
+	def SetAttributes (attributes = None):
 		### @description: private function for creating attributes string for HTML tags
 		### @parameter: <attributes>, @type: <dict>, @default: <None>
 		### @return: @type: <str>
@@ -51,7 +51,7 @@ class STRHTML (String):
 		# set base contents
 		contents = kwargs.get('contents', '')
 		# set base HTML string
-		node = STRHTML.Tag(kwargs.get('node', None)) % (STRHTML.Attr(attributes), '%s')
+		node = STRHTML.SetTag(kwargs.get('node', None)) % (STRHTML.SetAttributes(attributes), '%s')
 		# construct
 		return node % (contents if not hasattr(contents, '__call__') else contents())
 
@@ -61,5 +61,5 @@ class STRHTML (String):
 if __name__ == '__main__':
 
 	# build example HTML
-	print STRHTML.HTML(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = STRHTML.Tag) % ('', 'callback!')
+	print STRHTML.HTML(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = STRHTML.SetTag) % ('', 'callback!')
 	

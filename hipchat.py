@@ -17,8 +17,8 @@ class HIPHTML (STRHTML):
 	### public class for testing support HTML in HipChat ###
 	########################################################
 
-	ELEMENTS = ['A', 'B', 'I', 'STRONG', 'EM', 'BR', 'IMG', 'PRE', 'CODE', 'OL', 'UL', 'LI', 'TABLE', 'TR', 'TD', 'TH', 'TF', 'SPAN']
-	ATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
+	HIPELEMENTS = ['A', 'B', 'I', 'STRONG', 'EM', 'BR', 'IMG', 'PRE', 'CODE', 'OL', 'UL', 'LI', 'TABLE', 'TR', 'TD', 'TH', 'TF', 'SPAN']
+	HIPATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
 
 	@staticmethod
 	def HasTag (element = 'A'):
@@ -27,7 +27,7 @@ class HIPHTML (STRHTML):
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.ELEMENTS else False
+		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.HIPELEMENTS else False
 
 	@staticmethod
 	def HasAttribute (**kwargs):
@@ -42,7 +42,7 @@ class HIPHTML (STRHTML):
 		# @parameter: <node>, @type: <str>, @default: <str>
 		attribute = HIPHTML.SetStrType(kwargs.get('attribute')) or 'HREF'
 		# confirm attribute is supported
-		return True if element.upper() in HIPHTML.ELEMENTS and attribute in HIPHTML.ATTRIBUTES[element.upper()] else False
+		return True if element.upper() in HIPHTML.HIPELEMENTS and attribute in HIPHTML.HIPATTRIBUTES[element.upper()] else False
 
 	@staticmethod
 	def Base (**kwargs):
@@ -56,7 +56,7 @@ class HIPHTML (STRHTML):
 		# set default HTML tag
 		tag = tag if HIPHTML.HasTag(tag) else 'SPAN'
 		# set HTML
-		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.ATTRIBUTES[tag] } 
+		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.HIPATTRIBUTES[tag] } 
 
 
 
