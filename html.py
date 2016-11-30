@@ -16,17 +16,15 @@ class HTML:
 	#############################################
 	
 	@staticmethod
-	def Tag (tag = None, **kwargs):
+	def Tag (tag = None):
 		### @description: public function to create HTML string tag
 		### @parameter: <tag>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
-		# set base self close tag
-		# @parameter: <close>, @type: <bool>, @default: <False>
 		# set base string type
 		tag = String.SetStrType(tag, default = 'div').lower()
 		# encase tag string
-		return String.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>']) if not bool(kwargs.get('close', False)) else String.Cconcat(['<', tag, '%s', '/>', '%s'])
+		return String.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>']) if not tag in ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'] else String.Cconcat(['<', tag, '%s', '/>', '%s'])
 
 	@staticmethod
 	def FormatAttributes (attributes = {}):
@@ -45,11 +43,9 @@ class HTML:
 		### @parameter: <dict>, @type: <dict>
 		### @return: @type: <str>
 
-		# set base self close tag
-		# @parameter: <close>, @type: <bool>, @default: <False>
 		# set base HTML tag
 		# @parameter: <tag>, @type: <str>, @default: <None>
-		tag = HTML.Tag(kwargs.get('tag'), close = kwargs.get('close'))
+		tag = HTML.Tag(kwargs.get('tag'))
 		# set base HTML attributes
 		# @parameter: <attributes>, @type: <dict>, @default: <None>
 		attributes = HTML.FormatAttributes(kwargs.get('attributes'))
@@ -64,15 +60,15 @@ class HTML:
 
 		# set base HTML tag
 		# @parameter: <tag>, @type: <str>, @default: <None>
+		tag = kwargs.get('tag')
 		# set base HTML attributes
 		# @parameter: <attributes>, @type: <dict>, @default: <None>
+		attributes = kwargs.get('attributes')
 		# set base content for internal lambda string
 		# @parameter: <contents>, @type: <str>, @default: <str>
 		contents = kwargs.get('contents')
-		# set attributed HTML
-		node = HTML.SetAttributes(tag = kwargs.get('tag'), attributes = kwargs.get('attributes'), close = kwargs.get('close'))
 		# apply nesting
-		return node % (String.SetStrType(contents) if not hasattr(contents, '__call__') else contents())
+		return HTML.SetAttributes(tag = tag, attributes = attributes) % (String.SetStrType(contents) if not hasattr(contents, '__call__') else contents())
 
 
 
@@ -80,5 +76,4 @@ class HTML:
 if __name__ == '__main__':
 
 	# build example HTML
-	print HTML.Create(tag = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', HTML.Create(tag = 'p', attributes = { 'id': 'nested' }, contents = '%s') % ('callback!')), '\n', HTML.Create(tag = 'img', attributes = { 'src': 'path/to/img/.gif', 'width': '10px', 'height': '10px' }, close = True)
-	
+	print HTML.Create(tag = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = HTML.Tag) % ('', HTML.Create(tag = 'p', attributes = { 'id': 'nested' }, contents = '%s') % ('callback!')), '\n', HTML.Create(tag = 'img', attributes = { 'src': 'path/to/img/.gif', 'width': '10px', 'height': '10px' })
