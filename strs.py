@@ -9,23 +9,7 @@
 import re
 
 
-class Base (object):
-
-	###############################################
-	### public class for assisting string class ###
-	###############################################
-
-	@staticmethod
-	def SetStrType (arg):
-		### @description: public function to edit argumments that are not castable to string as empty
-		### @parameter: <arg>, @type: <*>, @default: <None>
-		### @return: @type: <str>
-
-		# set base string from argument
-		return str(arg) if type(arg) in [int, float, unicode, str] else ''
-
-
-class String (Base):
+class String (object):
 
 	##########################################
 	### public class for string formatting ###
@@ -45,6 +29,19 @@ class String (Base):
 	FILTER = r'\{\{{0,2}[^\{\{]+\}\}{0,2}'
 	EXTENSION = r'^.+\.{1}\w+$'
 	SYNTAX = r'{{|}}'
+
+	@staticmethod
+	def SetStrType (arg):
+		### @description: public function to edit argumments that are not castable to string as empty
+		### @parameter: <arg>, @type: <*>, @default: <None>
+		### @return: @type: <str>
+
+		# confirm argument is sequence type
+		if type(arg) in [list, tuple]:
+			# stringify sequence
+			return String.Cconcat(list(arg))
+		# set base string from argument
+		return str(arg) if type(arg) in [int, float, unicode, str] else ''
 
 	@staticmethod
 	def Cconcat (strings = [], character = ''):

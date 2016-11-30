@@ -7,6 +7,7 @@
 ###################################
 ### import pretty strings
 from strs import String
+### import HTML strings
 
 
 class HTML (String):
@@ -35,10 +36,10 @@ class HTML (String):
 		
 		# set base element
 		# @parameter: <element>, @type: <str>, @default: <str>
-		element = HTML.SetStrType(kwargs.get('element', 'A'))
+		element = HTML.SetStrType(kwargs.get('element')) or 'A'
 		# set base attribute
 		# @parameter: <node>, @type: <str>, @default: <str>
-		attribute = HTML.SetStrType(kwargs.get('attribute', 'HREF'))
+		attribute = HTML.SetStrType(kwargs.get('attribute')) or 'HREF'
 		# confirm attribute is supported
 		return True if element.upper() in HTML.ELEMENTS and attribute in HTML.ATTRIBUTES[element.upper()] else False
 
@@ -86,7 +87,7 @@ class REST (String):
 		return True if REST.SetStrType(arg) in REST.CONTENT else False
 
 	@staticmethod
-	def Base (**kwargs):
+	def Set (**kwargs):
 		### @description: public function to select suitable substitute from allowed HTTP methods
 		### @parameters: <kwargs>, @type: <dict>
 		### @return: @type: <dict>
@@ -101,9 +102,13 @@ class REST (String):
 		return { 'HTTP_METHOD': method if REST.Method(method) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
 
 
-class API (String):
+class API (REST):
 
-	pass
+	ORIGIN = 'EXAMPLE'
+	VERSION = 2
+	ROOM = '000000'
+	DEFAULT_API = "{{sample/api}}"
+
 
 
 if __name__ == '__main__':
@@ -111,4 +116,4 @@ if __name__ == '__main__':
 	# format HipChat HTML tag
 	print HTML.Base(tag = 'IMG')
 	# format HipChat HTTP request 
-	print REST.Base()
+	print REST.Set(method = 'FAKE')
