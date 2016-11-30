@@ -31,17 +31,18 @@ class String (object):
 	SYNTAX = r'{{|}}'
 
 	@staticmethod
-	def SetStrType (arg):
+	def SetStrType (arg, **kwargs):
 		### @description: public function to edit argumments that are not castable to string as empty
 		### @parameter: <arg>, @type: <*>, @default: <None>
+		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
 
 		# confirm argument is sequence type
 		if type(arg) in [list, tuple]:
 			# stringify sequence
-			return String.Cconcat(list(arg), ' ')
+			return String.Cconcat(list(arg), kwargs.get('separator', ' '))
 		# set base string from argument
-		return str(arg) if type(arg) in [int, float, unicode, str] else ''
+		return str(arg) if type(arg) in [int, float, unicode, str] else kwargs.get('default', '')
 
 	@staticmethod
 	def Cconcat (strings = [], character = ''):

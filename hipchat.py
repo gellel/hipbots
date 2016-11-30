@@ -17,8 +17,8 @@ class HIPHTML (STRHTML):
 	### public class for testing support HTML in HipChat ###
 	########################################################
 
-	HIPELEMENTS = ['A', 'B', 'I', 'STRONG', 'EM', 'BR', 'IMG', 'PRE', 'CODE', 'OL', 'UL', 'LI', 'TABLE', 'TR', 'TD', 'TH', 'TF', 'SPAN']
-	HIPATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
+	HIP_ELEMENTS = ['A', 'B', 'I', 'STRONG', 'EM', 'BR', 'IMG', 'PRE', 'CODE', 'OL', 'UL', 'LI', 'TABLE', 'TR', 'TD', 'TH', 'TF', 'SPAN']
+	HIP_ATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
 
 	@staticmethod
 	def HasTag (element = 'A'):
@@ -27,7 +27,7 @@ class HIPHTML (STRHTML):
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.HIPELEMENTS else False
+		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.HIP_ELEMENTS else False
 
 	@staticmethod
 	def HasAttribute (**kwargs):
@@ -42,10 +42,10 @@ class HIPHTML (STRHTML):
 		# @parameter: <node>, @type: <str>, @default: <str>
 		attribute = HIPHTML.SetStrType(kwargs.get('attribute')) or 'HREF'
 		# confirm attribute is supported
-		return True if element.upper() in HIPHTML.HIPELEMENTS and attribute in HIPHTML.HIPATTRIBUTES[element.upper()] else False
+		return True if element.upper() in HIPHTML.HIP_ELEMENTS and attribute in HIPHTML.HIP_ATTRIBUTES[element.upper()] else False
 
 	@staticmethod
-	def Base (**kwargs):
+	def GetAttributes (**kwargs):
 		### @description: public function to select suitable substitute from allowed HTML tags
 		### @parameters: <kwargs>, @type: <dict>
 		### @return: @type: <dict>
@@ -56,7 +56,7 @@ class HIPHTML (STRHTML):
 		# set default HTML tag
 		tag = tag if HIPHTML.HasTag(tag) else 'SPAN'
 		# set HTML
-		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.HIPATTRIBUTES[tag] } 
+		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.HIP_ATTRIBUTES[tag] } 
 
 
 
@@ -66,55 +66,56 @@ class REST (String):
 	### public class to construct REST API endpoint ###
 	###################################################
 
-	CONTENT = ['APPLICATION/JSON', 'APPLICATION/X-WWW-FORM-URLENCODED', 'TEXT/HTML', 'TEXT/PLAIN']
-	METHOD = ['GET', 'POST', 'PUT', 'HEAD', 'OPTIONS', 'PATCH', 'DELETE']
+	HIP_CONTENT_TYPES = ['APPLICATION/JSON', 'APPLICATION/X-WWW-FORM-URLENCODED', 'TEXT/HTML', 'TEXT/PLAIN']
+	HIP_METHOD_TYPES = ['GET', 'POST', 'PUT', 'HEAD', 'OPTIONS', 'PATCH', 'DELETE']
+	HIP_DEFAULT_SUBDOMAIN = 'FAKECOMPANY'
+	HIP_DEFAULT_VERSION = '2'
+	HIP_DEFAULT_ROOM = '0110110'
+	HIP_DEFAULT_API = 'PATH/TO/API/ENDPOINT'
 
 	@staticmethod
-	def Method (arg = 'GET'):
+	def HasMethodType (arg = 'GET'):
 		### @description: public function to confirm HTTP method is supported
 		### @parameter: <arg>, @type: <str>, @default: <str>
 		### @return: @type: <bool>
 
 		# confirm HTTP method support
-		return True if REST.SetStrType(arg) in REST.METHOD else False
+		return True if REST.SetStrType(arg) in REST.HIP_METHOD_TYPES else False
 
 	@staticmethod
-	def Content (arg = 'APPLICATION/JSON'):
+	def HasContentType (arg = 'APPLICATION/JSON'):
 		### @description: public function to confirm HTTP content-type header is supported
 		### @parameter: <arg>, @type: <str>, @default: <str>
 		### @return: @type: <bool>
 
 		# confirm HTTP content-type method supported
-		return True if REST.SetStrType(arg) in REST.CONTENT else False
+		return True if REST.SetStrType(arg) in REST.HIP_CONTENT_TYPES else False
 
 	@staticmethod
-	def Set (**kwargs):
-		### @description: public function to select suitable substitute from allowed HTTP methods
-		### @parameters: <kwargs>, @type: <dict>
-		### @return: @type: <dict>
+	def GetNotifyURL (**kwargs):
+		### @description: public function to configure REST API string
+		### @parameter: <kwargs>, @type: <dict>
+		### @return: @type: <str>
 
-		# set base method
-		# @parameter: <method>, @type: <str>, @default: <None>
-		method = kwargs.get('method')
-		# set base content
-		# @parameter: <content>, @type: <str>, @default: <None>
-		content = kwargs.get('content')
-		# set HTTP 
-		return { 'HTTP_METHOD': method if REST.Method(method) else 'POST', 'CONTENT_TYPE': content if REST.Content(content) else 'APPLICATION/JSON' }
+		# set subdomain for HipChat client
+		# @parameter: <subdomain>, @type: <str>, @default: <None>
+		subdomain = REST.SetStrType(kwargs.get('subdomain')) or REST.HIP_DEFAULT_SUBDOMAIN
+		# set api version for HipChat API
+		# @parameter: <version>, @type: <str>, @default: <None>
+		version = REST.SetStrType(kwargs.get('version')) or REST.HIP_DEFAULT_VERSION
+		# set room for HipChat API
+		# @parameter: <room>, @type: <str>, @default: <None>
+		room = REST.SetStrType(kwargs.get('room')) or REST.HIP_DEFAULT_ROOM
+		# set base endpoint for HipChat API
+		# @parameter: <api>, @type: <str>, @default: <None>
+		api = REST.SetStrType(kwargs.get('api')) or  REST.HIP_DEFAULT_API
+		
+		# set REST API URL
+		return REST.Cconcat([REST.Cconcat([REST.Cconcat(['https://', subdomain]), 'hipchat', 'com'], '.'), '/', REST.Cconcat(['v', version]), '/', 'room', '/', room, '/', api])
 
-
-class API (REST):
-
-	ORIGIN = 'EXAMPLE'
-	VERSION = 2
-	ROOM = '000000'
-	DEFAULT_API = "{{sample/api}}"
 
 
 
 if __name__ == '__main__':
 	
-	# format HipChat HTML tag
-	print HIPHTML.Base(tag = 'IMG')
-	# format HipChat HTTP request 
-	print REST.Set(method = 'FAKE')
+	print REST.GetNotifyURL()
