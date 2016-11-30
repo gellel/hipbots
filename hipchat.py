@@ -46,7 +46,7 @@ class HIPHTML (STRHTML):
 
 	@staticmethod
 	def GetTagAttributes (tag = 'A'):
-		### @description: public function to select suitable substitute from allowed HTML tags
+		### @description: public function to select suitable attributes from allowed HTML tags
 		### @parameter: <tag>, @type: <str>, @default: <str>
 		### @return: @type: <dict>
 
@@ -55,7 +55,7 @@ class HIPHTML (STRHTML):
 		# set base HTML tag attributes
 		attributes = HIPHTML.HIP_ATTRIBUTES[tag.upper()] if tag.upper() in HIPHTML.HIP_ATTRIBUTES else []
 		# get attributes
-		return { 'HTML_TAG': tag.upper(), 'TAG_ATTRIBUTES': attributes } 
+		return { 'HTML_TAG': tag.upper(), 'TAG_ATTRIBUTES': attributes, 'TAG_SUPPORTED': HIPHTML.HasTag(tag.upper()) } 
 
 
 
@@ -120,4 +120,3 @@ if __name__ == '__main__':
 	print HIPHTML.GetTagAttributes('LI')
 	# get api endpoint for notifications
 	print REST.GetNotifyURL()
-	
