@@ -21,13 +21,13 @@ class HIPHTML (STRHTML):
 	HIP_ATTRIBUTES = {'A':['HREF','REL','DATA-TARGET','DATA-TARGET-OPTIONS'], 'IMG':['SRC','ALT','WIDTH','HEIGHT','ALIGN','STYLE'],'TD':['COLSPAN','ROWSPAN','VALIGN'],'TR':['VALIGN'],'TH':['COLSPAN','ROWSPAN','VALIGN'],'SPAN':['STYLE']}
 
 	@staticmethod
-	def HasTag (element = 'A'):
+	def HasTag (tag = 'A'):
 		### @description: public function to confirm HTML tag supported in HipChat
 		### @parameter: <element>, @type: <str>, @default: <str>
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.HIP_ELEMENTS else False
+		return True if HIPHTML.SetStrType(tag).upper() in HIPHTML.HIP_ELEMENTS else False
 
 	@staticmethod
 	def HasAttribute (**kwargs):
@@ -37,26 +37,25 @@ class HIPHTML (STRHTML):
 		
 		# set base element
 		# @parameter: <element>, @type: <str>, @default: <str>
-		element = HIPHTML.SetStrType(kwargs.get('element')) or 'A'
+		tag = HIPHTML.SetStrType(kwargs.get('tag')) or 'A'
 		# set base attribute
 		# @parameter: <node>, @type: <str>, @default: <str>
 		attribute = HIPHTML.SetStrType(kwargs.get('attribute')) or 'HREF'
 		# confirm attribute is supported
-		return True if element.upper() in HIPHTML.HIP_ELEMENTS and attribute in HIPHTML.HIP_ATTRIBUTES[element.upper()] else False
+		return True if tag.upper() in HIPHTML.HIP_ELEMENTS and attribute in HIPHTML.HIP_ATTRIBUTES[tag.upper()] else False
 
 	@staticmethod
-	def GetAttributes (**kwargs):
+	def GetTagAttributes (tag = 'A'):
 		### @description: public function to select suitable substitute from allowed HTML tags
-		### @parameters: <kwargs>, @type: <dict>
+		### @parameter: <tag>, @type: <str>, @default: <str>
 		### @return: @type: <dict>
 
-		# set base method
-		# @parameter: <tag>, @type: <str>, @default: <str>
-		tag = HIPHTML.SetStrType(kwargs.get('tag'))
-		# set default HTML tag
-		tag = tag if HIPHTML.HasTag(tag) else 'SPAN'
-		# set HTML
-		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.HIP_ATTRIBUTES[tag] } 
+		# set base HTML tag
+		tag = HIPHTML.SetStrType(tag)
+		# set base HTML tag attributes
+		attributes = HIPHTML.HIP_ATTRIBUTES[tag.upper()] if tag.upper() in HIPHTML.HIP_ATTRIBUTES else []
+		# get attributes
+		return { 'HTML_TAG': tag.upper(), 'TAG_ATTRIBUTES': attributes } 
 
 
 
@@ -109,7 +108,6 @@ class REST (String):
 		# set base endpoint for HipChat API
 		# @parameter: <api>, @type: <str>, @default: <None>
 		api = REST.SetStrType(kwargs.get('api')) or  REST.HIP_DEFAULT_API
-		
 		# set REST API URL
 		return REST.Cconcat([REST.Cconcat([REST.Cconcat(['https://', subdomain]), 'hipchat', 'com'], '.'), '/', REST.Cconcat(['v', version]), '/', 'room', '/', room, '/', api])
 
@@ -118,4 +116,8 @@ class REST (String):
 
 if __name__ == '__main__':
 	
+	# get example attributes for tag
+	print HIPHTML.GetTagAttributes('LI')
+	# get api endpoint for notifications
 	print REST.GetNotifyURL()
+	
