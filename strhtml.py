@@ -9,7 +9,7 @@
 from strs import String
 
 
-class SHTML (String):
+class STRHTML (String):
 
 	#############################################
 	### public class for HTML string creation ###
@@ -22,9 +22,9 @@ class SHTML (String):
 		### @return: @type: <str>
 
 		# set base node
-		node = SHTML.SetStrType(node) or 'div'
+		node = STRHTML.SetStrType(node) or 'div'
 		# encase supplied string with HTML syntax
-		return SHTML.Cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
+		return STRHTML.Cconcat(['<', node, '%s', '>', '%s', '</', node, '>'])
 
 	@staticmethod
 	def Attr (attributes = None):
@@ -35,7 +35,7 @@ class SHTML (String):
 		# set base attributes
 		attributes = attributes or { 'id': None }
 		# set each key in attributes to be joined by equals and quotations
-		return SHTML.Cconcat([' ', SHTML.Cconcat([SHTML.Cconcat([attr, '=', '"', SHTML.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
+		return STRHTML.Cconcat([' ', STRHTML.Cconcat([STRHTML.Cconcat([attr, '=', '"', STRHTML.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")])
 	
 	
 	@staticmethod
@@ -51,7 +51,7 @@ class SHTML (String):
 		# set base contents
 		contents = kwargs.get('contents', '')
 		# set base HTML string
-		node = SHTML.Tag(kwargs.get('node', None)) % (SHTML.Attr(attributes), '%s')
+		node = STRHTML.Tag(kwargs.get('node', None)) % (STRHTML.Attr(attributes), '%s')
 		# construct
 		return node % (contents if not hasattr(contents, '__call__') else contents())
 
@@ -61,5 +61,5 @@ class SHTML (String):
 if __name__ == '__main__':
 
 	# build example HTML
-	print SHTML.HTML(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = SHTML.Tag) % ('', 'callback!')
+	print STRHTML.HTML(node = 'aside', attributes = { 'id': 'sample', 'class': 'col-xs-3 col-sm-6 col-md-9' }, contents = STRHTML.Tag) % ('', 'callback!')
 	

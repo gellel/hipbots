@@ -8,9 +8,10 @@
 ### import pretty strings
 from strs import String
 ### import HTML strings
+from strhtml import STRHTML
 
 
-class HTML (String):
+class HIPHTML (STRHTML):
 
 	########################################################
 	### public class for testing support HTML in HipChat ###
@@ -26,7 +27,7 @@ class HTML (String):
 		### @return: @type: <str>
 
 		# confirm HTML tag is supported 
-		return True if HTML.SetStrType(element).upper() in HTML.ELEMENTS else False
+		return True if HIPHTML.SetStrType(element).upper() in HIPHTML.ELEMENTS else False
 
 	@staticmethod
 	def HasAttribute (**kwargs):
@@ -36,12 +37,12 @@ class HTML (String):
 		
 		# set base element
 		# @parameter: <element>, @type: <str>, @default: <str>
-		element = HTML.SetStrType(kwargs.get('element')) or 'A'
+		element = HIPHTML.SetStrType(kwargs.get('element')) or 'A'
 		# set base attribute
 		# @parameter: <node>, @type: <str>, @default: <str>
-		attribute = HTML.SetStrType(kwargs.get('attribute')) or 'HREF'
+		attribute = HIPHTML.SetStrType(kwargs.get('attribute')) or 'HREF'
 		# confirm attribute is supported
-		return True if element.upper() in HTML.ELEMENTS and attribute in HTML.ATTRIBUTES[element.upper()] else False
+		return True if element.upper() in HIPHTML.ELEMENTS and attribute in HIPHTML.ATTRIBUTES[element.upper()] else False
 
 	@staticmethod
 	def Base (**kwargs):
@@ -51,11 +52,11 @@ class HTML (String):
 
 		# set base method
 		# @parameter: <tag>, @type: <str>, @default: <str>
-		tag = HTML.SetStrType(kwargs.get('tag'))
+		tag = HIPHTML.SetStrType(kwargs.get('tag'))
 		# set default HTML tag
-		tag = tag if HTML.HasTag(tag) else 'SPAN'
+		tag = tag if HIPHTML.HasTag(tag) else 'SPAN'
 		# set HTML
-		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HTML.ATTRIBUTES[tag] } 
+		return { 'HTML_TAG': tag, 'TAG_ATTRIBUTES': HIPHTML.ATTRIBUTES[tag] } 
 
 
 
@@ -114,6 +115,6 @@ class API (REST):
 if __name__ == '__main__':
 	
 	# format HipChat HTML tag
-	print HTML.Base(tag = 'IMG')
+	print HIPHTML.Base(tag = 'IMG')
 	# format HipChat HTTP request 
 	print REST.Set(method = 'FAKE')
