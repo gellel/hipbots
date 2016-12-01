@@ -25,10 +25,18 @@ import re
 
 class Secrets:
 
-	def __open (self, file):
+	def __open (self, filename):
 		### @description: private function for opening file type as JSON
-		### @parameter: <file>, @type: <str>, @default: <str>
+		### @parameter: <filename>, @type: <str>, @default: <str>
 		### @return: @type: <dict>
+
+		# attempt to fetch file
+		try:
+			return json.loads(open(filename, 'w'))
+		# handle exception
+		except:
+			# set base dictionary
+			return { 'auth_token': '1234SamPLEAuTHToKEN', 'auth_domain': 'organisation', 'auth_room': '123456' }
 
 	def __file (self, directory, file):
 		### @description: private function for create system file string
