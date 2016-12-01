@@ -114,6 +114,8 @@ class Messages (HTML):
 		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
 
 
+
+
 if __name__ == '__main__':
 
 	# create example REST object for messages API
