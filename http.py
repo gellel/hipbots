@@ -16,7 +16,6 @@ import re
 
 
 
-
 class HTTP:
 
 	###########################################################
@@ -105,7 +104,6 @@ class HTTP:
 		# set base certificate attribute
 		# @parameter: <name>, @type: <str>, @default: <None>
 		self.cert = kwargs.pop('cert', None)
-		
 
 
 
