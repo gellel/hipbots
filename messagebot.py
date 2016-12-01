@@ -32,6 +32,7 @@ class Secrets:
 
 		# attempt to fetch file
 		try:
+			# assumg file is json and set to dict
 			return json.loads(open(filename, 'w'))
 		# handle exception
 		except:
@@ -48,6 +49,8 @@ class Secrets:
 		directory = directory[:-1] if directory[-1:] is '/' else directory
 		# set base file string
 		file = String.Cconcat([directory, file], '/')
+		# attemp to fetch
+		return Secrets()._Secrets__open(file)
 
 	@staticmethod
 	def Get (**kwargs):
