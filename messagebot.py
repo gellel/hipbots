@@ -9,8 +9,8 @@
 from lib.strings import String
 ### import random sentences
 from lib.sentence import Sentence
-### import hipchat messages
-from lib.hipchat import Messages
+### import hipchat notifications
+from lib.api import Notification
 ### import http requests
 from lib.http import HTTP
 ### import json
@@ -83,7 +83,7 @@ class Robot:
 
 	def __init__ (self, **kwargs):
 
-		print Messages.Object(**kwargs)
+		print Notification.Object(**kwargs)
 		
 		
 
