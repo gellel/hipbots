@@ -79,7 +79,7 @@ class HTTP (object):
 		self.method = self.__HTTP(String.SetStrType(kwargs.get('method', None)))
 		# set base HTTP body attribute
 		# @parameter: <name>, @type: <dict>, @default: <dict>
-		self.data = self.__JSON(kwargs.pop('body', { '__json__': True }))
+		self.data = self.__JSON(kwargs.get('body', { '__json__': True }))
 		# set base HTTP headers attribute
 		# @parameter: <headers>, @type: <dict>, @default: <dict>
 		self.headers = self.__HEAD(**kwargs.get('headers', {}))
