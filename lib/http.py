@@ -16,13 +16,13 @@ import re
 
 
 
-class HTTP:
+class HTTP (object):
 
 	###########################################################
 	### creates HTTP requests through building helper class ###
 	###########################################################
 
-	def create (self):
+	def HTTP (self):
 		### @description: protected function for dispatching HTTP request
 		### @return: @type: <instance:requests>
 
@@ -73,10 +73,10 @@ class HTTP:
 
 		# set base url attribute
 		# @parameter: <URL>, @type: <str>, @default: <None>
-		self.URL = self.__URL(String.SetStrType(kwargs.pop('URL'))) 
+		self.URL = self.__URL(String.SetStrType(kwargs.get('URL', None))) 
 		# set base HTTP method type
 		# @parameter: <method>, @type: <str>, @default: <None>
-		self.method = self.__HTTP(String.SetStrType(kwargs.pop('method')))
+		self.method = self.__HTTP(String.SetStrType(kwargs.get('method', None)))
 		# set base HTTP body attribute
 		# @parameter: <name>, @type: <dict>, @default: <dict>
 		self.data = self.__JSON(kwargs.pop('body', { '__json__': True }))
@@ -85,25 +85,25 @@ class HTTP:
 		self.headers = self.__HEAD(**kwargs.get('headers', {}))
 		# set base proxies attribute
 		# @parameter: <name>, @type: <str>, @default: <dict>
-		self.proxies = kwargs.pop('proxies', {})
+		self.proxies = kwargs.get('proxies', {})
 		# set base query string attribute
 		# @parameter: <name>, @type: <str>, @default: <dict>
-		self.params = kwargs.pop('query', {})
+		self.params = kwargs.get('query', {})
 		# set base request timeout attribute
 		# @parameter: <name>, @type: <str>, @default: <None>
-		self.timeout = kwargs.pop('timeout', None)
+		self.timeout = kwargs.get('timeout', None)
 		# set base vertification attribute
 		# @parameter: <name>, @type: <str>, @default: <True>
-		self.verify = kwargs.pop('verify', True)
+		self.verify = kwargs.get('verify', True)
 		# set base stream response attribute
 		# @parameter: <name>, @type: <str>, @default: <False>
-		self.stream = kwargs.pop('stream', False)
+		self.stream = kwargs.get('stream', False)
 		# set base redirection attribute
 		# @parameter: <name>, @type: <str>, @default: <None>
-		self.allow_redirects = kwargs.pop('redirects', False)
+		self.allow_redirects = kwargs.get('redirects', False)
 		# set base certificate attribute
 		# @parameter: <name>, @type: <str>, @default: <None>
-		self.cert = kwargs.pop('cert', None)
+		self.cert = kwargs.get('cert', None)
 
 
 
@@ -111,5 +111,5 @@ class HTTP:
 if __name__ == '__main__':
 
 	# create example HTTP request wrapper
-	print HTTP(URL = "https://en.wikipedia.org/w/api.php", method = "GET", headers = {'Content-Type':'fake'}, query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).create().content
+	print HTTP(URL = "https://en.wikipedia.org/w/api.php", method = "GET", headers = {'Content-Type':'fake'}, query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).HTTP().content
 	

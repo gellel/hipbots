@@ -6,11 +6,13 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings
-from strings import String
+from lib.strings import String
 ### import random sentences
-from sentence import Sentence
+from lib.sentence import Sentence
 ### import hipchat messages
-from hipchat import Messages
+from lib.hipchat import Messages
+### import http requests
+from lib.http import HTTP
 ### import json
 import json
 ### import system
@@ -25,6 +27,10 @@ import re
 
 class Secrets:
 
+	########################################################
+	### public class get JSON client Secrets for HipChat ###
+	########################################################
+
 	def __open (self, filename):
 		### @description: private function for opening file type as JSON
 		### @parameter: <filename>, @type: <str>, @default: <str>
@@ -33,11 +39,11 @@ class Secrets:
 		# attempt to fetch file
 		try:
 			# assumg file is json and set to dict
-			return json.loads(open(filename, 'w'))
+			return json.load(open(filename, 'r'))
 		# handle exception
 		except:
 			# set base dictionary
-			return { 'auth_token': '1234SamPLEAuTHToKEN', 'auth_domain': 'organisation', 'auth_room': '123456' }
+			return { 'auth_token': '1234SamPLEAuTHToKEN', 'auth_subdomain': 'organisation', 'auth_room': '123456' }
 
 	def __file (self, directory, file):
 		### @description: private function for create system file string
@@ -70,8 +76,21 @@ class Secrets:
 
 
 
+class Robot:
+
+	def message (self):
+		return self.__dict__
+
+	def __init__ (self, **kwargs):
+
+		print Messages.Object(**kwargs)
+		
+		
+
+
+
+
 
 if __name__ == '__main__':
 
-	print Secrets.Get()
-
+	print Robot(message = Sentence().randomize()).message()

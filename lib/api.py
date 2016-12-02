@@ -14,11 +14,11 @@ import random
 
 
 
-class Messages (HTML):
+class Notification (HTML):
 
-	##########################################################
-	### public function for creating HipChat REST Messages ###
-	##########################################################
+	###################################################################
+	### public function for creating HipChat REST API notifications ###
+	###################################################################
 
 	def __HTML (self, tag = 'span'):
 		### @description: private function for confirming HTML tag supported
@@ -26,7 +26,7 @@ class Messages (HTML):
 		### @return: @type: <bool>
 
 		# get base HTML tags and confirm tag exists
-		return True if String.SetStrType(tag).lower() in Messages.GetHTML() else False
+		return True if String.SetStrType(tag).lower() in Notification.GetHTML() else False
 
 	def __CSS (self, style = 'color'):
 		### @description: private function for confirming CSS attribute supported
@@ -34,7 +34,7 @@ class Messages (HTML):
 		### @return: @type: <bool>
 
 		# get base CSS styles and confirm style exists
-		return True if String.SetStrType(style).lower() in Messages.GetCSS() else False
+		return True if String.SetStrType(style).lower() in Notification.GetCSS() else False
 
 	def __attribute (self, tag = 'a', attribute = 'href'):
 		### @description: private function for confirming HTML attribute supported for tag
@@ -43,7 +43,7 @@ class Messages (HTML):
 		### @return: @type: <bool>
 		
 		# get base HTML tag and confirm as well as test if attribute exists
-		return True if Messages()._Messages__HTML(tag) and String.SetStrType(attribute) in Messages.GetHTML()[tag] else False
+		return True if Notification()._Notification__HTML(tag) and String.SetStrType(attribute) in Notification.GetHTML()[tag] else False
 	
 	def __colour (self, colour = 'red'):
 		### @description: private function for confirming HipChat colour supported
@@ -51,7 +51,7 @@ class Messages (HTML):
 		### @return: @type: <bool>
 
 		# get base HipChat colours and confirm colour exists
-		return True if String.SetStrType(colour).lower() in Messages.GetColours() else False
+		return True if String.SetStrType(colour).lower() in Notification.GetColours() else False
 
 	def __format (self, format_type = 'html'):
 		### @description: private function for confirming HipChat format supported
@@ -59,7 +59,7 @@ class Messages (HTML):
 		### @return: @type: <bool>
 
 		# get base HipChat format types and confirm format exists
-		return True if String.SetStrType(format_type).lower() in Messages.GetFormats() else False
+		return True if String.SetStrType(format_type).lower() in Notification.GetFormats() else False
 
 	@staticmethod
 	def GetHTML ():
@@ -100,16 +100,16 @@ class Messages (HTML):
 
 		# set base colour for object
 		# @parameter: <colour>, @type: <str>, @default: <str>
-		colour = kwargs.get('colour') if Messages()._Messages__colour(kwargs.get('colour')) else 'random'
+		colour = kwargs.get('colour') if Notification()._Notification__colour(kwargs.get('colour')) else 'random'
 		# set base message for object
 		# @parameter: <message>, @type: <str>, @default: <str>
 		message = String.SetStrType(kwargs.get('message'))
 		# set base notification alert for object
 		# @parameter: <notify>, @type: <bool>, @default: <False>
-		notify = bool(kwargs.get('notify', False))
+		notify = str(bool(kwargs.get('notify', False))).lower()
 		# set base message format for object
 		# @parameter: <format>, @type: <str>, @default: <str>
-		format_type = kwargs.get('format') if Messages()._Messages__format(kwargs.get('format')) else 'html'
+		format_type = kwargs.get('format') if Notification()._Notification__format(kwargs.get('format')) else 'html'
 		# get supported HipChat message formats
 		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
 
@@ -119,5 +119,4 @@ class Messages (HTML):
 if __name__ == '__main__':
 
 	# create example REST object for messages API
-	print Messages.Object()
-	
+	print Notification.Object()
