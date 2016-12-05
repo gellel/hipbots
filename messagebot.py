@@ -159,5 +159,5 @@ class Robot:
 if __name__ == '__main__':
 
 	# create example HipChat room HTTP messager bot
-	print Robot(**dict({ 'message': Sentence(["Guten Tag", "Bonjour", "Hello"], "I am running another", Sentence(["test", "experiment", "program"], ".", separator = ""), "Please", ["ignore", "don't mind"], "me").randomise() }, **Secrets.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message().content
+	print Robot(**dict({ 'message': Sentence(Sentence(["Guten Tag!", "Bonjour!", "Hello!"]), "I am running another", Sentence(["test", "experiment", "program"], ".", separator = ""), "Please", ["ignore", "don't mind"], "me").randomise() }, **Secrets.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message().content
 	
