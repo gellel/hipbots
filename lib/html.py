@@ -11,9 +11,9 @@ from strings import String
 
 class HTML:
 
-	#############################################
-	### public class for HTML string creation ###
-	#############################################
+	####################################################
+	### class for creating HTML structures in Python ###
+	####################################################
 	
 	@staticmethod
 	def Tag (tag = None):
@@ -69,7 +69,6 @@ class HTML:
 		contents = kwargs.get('contents')
 		# apply nesting
 		return HTML.SetAttributes(tag = tag, attributes = attributes) % (String.SetStrType(contents) if not hasattr(contents, '__call__') else contents())
-
 
 
 

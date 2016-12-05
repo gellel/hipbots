@@ -13,7 +13,6 @@ from html import HTML
 import random
 
 
-
 class Notification (HTML):
 
 	###################################################################
@@ -112,8 +111,6 @@ class Notification (HTML):
 		format_type = kwargs.get('format') if Notification()._Notification__format(kwargs.get('format')) else 'html'
 		# get supported HipChat message formats
 		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
-
-
 
 
 

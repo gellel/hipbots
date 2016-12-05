@@ -11,9 +11,9 @@ import re
 
 class String (object):
 
-	##########################################
-	### public class for string formatting ###
-	##########################################
+	########################################################################
+	### extended object class for creating stylised or formatted strings ###
+	########################################################################
 
 	SAMPLE = 'SAMPLE'
 	PURPLE = '\033[95m'

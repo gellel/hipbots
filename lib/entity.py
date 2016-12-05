@@ -11,9 +11,9 @@ from persona import Persona
 
 class Entity (Persona):
 
-	####################################################################
-	### Persona class extension to handle user arguments with prefix ###
-	####################################################################
+	#############################################################################################
+	### extended persona class to handle user arguments with string beautification and prefix ###
+	#############################################################################################
 
 	def ask (self, *args, **kwargs):
 		### @description: protected function for requesting input from user under a persona
@@ -129,11 +129,10 @@ class Entity (Persona):
 
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
-		### @parameters: <kwargs>, @type: <dict>
+		### @parameter: <kwargs>, @type: <dict>
 
 		# set call to inherited persona
 		super(Entity, self).__init__(**kwargs)
-
 
 
 

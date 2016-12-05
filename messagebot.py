@@ -23,13 +23,11 @@ import os
 import re
 
 
-
-
 class Secrets:
 
-	########################################################
-	### public class get JSON client Secrets for HipChat ###
-	########################################################
+	#################################################
+	### class get JSON client Secrets for HipChat ###
+	#################################################
 
 	def __open (self, filename):
 		### @description: private function for opening file type as JSON
@@ -80,7 +78,10 @@ class Robot:
 
 
 	def message (self):
-		
+		### @description: protected function for dispatching bot message to HipChat
+		### @return: @type: <instance:requests>
+
+		# dispatch HTTP
 		return HTTP(**self.__dict__).HTTP()
 
 	def __URL (self, **kwargs):
@@ -112,12 +113,28 @@ class Robot:
 		return { 'auth_token': String.SetStrType(kwargs.get('auth_token')) }
 
 	def __data (self, **kwargs):
+		### @description: private function for stringifying data arguments for HTTP request
+		### @parameter: <kwargs>, @type: <dict>
+		### @return: @type: <str>
+
+		# set base colour for object
+		# @parameter: <colour>, @type: <str>, @default: <str>
+		colour = kwargs.get('colour')
+		# set base colour for object
+		# @parameter: <message>, @type: <str>, @default: <str>
+		message = kwargs.get('message') 
+		# set base colour for object
+		# @parameter: <notify>, @type: <bool>, @default: <False>
+		notify = kwargs.get('notify')
+		# set base colour for object
+		# @parameter: <format>, @type: <str>, @default: <str>
+		format_type = kwargs.get('format')
 		# set base object
-		return Notification.Object(**kwargs)
+		return dict({ '__json__': True }, **Notification.Object(colour = colour, message = message, notify = notify, format = format_type))
 
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
-		### @parameters: <kwargs>, @type: <dict>
+		### @parameter: <kwargs>, @type: <dict>
 
 		# set http request url 
 		# @parameter: <kwargs>, @type: <dict>
@@ -130,9 +147,10 @@ class Robot:
 		self.headers = kwargs.get('headers', {})
 		# set http request query string
 		# @parameter: <kwargs>, @type: <dict>
-		self.query = self.__auth(**kwargs)
+		self.query = self.__auth(auth_token = kwargs.get('auth_token'))
 		# set http data request
-		self.data = self.__data(**kwargs)
+		# @parameter: <kwargs>, @type: <dict>
+		self.data = self.__data(color = kwargs.get('color'), message = kwargs.get('message'), format = kwargs.get('format'), notify = kwargs.get('notify'))
 
 		
 		
@@ -140,4 +158,5 @@ class Robot:
 
 if __name__ == '__main__':
 
-	print Robot(**dict({ 'message': Sentence().randomize() }, **Secrets.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message()
+	# create example HipChat room HTTP messager bot
+	print Robot(**dict({ 'message': Sentence(["Guten Tag", "Bonjour", "Hello"], "I am running another", Sentence(["test", "experiment", "program"], ".", separator = ""), "Please", ["ignore", "don't mind"], "me").randomise() }, **Secrets.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message().content

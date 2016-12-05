@@ -15,12 +15,11 @@ import json
 import re
 
 
-
 class HTTP (object):
 
-	###########################################################
-	### creates HTTP requests through building helper class ###
-	###########################################################
+	########################################################
+	### extended object class for creating HTTP requests ###
+	########################################################
 
 	def HTTP (self):
 		### @description: protected function for dispatching HTTP request
@@ -28,10 +27,8 @@ class HTTP (object):
 
 		# set base kwargs for requests function
 		kwargs = self.__dict__.copy()
-		# remove unexpected keys
-		map(kwargs.pop, ['URL', 'method'])
 		# set base request
-		r = requests.request(self.method.lower(), self.URL.lower(), **kwargs)
+		r = requests.request(self.method.lower(), self.URL.lower(), **{ key: kwargs[key] for key in kwargs if key not in ['URL', 'method'] })
 		# send result
 		return r
 		
@@ -69,7 +66,7 @@ class HTTP (object):
 
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
-		### @parameters: <kwargs>, @type: <dict>
+		### @parameter: <kwargs>, @type: <dict>
 
 		# set base url attribute
 		# @parameter: <URL>, @type: <str>, @default: <None>
@@ -107,9 +104,8 @@ class HTTP (object):
 
 
 
-
 if __name__ == '__main__':
 
 	# create example HTTP request wrapper
-	print HTTP(URL = "https://en.wikipedia.org/w/api.php", method = "GET", headers = {'Content-Type':'fake'}, query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).HTTP().content
+	print HTTP(URL = "https://en.wikipedia.org/w/api.php", method = "GET", headers = {'Content-Type':'application/json'}, query = { "format": "json", "action": "query", "prop": "extracts", "exintro": "", "explaintext": "", "titles": "Elizabeth_II" }, redirects = True).HTTP().content
 	

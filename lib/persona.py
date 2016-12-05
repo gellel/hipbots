@@ -11,9 +11,9 @@ from strings import String
 
 class Persona (String):
 
-	###########################################
-	### public class named printed messages ###
-	###########################################
+	#########################################################################################
+	### extended string class for creating beautified console output with a prefixed name ###
+	#########################################################################################
 
 	def say (self, *args):
 		### @description: protected function for creating formatted string as a person
@@ -61,7 +61,7 @@ class Persona (String):
 
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
-		### @parameters: <kwargs>, @type: <dict>
+		### @parameter: <kwargs>, @type: <dict>
 
 		# set message prefixed name
 		# @parameter: <name>, @type: <str>, @default: <None>
@@ -72,7 +72,6 @@ class Persona (String):
 		# set string style attributes for prefixed name 
 		# @parameter: <style>, @type: <list>, @default: <list>
 		self.style = self.__list(kwargs.get('style'))
-
 
 
 
