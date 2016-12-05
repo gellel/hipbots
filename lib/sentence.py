@@ -98,3 +98,4 @@ if __name__ == '__main__':
 
 	# build pseudo random string
 	print Sentence([['a', 'b'], ['c', 'd']]).randomise()
+	
