@@ -11,71 +11,46 @@ from strings import String
 
 class Persona (String):
 
-	#########################################################################################
-	### extended string class for creating beautified console output with a prefixed name ###
-	#########################################################################################
+	####################################################################################################
+	### extended class of strings.String, creates beautified string terminal output prefixed by name ###
+	####################################################################################################
 
 	def say (self, *args):
-		### @description: protected function for creating formatted string as a person
-		### @parameter: <args>, @type: <list>, @default: <None>
+		### @description: protected function of class, concatenates arguments to single string that is prefixed by the defined name of the class instance to simulate a response from character or system
 		### @return: @type: <str>
 
-		# set supplied arguments to python list
-		args = list(args)
-		# initialise loop to process arguments
-		for i in range(0, len(args)):
-			# edit current argument to contain formatted string
-			args[i] = super(Persona, self).Pretty(**self.__dict(args[i])) if type(args[i]) is dict else args[i]
-		# join name with message
-		return super(Persona, self).Concat(self.__name(), super(Persona, self).Cconcat(args, ' '))
+		# set default list from supplied arguments tuple using String.SetStringDict to format arguments into expected type
+		# @parameter: <args>, @type: <tuple>, @default: <tuple>
+		args = [super(Persona, self).SetStringDict(arg) for arg in list(args)]
+
+		# concatenate supplied arguments using String.Cconcat to produce single uniform string
+		return super(Persona, self).Concat(self.__name(), super(Persona, self).Cconcat([super(Persona, self).Pretty(**arg) for arg in filter(None, args)], ' '))
 
 	def __name (self):
-		### @description: private function for creating formatted personas name
+		### @description: private function of class, creates beautified string using class instances attribute name
 		### @return: @type: <str>
 
-		# set base prefixed name for console output
-		name = super(Persona, self).Syntax(super(Persona, self).Cconcat([self.name, self.separator]))
-		# apply formatting attributes for name
-		return super(Persona, self).Pretty(name, self.style)
-	
-	def __dict (self, arg = {}):
-		### @description: private function for setting dict items to enable stylisation
-		### @parameter: <arg>, @type: <dict>, @default: <dict>
-		### @return: @type: <dict>
-
-		# set dictionary key string as defined pair use String default
-		arg['string'] = str(arg['string']) if not None else super(Persona, self).SAMPLE
-		# set style attibutes for dictionary
-		arg['attributes'] = list(arg['attributes']) if type(arg['attributes']) is list or type(arg['attributes']) is tuple else ['BOLD']
-		# supply constructed dictionary
-		return arg 
-
-	def __list (self, *args):
-		### @description: private function for setting argument
-		### @parameter: <args>, @type: <list>, @default: <tuple>
-		### @return: @type: <list>
-
-		# set base list from supplied arguments
-		return sum(filter(None, list(args)), [])
-
+		# create beautified string using String.Pretty to apply defined styling to name and separator attributes
+		return super(Persona, self).Pretty(super(Persona, self).Syntax(super(Persona, self).Cconcat([self.name, self.separator])), self.style)
 
 	def __init__ (self, **kwargs):
-		### @descrption: class constructor
-		### @parameter: <kwargs>, @type: <dict>
+		### @description: class constructor
 
-		# set message prefixed name
-		# @parameter: <name>, @type: <str>, @default: <None>
-		self.name = super(Persona, self).SetStrType(kwargs.get('name', None)) or 'system'
-		# set separator character between prefixed name and output string 
-		# @parameter: <separator>, @type: <str>, @default: <None>
-		self.separator = super(Persona, self).SetStrType(kwargs.get('separator', None)) or ':'
-		# set string style attributes for prefixed name 
-		# @parameter: <style>, @type: <list>, @default: <list>
-		self.style = self.__list(kwargs.get('style'))
+		# set default name for persona prefix using String.SetStringType
+		# @parameter: <kwargs:name>, @type: <str>, @default: <str>
+		self.name = super(Persona, self).SetStringType(kwargs.get('name')) or 'system'
+		# set default break from name to output using String.SetStringType
+		# @parameter: <kwargs:separator> @type: <str>, @default: <str>
+		self.separator = super(Persona, self).SetStringType(kwargs.get('separator')) or ':'
+		# set default style attributes for name
+		# @parameter: <kwargs:style>, @type: <list>, @default: <list>
+		self.style = list(kwargs.get('style', ['BOLD']))
+
 
 
 
 if __name__ == '__main__':
 
-	# formatted named message
-	print Persona(name = 'clockwerk', separator = ':', style = ['BOLD']).say({ 'string': 'bleep!', 'attributes': ['BLUE', 'BOLD'], 'tag': True }, { 'string': 'bloop!', 'attributes': ['RED', 'BOLD'], 'tag': True }, 'I am a robot!')
+	# create example output
+	print Persona().say({'string': 'Beep!', 'attributes': ['BOLD'], 'tag': True}, {'string': 'Boop!', 'attributes': ['BOLD'], 'tag': True}, ['I am a {{ROBOT!}}'])
+	

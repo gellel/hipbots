@@ -10,7 +10,7 @@ from lib.strings import String
 ### import random sentences
 from lib.sentence import Sentence
 ### import hipchat notifications
-from lib.api import Notification
+from lib.api import REST
 ### import http requests
 from lib.http import HTTP
 ### import json
@@ -23,59 +23,54 @@ import os
 import re
 
 
-class Secrets:
+class File:
 
-	#################################################
-	### class get JSON client Secrets for HipChat ###
-	#################################################
-
-	def __open (self, filename):
-		### @description: private function for opening file type as JSON
-		### @parameter: <filename>, @type: <str>, @default: <str>
-		### @return: @type: <dict>
-
-		# attempt to fetch file
-		try:
-			# assumg file is json and set to dict
-			return json.load(open(filename, 'r'))
-		# handle exception
-		except:
-			# set base dictionary
-			return { 'auth_token': '1234SamPLEAuTHToKEN', 'auth_subdomain': 'organisation', 'auth_room': '123456' }
-
-	def __file (self, directory, file):
-		### @description: private function for create system file string
-		### @parameter: <directory>, @type: <str>, @default: <str>
-		### @parameter: <file>, @type: <str>, @default: <str>
-		### @return: @type: <dict>
-
-		# set base directory string
-		directory = directory[:-1] if directory[-1:] is '/' else directory
-		# set base file string
-		file = String.Cconcat([directory, file], '/')
-		# attemp to fetch
-		return Secrets()._Secrets__open(file)
+	###########################################
+	### class for finding and opening files ###
+	###########################################
 
 	@staticmethod
-	def Get (**kwargs):
-		### @description: public function for importing secret credentials
-		### @parameter: <kwargs>, @type: <dict>
+	def Directory ():
+		### @description: public function of class, create string to local directory
+		### @return: @type: <str>
+
+		# create file path string
+		return os.path.dirname(os.path.realpath('__file__'))
+
+	@staticmethod
+	def Exists (file = ''):
+		### @description: public function of class, confirms file exists on drive
+		### @return: @type: <bool>
+
+		# set default file string
+		# @parameter: <file>, @type: <str>, @default: <str>
+		file = String.SetStringType(file)
+
+		# confirm file exists on drive
+		return True if os.path.exists(file) or os.path.exists(String.Cconcat([File.Directory(), '/', file])) else False
+
+	@staticmethod
+	def Open (file = '', method = 'r'):
+		### @description: public function of class, reads files on drive
 		### @return: @type: <dict>
 
-		# set base directory
-		# @parameter: <directory>, @type: <str>, @default: <str>
-		directory = String.SetStrType(kwargs.get('directory')) or os.path.dirname(os.path.realpath('__file__'))
-		# set base file secrets name
+		# set default file string
 		# @parameter: <file>, @type: <str>, @default: <str>
-		file = String.SetStrType(kwargs.get('file')) or 'secrets.json'
-		# fetch file
-		return Secrets()._Secrets__file(directory, file)
+		file = String.SetStringType(file) or None
+		# set default file read status
+		# @parameter: <method>, @type: <str>, @default: <str>
+		method = String.SetStringType(method)
 
+		# attempt to fetch file from drive
+		return open(file, method) if bool(file) and File.Exists(file) else None
 
 
 
 class Robot:
 
+	#####################################################################
+	### class to construct and send HipChat messages from defined bot ###
+	#####################################################################
 
 	def message (self):
 		### @description: protected function for dispatching bot message to HipChat
@@ -84,23 +79,23 @@ class Robot:
 		# dispatch HTTP
 		return HTTP(**self.__dict__).HTTP()
 
-	def __URL (self, **kwargs):
+	def __url (self, **kwargs):
 		### @description: private function for creating REST API URL for HipChat rooms
 		### @parameter: <kwargs>, @type: <dict>
 		### @return: @type: <str>
 
 		# set subdomain string
 		# @parameter: <auth_subdomain>, @type: <str>, @default: <str>
-		auth_subdomain = String.SetStrType(kwargs.get('auth_subdomain')) or 'github'
+		auth_subdomain = String.SetStringType(kwargs.get('auth_subdomain')) or 'github'
 		# set room string
 		# @parameter: <auth_room>, @type: <str>, @default: <str>
-		auth_room = String.SetStrType(kwargs.get('auth_room')) or '000000'
+		auth_room = String.SetStringType(kwargs.get('auth_room')) or '000000'
 		# set api endpoint string
 		# @parameter: <auth_api>, @type: <str>, @default: <str>
-		endpoint = String.SetStrType(kwargs.get('endpoint')) or 'notification'
+		endpoint = String.SetStringType(kwargs.get('endpoint')) or 'notification'
 		# set api version string
 		# @parameter: <version>, @type: <str>, @default: <str>
-		version = String.SetStrType(kwargs.get('version')) or '2'
+		version = String.SetStringType(kwargs.get('version')) or '2'
 		# set API URL
 		return String.Cconcat([String.Cconcat([String.Cconcat(['https://', auth_subdomain]), 'hipchat', 'com'], '.'), '/', String.Cconcat(['v', version]), '/', 'room', '/', auth_room, '/', endpoint])
 
@@ -110,7 +105,7 @@ class Robot:
 		### @return: @type: <str>
 
 		# set query to include
-		return { 'auth_token': String.SetStrType(kwargs.get('auth_token')) }
+		return { 'auth_token': String.SetStringType(kwargs.get('auth_token')) }
 
 	def __data (self, **kwargs):
 		### @description: private function for stringifying data arguments for HTTP request
@@ -138,7 +133,7 @@ class Robot:
 
 		# set http request url 
 		# @parameter: <kwargs>, @type: <dict>
-		self.URL = self.__URL(**kwargs)
+		self.URL = self.__url(**kwargs)
 		# set http request method
 		# @parameter: <method>, @type: <str>, @default: <str>
 		self.method = kwargs.get('method', 'POST')
@@ -152,12 +147,21 @@ class Robot:
 		# @parameter: <kwargs>, @type: <dict>
 		self.data = self.__data(color = kwargs.get('color'), message = kwargs.get('message'), format = kwargs.get('format'), notify = kwargs.get('notify'))
 
+
 		
 		
 
 
 if __name__ == '__main__':
 
-	# create example HipChat room HTTP messager bot
-	print Robot(**dict({ 'message': Sentence(Sentence(["Guten Tag!", "Bonjour!", "Hello!"]), "I am running another", Sentence(["test", "experiment", "program"], ".", separator = ""), "Please", ["ignore", "don't mind"], "me").randomise() }, **Secrets.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message().content
+	print File.Open("json/message_bot/chat.json")
+
+	#print json.load(open(String.Cconcat([os.path.dirname(os.path.realpath('__file__')), '/', 'json/message_bot/chat.json']), 'r'))
+
+	#print JSON.Get(file = "json/message_bot/chat.json")
+
+	#print Sentence(*JSON.Get(file = "dialogue.json", directory = "json/message_bot")[str(sys.argv[1:][0]) or "default"]).randomise()
 	
+
+	# create example HipChat room HTTP messager bot
+	#print Robot(**dict({ 'message': Sentence(*JSON.Get(file = "dialogue.json", directory = "json/message_bot")[sys.argv[1:] or "greeting"]).randomise(), "notify": True }, **JSON.Get(directory = 'json/oauth/', file = 'client_secrets.json'))).message().content

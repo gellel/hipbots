@@ -9,66 +9,69 @@
 from strings import String
 
 
-class HTML:
+class HTML (String):
 
-	####################################################
-	### class for creating HTML structures in Python ###
-	####################################################
+	##############################################################
+	### extended class of strings.String, creates HTML strings ###
+	##############################################################
 	
 	@staticmethod
-	def Tag (tag = None):
-		### @description: public function to create HTML string tag
-		### @parameter: <tag>, @type: <str>, @default: <str>
+	def Tag (tag = 'div'):
+		### @description: public function of class, creates HTML element string
 		### @return: @type: <str>
 
-		# set base string type
-		tag = String.SetStrType(tag, default = 'div').lower()
-		# encase tag string
-		return String.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>']) if not tag in ['area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'] else String.Cconcat(['<', tag, '%s', '/>', '%s'])
+		# set default HTML element tag string using String.SetStringType
+		# @parameter: <tag>, @type: <str>, @default: <str>
+		tag = HTML.SetStringType(tag).lower()
+		
+		# encase tag string using HTML element syntax using String.Cconcat
+		return HTML.Cconcat(['<', tag, '%s', '>', '%s', '</', tag, '>']) if not tag in ['area', 'default', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'] else String.Cconcat(['<', tag, '%s', '/>', '%s'])
 
 	@staticmethod
 	def FormatAttributes (attributes = {}):
-		### @description: public function to expand dict to HTML attribute syntax
-		### @parameter: <attributes>, @type: <dict>, @default: <dict>
+		### @description: public function of class, converts dictionary key value pairs into valid HTML attribute string
 		### @return: @type: <str>
 
-		# set base attributes dict
+		# set default attributes dict
+		# @parameter: <attributes>, @type: <dict>, @default: <dict>
 		attributes = attributes if type(attributes) is dict and bool(attributes) else {}
-		# set each dict key in attributes to be joined by equals and quotations
-		return String.Cconcat([' ', String.Cconcat([String.Cconcat([attr, '=', '"', String.SetStrType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")]) if bool(attributes) else ''
+
+		# set each dictionary key in attributes to be joined by equals and quotations using String.SetStringType to format supplied attributes
+		return HTML.Cconcat([' ', HTML.Cconcat([HTML.Cconcat([attr, '=', '"', HTML.SetStringType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")]) if bool(attributes) else ''
 
 	@staticmethod
 	def SetAttributes (**kwargs):
-		### @description: public function to apply attributes to HTML string tag without removing contents lambda
-		### @parameter: <dict>, @type: <dict>
+		### @description: public function of class, applies attribute string to HTML elment string
 		### @return: @type: <str>
 
-		# set base HTML tag
-		# @parameter: <tag>, @type: <str>, @default: <None>
+		# set default HTML element tag string using String.SetStringType
+		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = HTML.Tag(kwargs.get('tag'))
-		# set base HTML attributes
-		# @parameter: <attributes>, @type: <dict>, @default: <None>
+		# set default HTML element attributes
+		# @parameter: <attributes>, @type: <dict>, @default: <dict>
 		attributes = HTML.FormatAttributes(kwargs.get('attributes'))
-		# apply string to first lambda
+		
+		# set attributes for HTML string
 		return tag % (attributes, '%s')
 
 	@staticmethod
 	def Create (**kwargs):
-		### @description: public function to create HTML tag, while applying HTML attributes with the option to nest content
-		### @parameter: <dict>, @type: <dict>
+		### @description: public function of class, creates string HTML structures that include attributes and nesting of other strings
 		### @return: @type: <str>
 
-		# set base HTML tag
-		# @parameter: <tag>, @type: <str>, @default: <None>
-		tag = kwargs.get('tag')
-		# set base HTML attributes
-		# @parameter: <attributes>, @type: <dict>, @default: <None>
+		# set default HTML element tag string using String.SetStringType
+		# @parameter: <kwargs:tag>, @type: <str>, @default: <str>
+		tag = HTML.SetStringType(kwargs.get('tag'))
+		# set default HTML attributes
+		# @parameter: <kwargs:attributes>, @type: <dict>, @default: <dict>
 		attributes = kwargs.get('attributes')
-		# set base content for internal lambda string
-		# @parameter: <contents>, @type: <str>, @default: <str>
+		# set default content for internal lambda string
+		# @parameter: <kwargs:contents>, @type: <str/function>, @default: <str>
 		contents = kwargs.get('contents')
+
 		# apply nesting
-		return HTML.SetAttributes(tag = tag, attributes = attributes) % (String.SetStrType(contents) if not hasattr(contents, '__call__') else contents())
+		return HTML.SetAttributes(tag = tag, attributes = attributes) % (HTML.SetStringType(contents) if not hasattr(contents, '__call__') else contents())
+
 
 
 

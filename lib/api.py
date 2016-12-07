@@ -13,108 +13,141 @@ from html import HTML
 import random
 
 
-class Notification (HTML):
+class Support (HTML):
 
-	###################################################################
-	### public class for creating HipChat REST API notifications ###
-	###################################################################
+	#########################################################################################
+	### extended class of html.HTML, assists with HipChat messenger functionality support ###
+	#########################################################################################
 
-	def __HTML (self, tag = 'span'):
-		### @description: private function for confirming HTML tag supported
-		### @parameter: <tag>, @type: <str>, @default: <str>
+	@staticmethod
+	def HTML (tag = 'span'):
+		### @description: public function of class, confirms if HTML element tag is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# get base HTML tags and confirm tag exists
-		return True if String.SetStrType(tag).lower() in Notification.GetHTML() else False
+		# set default HTML element tag string using String.SetStringDict
+		# @parameter: <tag>, @type: <str>, @default: <str>
+		tag = Support.SetStringType(tag).lower()
 
-	def __CSS (self, style = 'color'):
-		### @description: private function for confirming CSS attribute supported
-		### @parameter: <tag>, @type: <str>, @default: <str>
+		# confirm HTML element tag is supported by HipChat Messenger
+		return True if tag in Support.GetHTML() else False
+
+	@staticmethod
+	def CSS (style = 'color'):
+		### @description: public function of class, confirms if CSS style attribute is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# get base CSS styles and confirm style exists
-		return True if String.SetStrType(style).lower() in Notification.GetCSS() else False
+		# set default CSS attribute string using String.SetStringDict
+		# @parameter: <style>, @type: <str>, @default: <str>
+		style = Support.SetStringType(style).lower()
 
-	def __attribute (self, tag = 'a', attribute = 'href'):
-		### @description: private function for confirming HTML attribute supported for tag
-		### @parameter: <tag>, @type: <str>, @default: <str>
-		### @parameter: <attribute>, @type: <str>, @default: <str>
+		# confirm CSS style attribute is supported by HipChat Messenger
+		return True if style in Support.GetCSS() else False
+
+	@staticmethod
+	def Attribute (tag = 'a', attribute = 'href'):
+		### @description: public function of class, confirms attribute supported for supplied HTML element in HipChat Messenger
 		### @return: @type: <bool>
-		
-		# get base HTML tag and confirm as well as test if attribute exists
-		return True if Notification()._Notification__HTML(tag) and String.SetStrType(attribute) in Notification.GetHTML()[tag] else False
+
+		# set default HTML element tag string using String.SetStringDict
+		# @parameter: <tag>, @type: <str>, @default: <str>
+		tag = Support.SetStringType(tag)
+		# set default HTML element attribute string using String.SetStringDict
+		# @parameter: <attribute>, @type: <str>, @default: <str>
+		attribute = Support.SetStringType(attribute)
+
+		# confirm HTML element tag and tag attribute is supported by HipChat Messenger
+		return True if Support().HTML(tag) and attribute in Support.GetHTML()[tag] else False
 	
-	def __colour (self, colour = 'red'):
-		### @description: private function for confirming HipChat colour supported
-		### @parameter: <colour>, @type: <str>, @default: <str>
+	@staticmethod
+	def Colour (colour = 'red'):
+		### @description: public function of class, confirms colour string is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# get base HipChat colours and confirm colour exists
-		return True if String.SetStrType(colour).lower() in Notification.GetColours() else False
+		# set default colour string using String.SetStringDict
+		# @parameter: <colour>, @type: <str>, @default: <str>
+		colour = Support.SetStringType(colour)
 
-	def __format (self, format_type = 'html'):
-		### @description: private function for confirming HipChat format supported
-		### @parameter: <format_type>, @type: <str>, @default: <str>
+		# confirm supplied colour string is supported by HipChat Messenger
+		return True if Support.SetStringType(colour).lower() in Support.GetColours() else False
+
+	@staticmethod
+	def Format (format_type = 'html'):
+		### @description: public function of class, confirms HipChat data format supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# get base HipChat format types and confirm format exists
-		return True if String.SetStrType(format_type).lower() in Notification.GetFormats() else False
+		# set default message format type using String.SetStringDict
+		# @parameter: <format_type>, @type: <str>, @default: <str>
+		format_type = Support.SetStringType(format_type).lower()
+
+		# confirm message data type is supported in HipChat Messenger
+		return True if format_type in Support.GetFormats() else False
 
 	@staticmethod
 	def GetHTML ():
-		### @description: public function for getting dict of supported HTML tags in HipChat messages
+		### @description: public function of class, sets dictionary of supported HTML tags in HipChat Messenger
 		### @return: @type: <dict>
 
-		# get supported HTML tags 
+		# create dictionary containing supported HTML tags and attributes
 		return { 'a':['style', 'href', 'rel', 'data-target', 'data-target-options'], 'b':[], 'i':[], 'strong':[], 'em':[], 'br':[], 'img':['style', 'src', 'alt', 'width', 'height', 'align'], 'pre':[], 'code':[], 'span':['style'], 'ol':[], 'ul':[], 'li':[], 'table':[], 'thead':[], 'tbody':[], 'tr':['valign'], 'th':['colspan', 'rowspan', 'valign'], 'td':['colspan', 'rowspan', 'valign'] }
 
 	@staticmethod
 	def GetCSS ():
-		### @description: public function for getting list of supported CSS attributes in HipChat messages
+		### @description: public function of class, sets list of supported CSS attributes in HipChat Messenger
 		### @return: @type: <list>
 
-		# get supported CSS attributes
+		# create list containing supported CSS style property attributes in HipChat Messenger
 		return ['font-weight', 'color', 'text-decoration', 'height', 'width']
 
 	@staticmethod
 	def GetColours ():
-		### @description: public function for getting list of supported colour attributes in HipChat messages
+		### @description: public function of class, sets list of supported colours in HipChat Messenger
 		### @return: @type: <list>
 
-		# get supported HipChat message colours
+		# create list containing supported colour strings in HipChat Messenger
 		return ['yellow', 'green', 'red', 'purple', 'gray', 'random']
 
 	@staticmethod
 	def GetFormats ():
-		### @description: public function for getting list of supported message formats in HipChat messages
+		### @description: public function of class, sets list of supported message formats in HipChat Messenger
 		### @return: @type: <list>
 
-		# get supported HipChat message formats
+		# create list containing supported data formated in HipChat Messenger
 		return ['html', 'text']
+
+
+
+class REST (Support):
+
+	###########################################################################################
+	### extended class of api.Support, assists with HipChat Messenger REST API data objects ###
+	###########################################################################################
 
 	@staticmethod
 	def Object (**kwargs):
-		### @description: public function for getting base dict for REST API
+		### @description: public function of class, used for setting data requirements for HipChat API REST body
 		### @return: @type: <dict>
 
-		# set base colour for object
+		# set default colour string for object using String.SetStringDict
 		# @parameter: <colour>, @type: <str>, @default: <str>
-		colour = kwargs.get('colour') if Notification()._Notification__colour(kwargs.get('colour')) else 'random'
-		# set base message for object
+		colour = kwargs.get('colour') if REST.Colour(REST.SetStringType(kwargs.get('colour'))) else 'random'
+		# set default message for object using String.SetStringDict
 		# @parameter: <message>, @type: <str>, @default: <str>
-		message = String.SetStrType(kwargs.get('message'))
-		# set base notification alert for object
-		# @parameter: <notify>, @type: <bool>, @default: <False>
+		message = REST.SetStringType(kwargs.get('message'))
+		# set default notification alert for object
+		# @parameter: <notify>, @type: <bool>, @default: <bool>
 		notify = str(bool(kwargs.get('notify', False))).lower()
-		# set base message format for object
+		# set default message format for object
 		# @parameter: <format>, @type: <str>, @default: <str>
-		format_type = kwargs.get('format') if Notification()._Notification__format(kwargs.get('format')) else 'html'
-		# get supported HipChat message formats
+		format_type = kwargs.get('format') if REST.Format(kwargs.get('format')) else 'html'
+		
+		# create dictionary containing required parameters for REST API
 		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
+
 
 
 
 if __name__ == '__main__':
 
-	# create example REST object for messages API
-	print Notification.Object()
+	# create example REST API object
+	print REST.Object()
+	

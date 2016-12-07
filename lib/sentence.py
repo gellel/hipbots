@@ -6,96 +6,70 @@
 ### python scripts dependencies ###
 ###################################
 ### import pretty strings
-from lib.strings import String
+from strings import String
 ### import pseudo random
 import random
 
 
 class Sentence (String):
 
-	#############################################################################
-	### extended string class to build out beautified strings pseudo randomly ###
-	#############################################################################
+	##################################################################################
+	### extended class of strings.String, creates beautified pseudo random strings ###
+	##################################################################################
 
 	def randomise (self):
-		### @description: protected function for creating pseudo random sentence from initialised argument strings
+		### @description: protected function of class, used to generate pseudo random string from defined fragments
 		### @return: @type: <str>
 
-		# construct random string from supplied sentence fragments, separated by defined character
-		return self.__process(self.fragments, self.separator)
+		# process argument fragment collection 
+		return self.__process(self.fragments)
 
-	def __process (self, fragments, separator):
-		### @description: private function for selecting items to be included in final output
-		### @parameter: <fragments>, @type: <list>, @default: <list>
-		### @parameter: <separator>, @type: <str>, @default: <str>
-		### @return: @type: <str>	
+	def __process (self, fragments):
+		### @description: private function of class, processes argument collection from constructor
+		### @return: @type: <str>
 
-		# set all fragments to their defined structures
-		fragments = [self.__type(fragment) for fragment in fragments]
-		# filter fragments to exclude dictionaries where key string is missing value
-		fragments = [fragment for fragment in fragments if 'string' in fragment and bool(fragment['string'])]
-		# initialise loop to construct sentence from fragments while beautifying each partial item where syntax included
-		return super(Sentence, self).Cconcat([super(Sentence, self).Pretty(**fragment) for fragment in fragments], separator)
+		# initialise loop to process individual fragment arguments and process item by its type requirement
+		return super(Sentence, self).Cconcat(filter(None, [self.__type(fragment) for fragment in fragments]), ' ')
 
-	def __type (self, arg):
-		### @description: private function for processing supplied fragments based on their data types
-		### @parameter: <arg>, @type: <str/dict/list/instance:Sentence>, @default: <None>
-		### @return: @type: <dict>
+	def __type (self, fragment):
+		### @description: private function of class, tests data type of fragment to construct response
+		### @return: @type: <str>
 
-		# confirm argument is sequence construct
-		if type(arg) in [tuple, list] and bool(arg):
-			# extract sequence item from length using the total length as the random number seed
-			return self.__type(arg[random.randrange(0, len(arg))])
-		# otherwise confirm argument is instance of sentence class
-		elif isinstance(arg, Sentence):
-			# construct sentence from initialised
-			arg = self.__dict(arg.randomise())
-		# manage keys for beautification handler
-		return self.__keys(self.__dict(arg))
+		# confirm fragment is a sequence
+		if type(fragment) in [list, tuple]:
+			# confirm sequence contains content
+			if bool(fragment):
+				# pseudo randomly select item from sequence using length as random seed
+				return self.__type(fragment[random.randrange(0, len(fragment))])
+		# confirm fragment is a dictionary
+		if type(fragment) is dict:
+			# confirm dictionary contains keys
+			if bool(fragment):
+				# confirm optional key present in dictionary and pseudo random number rolled zero
+				if 'optional' in fragment and not bool(fragment['optional']) and bool(random.randrange(0, random.randrange(0, 10))):
+					# set empty string for exclusion
+					return ''
+				# process selection beautifing string
+				return super(Sentence, self).Pretty(**super(Sentence, self).SetStringDict(fragment)) if 'string' in fragment and not type(fragment['string']) in [list, tuple] else Sentence(*fragment['string']).randomise()
+		# confirm fragment is an instance of Sentence
+		if isinstance(fragment, Sentence):
+			# construct sentence
+			return fragment.randomise()
+		# confirm fragment is not considered false and construct beautified string else return empty
+		return super(Sentence, self).Pretty(**super(Sentence, self).SetStringDict(fragment)) if bool(fragment) else ''
 
-	def __keys (self, arg):
-		### @description: private function for defining base dictionary keys
-		### @parameter: <arg>, @type: <dict>, @default: <dict>
-		### @return: @type: <dict>
 
-		# confirm dictionary contains key fragments of sentence
-		if 'fragments' in arg and type(arg['fragments']) in [list, tuple] and bool(arg['fragments']):
-			# set string key to be result of compiled sentence
-			arg['string'] = Sentence(*arg['fragments'], **arg).randomise()
-		# confirm optional inclusion
-		if 'optional' in arg and type(arg['optional']) is int:
-			# set dictionary to empty if random number throws zero
-			arg = {} if not bool(random.randrange(0, arg['optional'])) else arg
-		# construct dictionary with required keys
-		return { key: arg[key] for key in arg if key in ['tag', 'string', 'attributes'] }
- 
-	def __dict (self, arg):
-		### @description: private function for defining base dictionary syntax
-		### @parameter: <arg>, @type: <*>, @default: <dict>
-		### @return: @type: <dict>
-
-		# set base dictionary
-		return { 'string': super(Sentence, self).SetStrType(arg), 'attributes': [], 'tag': False } if type(arg) is not dict else arg
-
-	def __init__ (self, *args, **kwargs):
+	def __init__ (self, *args):
 		### @descrption: class constructor
-		### @parameter: <kwargs>, @type: <dict>
 
-		# set sentence fragments
-		# @parameter: <args>, @type: <list/tuple>
-		self.fragments = list(args) or [['Hello', 'Hej', 'Guten Tag']]
-		# set character for concatentation
-		# @parameter: <separator>, @type: <str>, @default: <str>
-		self.separator = super(Sentence, self).SetStrType(kwargs.get('separator', ' '))
-		# set random prefixed seed
-		# @parameter: <seed>, @type: <int>, @default: <int>
-		self.seed = kwargs.get('seed', random.randrange(random.randrange(1, 5), random.randrange(6, 11)))
+		# set default sentence string fragments
+		# @parameter: <args>, @type: <tuple>, @default: <tuple>
+		self.fragments = filter(None, list(args or [['Hello', 'Bonjour', 'Salut', 'Guten Tag']]))
 
 
 
 
 if __name__ == '__main__':
 
-	# build pseudo random string
-	print Sentence([['a', 'b'], ['c', 'd']]).randomise()
-	
+	# create pseudo random sentence
+	print Sentence([{'string':[[1, 2, 3]]}], [{'string':'Hello','tag':True,'attributes':['GREEN', 'BOLD']}, {'string':'Bye!','tag':True,'attributes':['RED', 'BOLD']}]).randomise()
