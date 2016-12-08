@@ -51,9 +51,7 @@ class File (String):
 		# @parameter: <method>, @type: <str>, @default: <str>
 		method = File.SetStringType(method)
 
-		# confirm file directory exists and within directory file does not exists
-
-		# attempt to create new file in specified directory or open file
+		# attempt to create new file in specified directory or open existing file
 		return open(os.path.join(File.Directory(directory), File.Cconcat([name, '.', extension])), 'w+') if File.Directory(directory) and not File.Exists(name = name, extension = extension, directory = directory) else File.Open(name = name, extension = extension, directory = directory)
 
 	@staticmethod
