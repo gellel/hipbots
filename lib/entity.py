@@ -91,7 +91,7 @@ class Entity (Persona):
 		### @description: private function for class, evaluates user input submission against defined option to confirm a match
 		### @return: @type: <bool>
 
-		# set default submission string using String.SetStringType
+		# set default submission string
 		# @parameter: <submission>, @type: <str>, @default: <str>
 		submission = super(Entity, self).SetStringType(submission).lower()
 		# set default option strings using String.Clean 
@@ -111,10 +111,10 @@ class Entity (Persona):
 		# set default beautified options using String.SetStringDict to set requirements for String.Pretty
 		# @parameter: <choices>, @type: <list>, @default: <list>
 		choices = [super(Entity, self).Pretty(**super(Entity, self).SetStringDict(i)) for i in choices]
-		# set default selection divider string using String.SetStringType
+		# set default selection divider string
 		# @parameter: <selection_divider>, @type: <str>, @default: <str>
 		selection_divider = super(Entity, self).SetStringType(selection_divider)
-		# set default input divider string using String.SetStringType
+		# set default input divider string
 		# @parameter: <input_divider>, @type: <str>, @default: <str>
 		input_divider = super(Entity, self).SetStringType(input_divider)
 		# set default empty input string using String.SetStringDict to set requirements for String.Pretty

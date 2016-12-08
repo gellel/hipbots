@@ -21,6 +21,10 @@ class HTTP (String):
 	### extended class of strings.String, used to create HTTP requests ###
 	######################################################################
 
+	#####################################################################################
+	### credits: requests provided by Kenneth Reitz, https://github.com/kennethreitz ####
+	#####################################################################################
+
 	def HTTP (self):
 		### @description: protected function of class, creates HTTP request using requests.request
 		### @return: @type: <instance:requests>
@@ -34,7 +38,7 @@ class HTTP (String):
 		### @description: private function of class, formats supplied url string to contain request protocol substring
 		### @return: @type: <str>
 
-		# set default http url string using String.SetStringType
+		# set default http url string
 		# @parameter: <url>, @type: <str>, @default: <str>
 		url = super(HTTP, self).SetStringType(url)
 
@@ -45,7 +49,7 @@ class HTTP (String):
 		### @description: private function of class, sets default HTTP request method for HTTP request
 		### @return: @type: <str>
 
-		# set default HTTP method string using String.SetStringType
+		# set default HTTP method string
 		# @parameter: <method>, @type: <str>, @default: <str>
 		method = super(HTTP, self).SetStringType(method)
 
@@ -77,7 +81,7 @@ class HTTP (String):
 	def __init__ (self, **kwargs):
 		### @descrption: class constructor
 
-		# set default url attribute using String.SetStringType
+		# set default url attribute
 		# @parameter: <kwargs:URL>, @type: <str>, @default: <None>
 		self.URL = self.__url(super(HTTP, self).SetStringType(kwargs.get('URL', None))) 
 		# set default HTTP method type

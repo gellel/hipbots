@@ -20,7 +20,7 @@ class HTML (String):
 		### @description: public function of class, creates HTML element string
 		### @return: @type: <str>
 
-		# set default HTML element tag string using String.SetStringType
+		# set default HTML element tag string
 		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = HTML.SetStringType(tag).lower()
 		
@@ -36,7 +36,7 @@ class HTML (String):
 		# @parameter: <attributes>, @type: <dict>, @default: <dict>
 		attributes = attributes if type(attributes) is dict and bool(attributes) else {}
 
-		# set each dictionary key in attributes to be joined by equals and quotations using String.SetStringType to format supplied attributes
+		# set each dictionary key in attributes to be joined by equals and quotations to format supplied attributes
 		return HTML.Cconcat([' ', HTML.Cconcat([HTML.Cconcat([attr, '=', '"', HTML.SetStringType(attributes[attr]) or 'SAMPLE', '"']) for attr in attributes], " ")]) if bool(attributes) else ''
 
 	@staticmethod
@@ -44,7 +44,7 @@ class HTML (String):
 		### @description: public function of class, applies attribute string to HTML elment string
 		### @return: @type: <str>
 
-		# set default HTML element tag string using String.SetStringType
+		# set default HTML element tag string
 		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = HTML.Tag(kwargs.get('tag'))
 		# set default HTML element attributes
@@ -59,7 +59,7 @@ class HTML (String):
 		### @description: public function of class, creates string HTML structures that include attributes and nesting of other strings
 		### @return: @type: <str>
 
-		# set default HTML element tag string using String.SetStringType
+		# set default HTML element tag string
 		# @parameter: <kwargs:tag>, @type: <str>, @default: <str>
 		tag = HTML.SetStringType(kwargs.get('tag'))
 		# set default HTML attributes

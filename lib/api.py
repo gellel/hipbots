@@ -24,7 +24,7 @@ class Support (HTML):
 		### @description: public function of class, confirms if HTML element tag is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# set default HTML element tag string using String.SetStringDict
+		# set default HTML element tag string
 		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = Support.SetStringType(tag).lower()
 
@@ -36,7 +36,7 @@ class Support (HTML):
 		### @description: public function of class, confirms if CSS style attribute is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# set default CSS attribute string using String.SetStringDict
+		# set default CSS attribute string
 		# @parameter: <style>, @type: <str>, @default: <str>
 		style = Support.SetStringType(style).lower()
 
@@ -48,10 +48,10 @@ class Support (HTML):
 		### @description: public function of class, confirms attribute supported for supplied HTML element in HipChat Messenger
 		### @return: @type: <bool>
 
-		# set default HTML element tag string using String.SetStringDict
+		# set default HTML element tag string
 		# @parameter: <tag>, @type: <str>, @default: <str>
 		tag = Support.SetStringType(tag)
-		# set default HTML element attribute string using String.SetStringDict
+		# set default HTML element attribute string
 		# @parameter: <attribute>, @type: <str>, @default: <str>
 		attribute = Support.SetStringType(attribute)
 
@@ -63,7 +63,7 @@ class Support (HTML):
 		### @description: public function of class, confirms colour string is supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# set default colour string using String.SetStringDict
+		# set default colour string
 		# @parameter: <colour>, @type: <str>, @default: <str>
 		colour = Support.SetStringType(colour)
 
@@ -75,7 +75,7 @@ class Support (HTML):
 		### @description: public function of class, confirms HipChat data format supported in HipChat Messenger
 		### @return: @type: <bool>
 
-		# set default message format type using String.SetStringDict
+		# set default message format type
 		# @parameter: <format_type>, @type: <str>, @default: <str>
 		format_type = Support.SetStringType(format_type).lower()
 
@@ -127,10 +127,10 @@ class REST (Support):
 		### @description: public function of class, used for setting data requirements for HipChat API REST body
 		### @return: @type: <dict>
 
-		# set default colour string for object using String.SetStringDict
+		# set default colour string for object
 		# @parameter: <colour>, @type: <str>, @default: <str>
 		colour = kwargs.get('colour') if REST.Colour(REST.SetStringType(kwargs.get('colour'))) else 'random'
-		# set default message for object using String.SetStringDict
+		# set default message for object
 		# @parameter: <message>, @type: <str>, @default: <str>
 		message = REST.SetStringType(kwargs.get('message'))
 		# set default notification alert for object

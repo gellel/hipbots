@@ -19,7 +19,7 @@ class Persona (String):
 		### @description: protected function of class, concatenates arguments to single string that is prefixed by the defined name of the class instance to simulate a response from character or system
 		### @return: @type: <str>
 
-		# set default list from supplied arguments tuple using String.SetStringDict to format arguments into expected type
+		# set default list from supplied arguments tuple to format arguments into expected type
 		# @parameter: <args>, @type: <tuple>, @default: <tuple>
 		args = [super(Persona, self).SetStringDict(arg) for arg in list(args)]
 
@@ -36,10 +36,10 @@ class Persona (String):
 	def __init__ (self, **kwargs):
 		### @description: class constructor
 
-		# set default name for persona prefix using String.SetStringType
+		# set default name string for persona prefix
 		# @parameter: <kwargs:name>, @type: <str>, @default: <str>
 		self.name = super(Persona, self).SetStringType(kwargs.get('name')) or 'system'
-		# set default break from name to output using String.SetStringType
+		# set default separation string 
 		# @parameter: <kwargs:separator> @type: <str>, @default: <str>
 		self.separator = super(Persona, self).SetStringType(kwargs.get('separator')) or ':'
 		# set default style attributes for name

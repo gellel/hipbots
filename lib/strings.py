@@ -35,13 +35,13 @@ class String (object):
 		### @description: public function of class, creates dictionary keys and values for use in String.Pretty
 		### @return: @type: <dict>
 
-		# set default string
+		# set default string for formatting
 		# @parameter: <string>, @type: <str>, @default: <str>
 		string = String.SetStringType(string) if not type(string) is dict else string
-		# set default style attributes
+		# set default style attributes for string
 		# @parameter: <attributes>, @type: <list>, @default: <list>
 		attributes = list(attributes) if not type(attributes) in [list, tuple] else attributes
-		# set default tag requirement
+		# set default tag requirement for string
 		# @parameter: <tag>, @type: <bool>, @default: <bool>
 		tag = bool(tag)
 

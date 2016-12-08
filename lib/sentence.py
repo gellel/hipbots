@@ -24,9 +24,13 @@ class Sentence (String):
 		# process argument fragment collection 
 		return self.__process(self.fragments)
 
-	def __process (self, fragments):
+	def __process (self, fragments = []):
 		### @description: private function of class, processes argument collection from constructor
 		### @return: @type: <str>
+
+		# set default fragments list
+		# @parameter: <fragments>, @type: <list>, @default: <list>
+		fragments = fragments if type(fragments) is list else []
 
 		# initialise loop to process individual fragment arguments and process item by its type requirement
 		return super(Sentence, self).Cconcat(filter(None, [self.__type(fragment) for fragment in fragments]), ' ')
@@ -57,7 +61,6 @@ class Sentence (String):
 			return fragment.randomise()
 		# confirm fragment is not considered false and construct beautified string else return empty
 		return super(Sentence, self).Pretty(**super(Sentence, self).SetStringDict(fragment)) if bool(fragment) else ''
-
 
 	def __init__ (self, *args):
 		### @descrption: class constructor
