@@ -71,10 +71,10 @@ class Entity (Persona):
 
 		# set default accept input string
 		# @parameter: <kwarg:user_accept>, @type: <str>, @default: <str>
-		user_accept = super(Entity, self).Clean(kwargs.get('user_accept')['string'] if type(kwargs.get('user_accept')) is dict else kwargs.get('user_accept'))
+		user_accept = super(Entity, self).RemovePrettySyntax(kwargs.get('user_accept')['string'] if type(kwargs.get('user_accept')) is dict else kwargs.get('user_accept'))
 		# set default decline input string
 		# @parameter: <kwarg:user_accept>, @type: <str>, @default: <str>
-		user_decline = super(Entity, self).Clean(kwargs.get('user_decline')['string'] if type(kwargs.get('user_decline')) is dict else kwargs.get('user_decline'))
+		user_decline = super(Entity, self).RemovePrettySyntax(kwargs.get('user_decline')['string'] if type(kwargs.get('user_decline')) is dict else kwargs.get('user_decline'))
 
 		# request confirmation input submission from user using String.SetPrettyKeys to set requirements for String.Pretty
 		confirmation = self.__prompt([kwargs.get('user_accept'), kwargs.get('user_decline')], super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(kwargs.get('user_confirm') % submission)), kwargs.get('selection_divider'), kwargs.get('input_divider'), kwargs.get('user_null'))
@@ -94,9 +94,9 @@ class Entity (Persona):
 		# set default submission string
 		# @parameter: <submission>, @type: <str>, @default: <str>
 		submission = super(Entity, self).SetStringType(submission).lower()
-		# set default option strings using String.Clean 
+		# set default option strings using String.RemovePrettySyntax 
 		# @parameter: <options>, @type: <list>, @default: <list>
-		options = [super(Entity, self).Clean(option['string'] if type(option) is dict else option).lower() for option in list(options)]
+		options = [super(Entity, self).RemovePrettySyntax(option['string'] if type(option) is dict else option).lower() for option in list(options)]
 
 		# set test result
 		return True if submission in options else False

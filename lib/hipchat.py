@@ -200,5 +200,5 @@ class Support (HTML):
 if __name__ == '__main__':
 
 	# fetch supported HipChat HTML
-	print Support.SetHTML()
+	print Support.GetHTML()
 	

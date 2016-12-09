@@ -135,7 +135,7 @@ class String (object):
 		return String.Cconcat(['{{', string or String.SAMPLE, '}}'])
 
 	@staticmethod
-	def Clean (string = ''):
+	def RemovePrettySyntax (string = ''):
 		### @description: public function of class, removes beautification syntax from string argument
 		### @return: @type: <str>
 
