@@ -11,9 +11,9 @@ from persona import Persona
 
 class Entity (Persona):
 
-	##########################################################################################################
-	### extended class of string.Strings, creates input prompts using the Persona class to prefix requests ###
-	##########################################################################################################
+	###########################################################################################################
+	### extended class of persona.Persona, creates input prompts using the Persona class to prefix requests ###
+	###########################################################################################################
 
 	def ask (self, *args, **kwargs):
 		### @description: protected function of class, prompts user for input but uses the persona prefix to simulate a system or character requesting an action

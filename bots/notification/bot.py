@@ -99,7 +99,10 @@ class Room:
 		self.method = String.SetStringType(kwargs.get('method', 'POST'))
 
 
+
+
 if __name__ == '__main__':
 
 	# create HipChat messenger bot
 	print Room(**dict(json.loads(File.Open(name = 'secrets', extension = 'json', directory = '../../json/oauth/').read()), **{ 'content': { 'message':'hello world!' }}))
+	
