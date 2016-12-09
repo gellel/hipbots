@@ -34,8 +34,8 @@ class Room:
 	##########################################################################
 
 	@staticmethod
-	def SetEndpoint (**kwargs):
-		### @description: public function of class, creates HipChat Rooms API URL string
+	def SetBaseEndpoint (**kwargs):
+		### @description: public function of class, creates base HipChat Rooms API URL string
 		### @return: @type: <str>
 
 		# set default HipChat subdomain string
@@ -56,7 +56,7 @@ class Room:
 
 	@staticmethod
 	def SetRequestBody (**kwargs):
-		### @description: public function of class, constructs body of HTTP request
+		### @description: public function of class, creates HTTP data request object structure
 		### @return: @type: <dict>
 
 		# set default colour string for object
@@ -74,7 +74,6 @@ class Room:
 		
 		# construct HTTP body for HipChat Messenger API
 		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
-
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
