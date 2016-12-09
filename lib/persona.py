@@ -21,7 +21,7 @@ class Persona (String):
 
 		# set default list from supplied arguments tuple to format arguments into expected type
 		# @parameter: <args>, @type: <tuple>, @default: <tuple>
-		args = [super(Persona, self).SetStringDict(arg) for arg in list(args)]
+		args = [super(Persona, self).SetPrettyKeys(arg) for arg in list(args)]
 
 		# concatenate supplied arguments using String.Cconcat to produce single uniform string
 		return super(Persona, self).Concat(self.__name(), super(Persona, self).Cconcat([super(Persona, self).Pretty(**arg) for arg in filter(None, args)], ' '))
@@ -31,7 +31,7 @@ class Persona (String):
 		### @return: @type: <str>
 
 		# create beautified string using String.Pretty to apply defined styling to name and separator attributes
-		return super(Persona, self).Pretty(super(Persona, self).Syntax(super(Persona, self).Cconcat([self.name, self.separator])), self.style)
+		return super(Persona, self).Pretty(super(Persona, self).SetPrettySyntax(super(Persona, self).Cconcat([self.name, self.separator])), self.style)
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor

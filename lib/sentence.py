@@ -54,13 +54,13 @@ class Sentence (String):
 					# set empty string for exclusion
 					return ''
 				# process selection beautifing string
-				return super(Sentence, self).Pretty(**super(Sentence, self).SetStringDict(fragment)) if 'string' in fragment and not type(fragment['string']) in [list, tuple] else Sentence(*fragment['string']).randomise()
+				return super(Sentence, self).Pretty(**super(Sentence, self).SetPrettyKeys(fragment)) if 'string' in fragment and not type(fragment['string']) in [list, tuple] else Sentence(*fragment['string']).randomise()
 		# confirm fragment is an instance of Sentence
 		if isinstance(fragment, Sentence):
 			# construct sentence
 			return fragment.randomise()
 		# confirm fragment is not considered false and construct beautified string else return empty
-		return super(Sentence, self).Pretty(**super(Sentence, self).SetStringDict(fragment)) if bool(fragment) else ''
+		return super(Sentence, self).Pretty(**super(Sentence, self).SetPrettyKeys(fragment)) if bool(fragment) else ''
 
 	def __init__ (self, *args):
 		### @descrption: class constructor
@@ -76,3 +76,4 @@ if __name__ == '__main__':
 
 	# create pseudo random sentence
 	print Sentence([{'string':[[1, 2, 3]]}], [{'string':'Hello','tag':True,'attributes':['GREEN', 'BOLD']}, {'string':'Bye!','tag':True,'attributes':['RED', 'BOLD']}]).randomise()
+	

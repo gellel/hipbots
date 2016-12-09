@@ -31,7 +31,7 @@ class String (object):
 	SYNTAX = r'{{|}}'
 
 	@staticmethod
-	def SetStringDict (string = '', attributes = ['BOLD'], tag = False):
+	def SetPrettyKeys (string = '', attributes = ['BOLD'], tag = False):
 		### @description: public function of class, creates dictionary keys and values for use in String.Pretty
 		### @return: @type: <dict>
 
@@ -120,10 +120,10 @@ class String (object):
 		attribute = String.SetStringType(attribute)
 
 		# join string with attribute style and attribute end to create beautified string
-		return String.Cconcat([attribute or String.BOLD, string or String.Syntax(String.SAMPLE), String.END])
+		return String.Cconcat([attribute or String.BOLD, string or String.SetPrettySyntax(String.SAMPLE), String.END])
 
 	@staticmethod
-	def Syntax (string = ''):
+	def SetPrettySyntax (string = ''):
 		### @description: public function of class, encapsulates string argument with handlebars syntax to create points for beautified string substitution
 		### @return: @type: <str>
 
@@ -156,7 +156,7 @@ class String (object):
 		string = String.SetStringType(string) or String.SAMPLE
 		# set default syntax wrap
 		# @parameter: <tag>, @type: <bool>, @default: <bool>
-		string = String.Syntax(string) if bool(tag) and not re.compile(String.SYNTAX).search(string) else string
+		string = String.SetPrettySyntax(string) if bool(tag) and not re.compile(String.SYNTAX).search(string) else string
 		# set default attributes for string
 		# @parameter: <attributes>, @type: <list>, @default: <list>
 		attributes = list(attributes) if type(attributes) in [list, tuple] else [String.SetStringType(attributes, default = 'BOLD')]

@@ -60,8 +60,8 @@ class Entity (Persona):
 		if self.__test(submission, kwargs.get('user_choices')):
 			# accept user submission or request input again
 			return submission if self.__select(submission, **kwargs) else self.__manage(**kwargs)
-		# request user submit accepted input using String.SetStringDict to set requirements for String.Pretty
-		print super(Entity, self).say(super(Entity, self).Pretty(**super(Entity, self).SetStringDict(kwargs.get('user_reject') % submission)))
+		# request user submit accepted input using String.SetPrettyKeys to set requirements for String.Pretty
+		print super(Entity, self).say(super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(kwargs.get('user_reject') % submission)))
 		# request user input
 		return self.__manage(**kwargs)	
 
@@ -76,14 +76,14 @@ class Entity (Persona):
 		# @parameter: <kwarg:user_accept>, @type: <str>, @default: <str>
 		user_decline = super(Entity, self).Clean(kwargs.get('user_decline')['string'] if type(kwargs.get('user_decline')) is dict else kwargs.get('user_decline'))
 
-		# request confirmation input submission from user using String.SetStringDict to set requirements for String.Pretty
-		confirmation = self.__prompt([kwargs.get('user_accept'), kwargs.get('user_decline')], super(Entity, self).Pretty(**super(Entity, self).SetStringDict(kwargs.get('user_confirm') % submission)), kwargs.get('selection_divider'), kwargs.get('input_divider'), kwargs.get('user_null'))
+		# request confirmation input submission from user using String.SetPrettyKeys to set requirements for String.Pretty
+		confirmation = self.__prompt([kwargs.get('user_accept'), kwargs.get('user_decline')], super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(kwargs.get('user_confirm') % submission)), kwargs.get('selection_divider'), kwargs.get('input_divider'), kwargs.get('user_null'))
 		# confirm user submission matches supplied options
 		if self.__test(confirmation, [user_accept, user_decline]):
 			# confirm outcome
 			return True if confirmation == user_accept else False
 		# request user submit accepted input using inherited Persona.Say to produce formatted printed message
-		print super(Entity, self).say(super(Entity, self).Pretty(**super(Entity, self).SetStringDict(kwargs.get('user_reject') % confirmation)))
+		print super(Entity, self).say(super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(kwargs.get('user_reject') % confirmation)))
 		# request user input
 		return self.__select(submission, **kwargs)
 
@@ -105,21 +105,21 @@ class Entity (Persona):
 		### @description: private function for class, creates beautified prompt string including persona prefix
 		### @return: @type: <str>
 
-		# set default request string using String.SetStringDict to set requirements for String.Pretty
+		# set default request string using String.SetPrettyKeys to set requirements for String.Pretty
 		# @parameter: <request>, @type: <str>, @default: <str>
-		request = super(Entity, self).Pretty(**super(Entity, self).SetStringDict(request))
-		# set default beautified options using String.SetStringDict to set requirements for String.Pretty
+		request = super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(request))
+		# set default beautified options using String.SetPrettyKeys to set requirements for String.Pretty
 		# @parameter: <choices>, @type: <list>, @default: <list>
-		choices = [super(Entity, self).Pretty(**super(Entity, self).SetStringDict(i)) for i in choices]
+		choices = [super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(i)) for i in choices]
 		# set default selection divider string
 		# @parameter: <selection_divider>, @type: <str>, @default: <str>
 		selection_divider = super(Entity, self).SetStringType(selection_divider)
 		# set default input divider string
 		# @parameter: <input_divider>, @type: <str>, @default: <str>
 		input_divider = super(Entity, self).SetStringType(input_divider)
-		# set default empty input string using String.SetStringDict to set requirements for String.Pretty
+		# set default empty input string using String.SetPrettyKeys to set requirements for String.Pretty
 		# @parameter: <request>, @type: <str>, @default: <str>
-		empty = super(Entity, self).Pretty(**super(Entity, self).SetStringDict(empty))
+		empty = super(Entity, self).Pretty(**super(Entity, self).SetPrettyKeys(empty))
 
 		# request user input response using Persona.Say
 		return raw_input(super(Entity, self).say(request, super(Entity, self).Cconcat([super(Entity, self).Cconcat(choices, selection_divider), input_divider, " "]))) or empty

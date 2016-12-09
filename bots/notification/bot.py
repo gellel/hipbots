@@ -27,7 +27,7 @@ from lib.http import HTTP
 from lib.file import File
 
 
-class Room:
+class Room (Support):
 
 	##########################################################################
 	### extended class of hipchat.Support, sends messages to HipChat Rooms ###
@@ -59,49 +59,55 @@ class Room:
 		### @description: public function of class, creates HTTP data request object structure
 		### @return: @type: <dict>
 
-		# set default colour string for object
-		# @parameter: <colour>, @type: <str>, @default: <str>
-		colour = kwargs.get('colour') if Support.Colour(String.SetStringType(kwargs.get('colour'))) else 'random'
-		# set default message for object
-		# @parameter: <message>, @type: <str>, @default: <str>
+		# set default HipChat notification colour string
+		# @parameter: <kwargs:colour>, @type: <str>, @default: <str>
+		colour = String.SetStringType(kwargs.get('colour'))
+		# set default HipChat notification message contents
+		# @parameter: <kwargs:message>, @type: <str>, @default: <str>
 		message = String.SetStringType(kwargs.get('message'))
-		# set default notification alert for object
-		# @parameter: <notify>, @type: <bool>, @default: <bool>
-		notify = str(bool(kwargs.get('notify', False))).lower()
-		# set default message format for object
-		# @parameter: <format>, @type: <str>, @default: <str>
-		format_type = kwargs.get('format') if Support.Format(kwargs.get('format')) else 'html'
-		
+		# set default HipChat notification alert string
+		# @parameter: <kwargs:notify>, @type: <str>, @default: <str>
+		notify = String.SetStringType(kwargs.get('notify'))
+		# set default HipChat notification data format type
+		# @parameter: <kwargs:format>, @type: <str>, @default: <str>
+		datatype = String.SetStringType(kwargs.get('format'))
+
 		# construct HTTP body for HipChat Messenger API
-		return { 'color': colour, 'message': message, 'notify': notify, 'message_format': format_type }
+		return { 'color': Room.SetColour(colour = colour), 'message': message, 'notify': str(bool(notify)).lower(), 'message_format': Room.SetFormat(datatype = datatype) }
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
 
-		# set default HipChat Messenger room string
-		# @parameter: <room>, @type: <str>, @default: <None>
-		self.room = String.SetStringType(kwargs.get('room', None))
 		# set default HipChat Messenger subdomain string
 		# @parameter: <subdomain>, @type: <str>, @default: <None>
 		self.subdomain = String.SetStringType(kwargs.get('subdomain', None))
-		# set default HipChat API token string
+		# set default HipChat Messenger api version string
+		# @parameter: <version>, @type: <str>, @default: <None>
+		self.version = String.SetStringType(kwargs.get('version', None))
+		# set default HipChat Messenger room id string
+		# @parameter: <room>, @type: <str>, @default: <None>
+		self.room = String.SetStringType(kwargs.get('room', None))
+		# set default HipChat Messenger api endpoint string
+		# @parameter: <room>, @type: <str>, @default: <None>
+		self.endpoint = String.SetStringType(kwargs.get('endpoint', 'notification'))
+		# set default HipChat Messenger api token string
 		# @parameter: <token>, @type: <str>, @default: <None>
 		self.token = String.SetStringType(kwargs.get('token', None))
+		# set default HipChat HTTP method type
+		# @parameter: <method>, @type: <str>, @default: <str>
+		self.method = String.SetStringType(kwargs.get('method', 'POST'))
 		# set default HipChat API headers
 		# @parameter: <headers>, @type: <dict>, @default: <dict>
 		self.headers = kwargs.get('headers', { 'Content-Type': 'application/json' })
 		# set default HipChat API body
 		# @parameter: <content>, @type: <dict>, @default: <dict>
 		self.content = Room.SetRequestBody(**kwargs.get('content', {}))
-		# set default HipChat HTTP method type
-		# @parameter: <method>, @type: <str>, @default: <str>
-		self.method = String.SetStringType(kwargs.get('method', 'POST'))
-
+		
 
 
 
 if __name__ == '__main__':
 
 	# create HipChat messenger bot
-	print Room(**dict(json.loads(File.Open(name = 'secrets', extension = 'json', directory = '../../json/oauth/').read()), **{ 'content': { 'message':'hello world!' }}))
+	print Room(**dict(json.loads(File.Open(name = 'secrets', extension = 'json', directory = '../../json/oauth/').read()), **{ 'content': { 'message':'hello world!' }})).__dict__
 	
