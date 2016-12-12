@@ -23,28 +23,28 @@ class Entity (Persona):
 		# @parameter: <args>, @type: <tuple>, @default: <list>
 		args = filter(None, list(args or [{'string':'a', 'tag': True}, {'string':'b', 'tag': True}, '{{c}}']))
 		# set default request prompt string
-		# @parameter: <kwarg:user_request>, @type: <str/dict>, @default: <str>
+		# @parameter: <kwargs:user_request>, @type: <str/dict>, @default: <str>
 		user_request = kwargs.get('user_request', 'please enter your desired input selection.')
 		# set default confirm input prompt string
-		# @parameter: <kwarg:user_confirm>, @type: <str/dict>, @default: <str>
+		# @parameter: <kwargs:user_confirm>, @type: <str/dict>, @default: <str>
 		user_confirm = kwargs.get('user_confirm', 'is selection {{%s}} the correct choice?')
 		# set default reject input string
-		# @parameter: <kwarg:user_reject>, @type: <str/dict>, @default: <str>
+		# @parameter: <kwargs:user_reject>, @type: <str/dict>, @default: <str>
 		user_reject = kwargs.get('user_reject', 'input {{%s}} is not an accepted selection.')
 		# set default null input string
-		# @parameter: <kwarg:user_null>, @type: <str/dict>, @default: <str>
+		# @parameter: <kwargs:user_null>, @type: <str/dict>, @default: <str>
 		user_null = kwargs.get('user_null', 'empty')
 		# set default user accept string
-		# @parameter: <kwarg:user_accept>, @type: <str/dict>, @default: <dict>
+		# @parameter: <kwargs:user_accept>, @type: <str/dict>, @default: <dict>
 		user_accept = kwargs.get('user_accept', {'string':'yes', 'tag': True})
 		# set default user reject string
-		# @parameter: <kwarg:user_decline>, @type: <str>, @default: <str>
+		# @parameter: <kwargs:user_decline>, @type: <str>, @default: <str>
 		user_decline = kwargs.get('user_decline', 'no')
 		# set default character to separate selection options
-		# @parameter: <kwarg:selection_divider>, @type: <str>, @default: <str>
+		# @parameter: <kwargs:selection_divider>, @type: <str>, @default: <str>
 		selection_divider = kwargs.get('selection_divider', '/')
 		# set default character to separate user input from request string
-		# @parameter: <kwarg:input_divider>, @type: <str>, @default: <str>
+		# @parameter: <kwargs:input_divider>, @type: <str>, @default: <str>
 		input_divider = kwargs.get('input_divider', ':')
 		
 		# manage user responses
@@ -70,10 +70,10 @@ class Entity (Persona):
 		### @return: @type: <bool>
 
 		# set default accept input string
-		# @parameter: <kwarg:user_accept>, @type: <str>, @default: <str>
+		# @parameter: <kwargs:user_accept>, @type: <str>, @default: <str>
 		user_accept = super(Entity, self).RemovePrettySyntax(kwargs.get('user_accept')['string'] if type(kwargs.get('user_accept')) is dict else kwargs.get('user_accept'))
 		# set default decline input string
-		# @parameter: <kwarg:user_accept>, @type: <str>, @default: <str>
+		# @parameter: <kwargs:user_accept>, @type: <str>, @default: <str>
 		user_decline = super(Entity, self).RemovePrettySyntax(kwargs.get('user_decline')['string'] if type(kwargs.get('user_decline')) is dict else kwargs.get('user_decline'))
 
 		# request confirmation input submission from user using String.SetPrettyKeys to set requirements for String.Pretty

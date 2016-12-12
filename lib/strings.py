@@ -96,7 +96,7 @@ class String (object):
 	@staticmethod
 	def GetStyles (*args):
 		### @description: public function of class, gets dictionary containing supported unix string formatting character codes 
-		### @return: @type <dict>
+		### @return: @type: <dict>
 
 		# set default arguments to string type for filtering required styles
 		# @parameter: <args>, @type: <tuple>, @default: <tuple>
@@ -149,7 +149,7 @@ class String (object):
 	@staticmethod
 	def Pretty (string = '', attributes = ['BOLD'], tag = False):
 		### @description: public function of class, creates beautified string
-		### @return: @type <str>
+		### @return: @type: <str>
 
 		# set default string
 		# @parameter: <string>, @type: <str>, @default: <str>

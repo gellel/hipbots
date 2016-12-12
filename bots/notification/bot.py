@@ -34,7 +34,7 @@ class Room (Support):
 	##########################################################################
 
 	@staticmethod
-	def SetBaseEndpoint (**kwargs):
+	def SetRequestEndpoint (**kwargs):
 		### @description: public function of class, creates base HipChat Rooms API URL string
 		### @return: @type: <str>
 
@@ -79,7 +79,7 @@ class Room (Support):
 		### @description: class constructor
 
 		# set default HipChat Messenger subdomain string
-		# @parameter: <subdomain>, @type: <str>, @default: <None>
+		# @parameter: <kwargs:subdomain>, @type: <str>, @default: <None>
 		self.subdomain = String.SetStringType(kwargs.get('subdomain', None))
 		# set default HipChat Messenger api version string
 		# @parameter: <version>, @type: <str>, @default: <None>
