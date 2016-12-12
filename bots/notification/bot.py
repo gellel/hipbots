@@ -43,10 +43,10 @@ class Room (Support):
 		subdomain = String.SetStringType(kwargs.get('subdomain')) or 'SUBDOMAIN'
 		# set default HipChat api version string
 		# @parameter: <kwargs:version>, @type: <str>, @default: <str>
-		version = re.sub(r'\w*', '', String.SetStringType(kwargs.get('version'))) or '2'
+		version = re.sub(r'\D', '', String.SetStringType(kwargs.get('version'))) or '2'
 		# set default HipChat room id string
 		# @parameter: <kwargs:room>, @type: <str>, @default: <str>
-		room = re.sub(r'\w*', '', String.SetStringType(kwargs.get('room'))) or '01010101'
+		room = re.sub(r'\D', '', String.SetStringType(kwargs.get('room'))) or '01010101'
 		# set default HipChat api endpoint for rooms
 		# @parameter: <kwargs:endpoint>, @type: <str>, @default: <str>
 		endpoint = String.SetStringType(kwargs.get('endpoint')) or 'room'
@@ -74,6 +74,18 @@ class Room (Support):
 
 		# construct HTTP body for HipChat Messenger API
 		return { 'color': Room.SetColour(colour = colour), 'message': message, 'notify': str(bool(notify)).lower(), 'message_format': Room.SetFormat(datatype = datatype) }
+
+	def message (self):
+		### @description: protected function of class, disptaches HTTP request to HipChat Messenger
+		### @return: @type: <instance:requests>
+
+		# set base URL string
+		URL = Room.SetRequestEndpoint(subdomain = self.subdomain, version = self.version, room = self.room, endpoint = self.endpoint)
+		# set base request object 
+		data = Room.SetRequestBody(**self.content)
+
+		# set request requirements and dispatch
+		return HTTP(URL = URL, method = self.method, headers = self.headers, query = { 'auth_token': self.token }, data = dict(data, **{ '__json__': True})).HTTP()
 
 	def __init__ (self, **kwargs):
 		### @description: class constructor
@@ -109,5 +121,5 @@ class Room (Support):
 if __name__ == '__main__':
 
 	# create HipChat messenger bot
-	print Room(**dict(json.loads(File.Open(name = 'secrets', extension = 'json', directory = '../../json/oauth/').read()), **{ 'content': { 'message':'hello world!' }})).__dict__
+	print Room(**dict(json.loads(File.Open(name = 'secrets', extension = 'json', directory = '../../json/oauth/').read()), **{ 'content': { 'message':'hello world!' }})).message()
 	
