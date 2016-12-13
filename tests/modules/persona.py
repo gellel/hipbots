@@ -21,6 +21,13 @@ class Persona (object):
 	Uses 'strings' module for easier string formatting.
 	"""
 
+	def ask (self, *args, *kwargs):
+		"""Creates prompt strings prefixed by persona's name.
+		
+		Uses classes 'say' function (protected) to construct prefix for user prompt.
+		"""
+		pass
+
 	def say (self, *args, **kwargs):
 		"""Creates strings prefixed by persona's name.
 
@@ -97,3 +104,4 @@ class Persona (object):
 if __name__ == '__main__':
 		
 	print Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'})
+	
