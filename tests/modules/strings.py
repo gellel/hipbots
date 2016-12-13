@@ -63,7 +63,8 @@ BEAUTIFIED = r'\x1b[^m]*m'
 def Concatenate (*args, **kwargs):
 	"""Sets multiple arguments to be concatenated by supplied character string. 
 
-	User arguments are set to string type during concatenation process. Function can accept a filter argument to manage the contents of the returned concatenated string.
+	User arguments are set to string type during concatenation process. 
+	Function can accept a filter argument to manage the contents of the returned concatenated string.
 	"""
 
 	# @parameter: <*args>, @type: <tuple>
@@ -85,7 +86,9 @@ def Concatenate (*args, **kwargs):
 def AssignStyle (string = 'EXAMPLE', attributes = []):
 	"""Sets string to contain beautification formatting. 
 
-	Style attributes can be supplied as a string, list or tuple. Sequence arguments are expected to contain strings referring to their style reference. Beautification attributes can be nested to produce more complex styles.
+	Style attributes can be supplied as a string, list or tuple. 
+	Sequence arguments are expected to contain strings referring to their style reference. 
+	Beautification attributes can be nested to produce more complex styles.
 	"""
 
 	# @parameter: <string>, @type: <str>
@@ -106,7 +109,9 @@ def AssignStyle (string = 'EXAMPLE', attributes = []):
 def EraseStyle (string = '\033[91mEXAMPLE\033[0m', attributes = []): 
 	"""Removes beautification formatting from string. 
 	
-	Style attributes can be supplied as a string, list or tuple. Sequence arguments are expected to contain strings referring to their style reference. Supplied attributes are not removed from string.
+	Style attributes can be supplied as a string, list or tuple. 
+	Sequence arguments are expected to contain strings referring to their style reference. 
+	Supplied attributes are not removed from string.
 	"""
 
 	# @parameter: <string>, @type: <str>
@@ -131,7 +136,9 @@ def EraseStyle (string = '\033[91mEXAMPLE\033[0m', attributes = []):
 def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 	"""Sets beautification for multiple points in a string.
 	
-	Substrings in string that contain pretty syntax receive beautification. If tag is set to true, supplied string is encased in pretty syntax. Requires string does not contain pretty syntax.
+	Substrings in string that contain pretty syntax receive beautification. 
+	If tag is set to true, supplied string is encased in pretty syntax. 
+	Requires string does not contain pretty syntax.
 	"""
 	
 	# @parameter: <string>, @type: <str>
@@ -167,3 +174,4 @@ if __name__ == '__main__':
 
 	# create beautified string and substract style
 	print EraseStyle(Pretty("{{Hello}}", ['RED', 'BOLD', 'BLINK']), ['RED', 'BOLD'])
+	
