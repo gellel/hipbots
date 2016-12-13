@@ -8,15 +8,15 @@
 VERSION = 0.1
 AUTHOR = 'lindsay.gelle@gmail.com'
 
-###################################
-### python scripts dependencies ###
-###################################
+##################################
+### python script dependencies ###
+##################################
 ### import regexp module
 import re
 
-#################################
-### ANSI base text formatting ###
-#################################
+############################################
+### constants: string formatting options ###
+############################################
 PURPLE = '\033[95m'
 CYAN = '\033[96m'
 DARKCYAN = '\033[36m'
@@ -32,9 +32,6 @@ BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
 END = '\033[0m'
 
-##################################
-### ANSI formatting dictionary ###
-##################################
 STYLES = { 
 	'PURPLE': PURPLE, 
 	'CYAN': CYAN, 
@@ -52,9 +49,9 @@ STYLES = {
 	'END': END
 }
 
-###########################################
-### module regular expression constants ###
-###########################################
+######################################
+### constants: regular expressions ###
+######################################
 FILTER = r'\{\{{0,2}[^\{\{]+\}\}{0,2}'
 SYNTAX = r'{{|}}'
 BEAUTIFIED = r'\x1b[^m]*m'

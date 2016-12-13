@@ -8,9 +8,9 @@
 VERSION = 0.1
 AUTHOR = 'lindsay.gelle@gmail.com'
 
-###################################
-### python scripts dependencies ###
-###################################
+##################################
+### python script dependencies ###
+##################################
 ### import strings module
 import strings
 
@@ -97,4 +97,3 @@ class Persona (object):
 if __name__ == '__main__':
 		
 	print Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'})
-	
