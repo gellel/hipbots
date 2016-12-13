@@ -135,7 +135,7 @@ def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 	
 	Substrings in string that contain pretty syntax receive beautification. 
 	If tag is set to true, supplied string is encased in pretty syntax. 
-	Requires string does not contain pretty syntax.
+	Requires argument string does not contain existing pretty syntax.
 	"""
 	
 	# @parameter: <string>, @type: <str>
