@@ -65,15 +65,15 @@ def Concatenate (*args, **kwargs):
 	"""
 
 	# @parameter: <*args>, @type: <tuple>
-	# @use: arguments required for concatenation
+	# @use: (optional) arguments required for concatenation
 	args = list(args)
 	
 	# @parameter: <**kwargs:filter>, @type: <function>
-	# @use: function for filtering supplied arguments out of list to be concatenated
+	# @use: (optional) function for filtering supplied arguments out of list to be concatenated
 	manage = kwargs.get('filter', None)
 
 	# @parameter: <**kwargs:join>, @type: <str>
-	# @use: character used for concatenating supplied arguments
+	# @use: (optional) character used for concatenating supplied arguments
 	join = str(kwargs.get('join', ''))
 
 	# @return: @type: <str>
@@ -89,11 +89,11 @@ def AssignStyle (string = 'EXAMPLE', attributes = []):
 	"""
 
 	# @parameter: <string>, @type: <str>
-	# @use: string required for ansi formatting
+	# @use: (optional) string requiring beautification
 	string = str(string)	
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
-	# @use: attribute(s) required for beautification
+	# @use: (optional) attribute(s) required for beautification
 	attributes = attributes if type(attributes) in [list, tuple] else [str(attributes)]
 
 	# set attributes as concatenated string (if defined in styles dictionary)
@@ -112,15 +112,15 @@ def EraseStyle (string = '\033[91mEXAMPLE\033[0m', attributes = []):
 	"""
 
 	# @parameter: <string>, @type: <str>
-	# @use: string containing formatting
+	# @use: (optional) string containing beautification
 	string = re.sub(SYNTAX, '', str(string))
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
-	# @use: filters styles dictionary to exclude certain keys
+	# @use: (optional) filters styles dictionary to exclude certain keys
 	attributes = attributes if type(attributes) in [list, tuple] else [str(attributes)]
 	
 	# set beautification to be removed from string
-	encoding = { key: STYLES[key] for key in STYLES if not key in map(str.upper, attributes) }
+	encoding = { key: STYLES[key] for key in STYLES if key not in map(str.upper, attributes) }
 	# set list containing formatting strings
 	formatting = [encoding[key] for key in encoding if encoding[key] in string]
 	# set substituted string, removing required beautification strings
@@ -135,19 +135,19 @@ def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 	
 	Substrings in string that contain pretty syntax receive beautification. 
 	If tag is set to true, supplied string is encased in pretty syntax. 
-	Requires argument string does not contain existing pretty syntax.
+	Requires argument string to not contain existing pretty syntax.
 	"""
 	
 	# @parameter: <string>, @type: <str>
-	# @use: string(s) required for ansi encoding
-	string = str(string) if not type(string) in [list, tuple] else Concatenate(*string)
+	# @use: (optional) string(s) requiring beautification
+	string = str(string) if type(string) not in [list, tuple] else Concatenate(*string)
 
 	# @parameter: <tag>, @type: <bool>
-	# @use: requirement of string to include beautification syntax identifier
+	# @use: (optional) requirement of string to include beautification syntax identifier
 	tag = bool(tag)
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
-	# @use: attribute(s) required for beautification
+	# @use: (optional) attribute(s) required for beautification
 	attributes = attributes if type(attributes) in [list, tuple] else [str(attributes)]
 		
 	# set string to contain pretty syntax if required and string does not contain pretty syntax

@@ -21,12 +21,37 @@ class Persona (object):
 	Uses 'strings' module for easier string formatting.
 	"""
 
-	def ask (self, *args, *kwargs):
-		"""Creates prompt strings prefixed by persona's name.
+	def ask (self, *args, **kwargs):
+		"""Creates prompt string prefixed by persona's name.
 		
-		Uses classes 'say' function (protected) to construct prefix for user prompt.
+		User arguments are set to string type during request process if provided.
+		Provided arguments are used as a selection criteria to simulate persona asking for a specific outcome.
 		"""
-		pass
+
+		# @parameter: <*args>, @type: <tuple>
+		# @use: arguments used to define a preset of options for input to match
+		args = list(args)
+
+		# @parameter: <**kwargs:input_request>, @type: <str/dict>
+		# @use: serves as the primary request string from user prompt
+		input_request = kwargs.get('input_request', 'please enter your desired input selection')
+
+		# @parameter: <**kwargs:input_confirm>, @type: <str/dict>
+		# @use: (optional)
+		input_confirm = kwargs.get('input_confirm', None)
+
+		# @parameter: <**kwargs:input_reject>, @type: <str/dict>
+		# @use: (optional) notifies user that submission is not an accepted if supplied and blocks input submission
+		input_reject = kwargs.get('input_reject', None)
+
+		# @parameter: <**kwargs:input_null>, @type: <str/dict>
+		# @use: expresses empty input submissions
+		input_null = kwargs.get('input_null', 'empty')
+
+		# @parameter: <**kwargs:input_accept>, @type: <str/dict>
+		# @use: acts as input pattern for confirming that input subission was correct
+		input_accept = kwargs.get('input_accept', 'yes')
+
 
 	def say (self, *args, **kwargs):
 		"""Creates strings prefixed by persona's name.
@@ -102,6 +127,6 @@ class Persona (object):
 
 
 if __name__ == '__main__':
-		
-	print Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'})
 	
+	print Persona().ask(dank = 'memes')	
+	#print Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'})
