@@ -27,7 +27,7 @@ class Persona (object):
 		
 		Describes name prefix and assigned attributes
 		"""
-		
+
 		# set persona name description string
 		name = strings.Concatenate('Persona name:', ' ', self.name)
 		# set persona attributes description string
@@ -51,6 +51,7 @@ class Persona (object):
 		# @parameter: <**kwargs:attributes>, @type: <str/list/tuple>
 		# @use: attribute(s) required for beautification
 		self.attributes = kwargs.get('attributes', 'BOLD')
+
 
 
 

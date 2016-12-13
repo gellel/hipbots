@@ -169,7 +169,6 @@ def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 
 
 
-
 if __name__ == '__main__':
 
 	# create beautified string and substract style
