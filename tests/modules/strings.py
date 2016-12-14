@@ -158,6 +158,36 @@ def EraseStyle (string = '\033[91mEXAMPLE\033[0m', attributes = []):
 	return Concatenate(edited, END) if re.compile(BEAUTIFIED).match(edited) else edited
 
 
+def AssignPrettyKeys (arg = {}, attributes = [], tag = False):
+	"""Sets required key word arguments for pretty. 
+
+	Sets strings to beautification key word arguments or filters dictionary to contain required keys only
+	"""
+
+	# @parameter: <arg>, @type: <str/dict>
+	# @use: string argument to be set to dictionary or dictionary to be filtered
+	arg = { 'string': str(arg) } if type(arg) is not dict else arg
+
+	# @parameter: <attributes>, @type: <str/list/tuple>
+	# @use: (optional) attribute(s) required for beautification
+	attributes = attributes if type(attributes) in [list, tuple] else [str(attributes)]
+
+	# @parameter: <tag>, @type: <bool>
+	# @use: (optional) requirement of string to include beautification syntax identifier
+	tag = bool(tag)
+
+	# set default keys for argument dictionary
+	defaults = [{'key': 'string', 'value': ''}, {'key':'attributes', 'value': attributes}, {'key': 'tag','value': tag}]
+
+	# iterate over keys requiring defaults
+	for i in range(0, len(defaults)):
+		# assign default key value pair
+		arg.setdefault(defaults[i]['key'], defaults[i]['value'])
+
+	# @return: @type: <dict>
+	return { key: arg[key] for key in arg if key in ['string', 'attributes', 'tag'] }
+
+
 def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 	"""Sets beautification for multiple points in a string.
 	
@@ -170,14 +200,14 @@ def Pretty (string = 'EXAMPLE', attributes = ['BOLD'], tag = False):
 	# @use: (optional) string(s) requiring beautification
 	string = str(string) if type(string) not in [list, tuple] else Concatenate(*string)
 
-	# @parameter: <tag>, @type: <bool>
-	# @use: (optional) requirement of string to include beautification syntax identifier
-	tag = bool(tag)
-
 	# @parameter: <attributes>, @type: <str/list/tuple>
 	# @use: (optional) attribute(s) required for beautification
 	attributes = attributes if type(attributes) in [list, tuple] else [str(attributes)]
 		
+	# @parameter: <tag>, @type: <bool>
+	# @use: (optional) requirement of string to include beautification syntax identifier
+	tag = bool(tag)
+
 	# set string to contain pretty syntax if required and string does not contain pretty syntax
 	string = Concatenate('{{', string, '}}') if tag and not re.compile(SYNTAX).search(string) else string
 	# find strings containing pretty syntax

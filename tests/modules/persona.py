@@ -45,26 +45,31 @@ class Persona (object):
 		input_failure = kwargs.get('input_failure', None)
 
 		# @parameter: <**kwargs:input_null>, @type: <str/dict>
-		# @use: expresses empty input submissions from prompt function
+		# @use: (optional) expresses empty input submissions from prompt function
 		input_null = kwargs.get('input_null', 'empty')
 
 		# @parameter: <**kwargs:input_accept>, @type: <str/dict>
-		# @use: acts as input pattern for flagging that input submission was correct
+		# @use: (optional) acts as input pattern for flagging that input submission was correct
 		input_accept = kwargs.get('input_accept', 'yes')
 
 		# @parameter: <**kwargs:input_reject>, @type: <str/dict>
-		# @use: acts as input pattern for flagging that input submission was incorrect
+		# @use: (optional) acts as input pattern for flagging that input submission was incorrect
 		input_reject = kwargs.get('input_reject', 'no')
 
+		# @parameter: <**kwargs:argument_divider>, @type: <str/dict>
+		# @use: (optional) separaters user arguments by character string to assist in readability
+		argument_divider = kwargs.get('argument_divider', '/')
+
+		# @return: @type: <str>
+		return self.__request(arguments = args, input_request = input_request, input_success = input_success, input_failure = input_failure, 
+			input_null = input_null, input_accept = input_accept, input_reject = input_reject, argument_divider = argument_divider)
 
 
 	def say (self, *args, **kwargs):
 		"""Creates strings prefixed by persona's name.
 
-		Uses classes '__name' function (private) to construct prefix for response output. 
-		Assigns this prefix as a concatenation argument as well as supplied arguments.
-		Intended to represent a reply on the behalf of this 'persona'.
-		Function arguments can be formatted as beautified strings to create more interesting responses.
+		Adds persona's name as a concatenation argument as well as supplied arguments.
+		Dictionaries arguments are formatted as beautified strings to create more interesting responses.
 		"""
 
 		# @parameter: <*args>, @type: <tuple>
@@ -80,10 +85,23 @@ class Persona (object):
 		join = str(kwargs.get('join', ' '))
 
 		# set dictionary arguments to be beautified
-		args = [strings.Pretty(**{ key: arg[key] for key in arg if key in ['string', 'attribute', 'tag'] }) if type(arg) is dict else arg for arg in args]
+		args = [strings.Pretty(**strings.AssignPrettyKeys(arg)) if type(arg) is dict else arg for arg in args]
 
 		# @return: @type: <str>
 		return strings.Concatenate(*[self.__name()] + args, filter = manage, join = join)
+
+
+	def __request (self, **kwargs):
+		"""
+
+		"""
+		return kwargs
+
+
+	def __prompt (self, input_choices = [], input_request = 'enter text', argument_divider = '/'):
+		"""
+		"""
+		pass
 
 
 	def __name (self):
@@ -133,5 +151,5 @@ class Persona (object):
 
 if __name__ == '__main__':
 	
-	print Persona().ask(dank = 'memes')	
-	#print Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'})
+	#strings.Log(Persona().ask(dank = 'memes'))	
+	strings.Log(Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'}))
