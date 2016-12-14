@@ -57,6 +57,34 @@ SYNTAX = r'{{|}}'
 BEAUTIFIED = r'\x1b[^m]*m'
 
 
+def Log (*args, **kwargs):
+	"""Sets multiple arguments to be printed.
+	
+	User arguments can be set to structure type during concatenation process if required.
+	Function can accept a filter argument to manage the contents of the print response.
+	Supports the use of concatenation string character.
+	"""
+
+	# @parameter: <*args>, @type: <tuple>
+	# @use: (optional) arguments required for printing
+	args = list(args)
+
+	# @parameter: <**kwargs:as_type>, @type: <str>
+	# @use: (optional) sets argument to be printed as required format
+	as_type = kwargs.get('as_type', None)
+
+	# @parameter: <**kwargs:filter>, @type: <function>
+	# @use: (optional) function for filtering supplied arguments out of list to be concatenated
+	manage = kwargs.get('filter', None)
+
+	# @parameter: <**kwargs:join>, @type: <str>
+	# @use: (optional) character used for concatenating supplied arguments
+	join = str(kwargs.get('join', ''))
+
+	# @return: @type: <None>
+	print Concatenate(*[as_type(arg) if hasattr(as_type, '__call__') else arg for arg in args], filter = manage, join = join)
+
+
 def Concatenate (*args, **kwargs):
 	"""Sets multiple arguments to be concatenated by supplied character string. 
 
