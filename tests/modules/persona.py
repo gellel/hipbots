@@ -40,9 +40,9 @@ class Persona (object):
 		# @use: (optional) acts as an expression of user input from prompt function and input handler
 		input_success = kwargs.get('input_success', None)
 
-		# @parameter: <**kwargs:input_fail>, @type: <str/dict>
+		# @parameter: <**kwargs:input_failure>, @type: <str/dict>
 		# @use: (optional) acts as an expression of incorrect input from prompt function and input handler
-		input_fail = kwargs.get('input_fail', None)
+		input_failure = kwargs.get('input_failure', None)
 
 		# @parameter: <**kwargs:input_null>, @type: <str/dict>
 		# @use: expresses empty input submissions from prompt function
