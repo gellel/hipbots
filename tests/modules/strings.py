@@ -75,14 +75,14 @@ def Log (*args, **kwargs):
 
 	# @parameter: <**kwargs:filter>, @type: <function>
 	# @use: (optional) function for filtering supplied arguments out of list to be concatenated
-	manage = kwargs.get('filter', None)
+	argument_filter = kwargs.get('filter', None)
 
 	# @parameter: <**kwargs:join>, @type: <str>
 	# @use: (optional) character used for concatenating supplied arguments
-	join = str(kwargs.get('join', ''))
+	string_join = str(kwargs.get('join', ''))
 
 	# @return: @type: <None>
-	print Concatenate(*[as_type(arg) if hasattr(as_type, '__call__') else arg for arg in args], filter = manage, join = join)
+	print Concatenate(*[as_type(arg) if hasattr(as_type, '__call__') else arg for arg in args], filter = argument_filter, join = string_join)
 
 
 def Concatenate (*args, **kwargs):
@@ -98,14 +98,14 @@ def Concatenate (*args, **kwargs):
 	
 	# @parameter: <**kwargs:filter>, @type: <function>
 	# @use: (optional) function for filtering supplied arguments out of list to be concatenated
-	manage = kwargs.get('filter', None)
+	argument_filter = kwargs.get('filter', None)
 
 	# @parameter: <**kwargs:join>, @type: <str>
 	# @use: (optional) character used for concatenating supplied arguments
-	join = str(kwargs.get('join', ''))
+	string_join = str(kwargs.get('join', ''))
 
 	# @return: @type: <str>
-	return str(join).join([str(arg) for arg in filter(manage if hasattr(manage, '__call__') else None, args)])
+	return string_join.join([str(arg) for arg in filter(argument_filter if hasattr(argument_filter, '__call__') else None, args)])
 
 
 def AssignStyle (string = 'EXAMPLE', attributes = []):

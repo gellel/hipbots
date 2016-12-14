@@ -77,18 +77,18 @@ class Persona (object):
 		args = list(args)
 
 		# @parameter: <**kwargs:filter>, @type: <function>
-		# @use: function for filtering supplied arguments out of list to be concatenated
-		manage = kwargs.get('filter', None)
+		# @use: (optional) function for filtering supplied arguments out of list to be concatenated
+		argument_filter = kwargs.get('filter', None)
 
 		# @parameter: <**kwargs:join>, @type: <str>
-		# @use: character used for concatenating supplied arguments
-		join = str(kwargs.get('join', ' '))
+		# @use: (optional) character used for concatenating supplied arguments
+		string_join = str(kwargs.get('join', ''))
 
 		# set dictionary arguments to be beautified
 		args = [strings.Pretty(**strings.AssignPrettyKeys(arg)) if type(arg) is dict else arg for arg in args]
 
 		# @return: @type: <str>
-		return strings.Concatenate(*[self.__name()] + args, filter = manage, join = join)
+		return strings.Concatenate(self.__name(), ' ', strings.Concatenate(*args), filter = manage, join = join)
 
 
 	def __request (self, **kwargs):
@@ -104,7 +104,7 @@ class Persona (object):
 		Concatenates input choices by argument divider string. Empty input choices lists are not included in prompt.
 		Prompts are prefixed by persona's name with input request trailing the constructed name.
 		"""
-		
+
 		# @parameter: <input_choices>, @type: <list>
 		# @use: sets prompt to expect input string to match item in list
 		input_choices = filter(None, input_choices)
@@ -117,13 +117,13 @@ class Persona (object):
 		# @use: separates user input choices
 		argument_divider = strings.Pretty(**strings.AssignPrettyKeys(argument_divider))
 
-		# set input prompt request string
-		request_string = strings.Concatenate(self.__name(), ' ', input_request)
-		# set request options string
-		request_options = argument_divider.join([strings.Pretty(**strings.AssignPrettyKeys(choice)) for choice in input_choices])
+		# set input prompt request string including persona name
+		string_request = strings.Concatenate(self.__name(), ' ', input_request)
+		# set request options string separated by argument dividing character string 
+		string_options = argument_divider.join([strings.Pretty(**strings.AssignPrettyKeys(choice)) for choice in input_choices])
 
 		# @return: @type: <str>
-		return raw_input(strings.Concatenate(request_string, ' ', request_options, ' ') if bool(request_options) else strings.Concatenate(request_string, ' '))
+		return raw_input(strings.Concatenate(string_request, ' ', string_options, ' ') if bool(string_options) else strings.Concatenate(string_request, ' '))
 
 
 	def __name (self):
