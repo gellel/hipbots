@@ -64,11 +64,11 @@ def Concatenate (*args, **kwargs):
 	# named function arguments #
 
 	# @parameter: <kwargs:string_join>, @type: <str>
-	# Used to concatenate each of the supplied function arguments.
+	# String to concatenate each of the supplied function arguments.
 	string_join = kwargs.get('string_join', '')
 
 	# @parameter: <kwargs:type_filter>, @type: <function>
-	# Used to filter out or in (based on definition) supplied arguments.
+	# Function to filter out or in (based on definition) supplied arguments.
 	type_filter = kwargs.get('type_filter', None)
 
 	# @return: @type: <str>
@@ -85,11 +85,11 @@ def ApplyStyle (string = 'HELLO', attributes = []):
 	# named function arguments #
 
 	# @parameter: <string>, @type: <str>
-	# Used as anchor for formatting attribute assignment.
+	# String to receive formatting attribute assignment.
 	string = str(string)
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
-	# Used for selecting escaped formatting strings from styles dictionary.
+	# List used for selecting escaped strings from styles dictionary.
 	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else map(str.upper, re.compile(SPLIT).split(attributes))
 
 	# @return: @type: <str>
@@ -107,11 +107,11 @@ def EraseStyle (string = '\033[91mHELLO\033[0m', attributes = []):
 	# named function arguments #
 
 	# @parameter: <string>, @type: <str>
-	# Used as an anchor for removing assigned formatting attributes.
+	# String containing formatting.
 	string = re.sub(SYNTAX, '', str(string))
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
-	# Used for selecting escaped formatting strings from styles dictionary.
+	# List used for selecting escaped strings from styles dictionary.
 	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else map(str.upper, re.compile(SPLIT).split(attributes))
 
 	# set string substitutions for found styles
@@ -130,7 +130,7 @@ def Pretty (string = 'HELLO', attributes = [], tag = False):
 	"""
 	
 	# @parameter: <string>, @type: <str>
-	# Used as anchor for formatting attribute assignment.
+	# String to receive formatting attribute assignment.
 	string = str(string) if type(string) not in [list, tuple] else Concatenate(*string)
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
@@ -146,15 +146,29 @@ def Pretty (string = 'HELLO', attributes = [], tag = False):
 	# iterate over substrings
 	for i in range(0, len(matches)):
 		# substitute identifiers with formatted string using defined attributes
-		string = re.sub(matches[i], AssignStyle(re.sub(SYNTAX, '', matches[i]), attributes), string)
+		string = re.sub(matches[i], ApplyStyle(re.sub(SYNTAX, '', matches[i]), attributes), string)
 	
 	# @return: @type: <str>
 	return re.sub(SYNTAX, '', string)
+
+
+def Ugly (string = '\033[91mHELLO\033[0m'):
+	"""Sets substrings in string argument containing formatting to be substituted. 
+	
+	Escapes style strings such as '\033[95m' are substituted with empty strings.
+	"""
+
+	# @parameter: <string>, @type: <str>
+	# String containing formatting to be edited.
+	string = str(string) if type(string) not in [list, tuple] else Concatenate(*string)
+ 
+	# @return: @type: <str>
+	return re.sub(r'|'.join(map(re.escape, [STYLES[key] for key in STYLES])), '', string)
 
 
 
 
 if __name__ == '__main__':
 
-	print(ApplyStyle('hello', 'red|blink.bold')), print(repr(EraseStyle(ApplyStyle('world', ['BLUE']), 'BLUE')))
+	print(Pretty('{{Hello}} world!', ['BOLD', 'RED'])), print(Ugly(Pretty('{{Hello}} world!', 'BLUE/UNDERLINE'))) 
 	
