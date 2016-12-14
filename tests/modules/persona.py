@@ -95,13 +95,35 @@ class Persona (object):
 		"""
 
 		"""
-		return kwargs
+		return self.__prompt(kwargs.get('arguments'), kwargs.get('input_request'), kwargs.get('argument_divider'))
 
 
-	def __prompt (self, input_choices = [], input_request = 'enter text', argument_divider = '/'):
+	def __prompt (self, input_choices = [], input_request = 'please input text', argument_divider = '/'):
+		"""Creates raw input request prefixed by persona's name.
+		
+		Concatenates input choices by argument divider string. Empty input choices lists are not included in prompt.
+		Prompts are prefixed by persona's name with input request trailing the constructed name.
 		"""
-		"""
-		pass
+		
+		# @parameter: <input_choices>, @type: <list>
+		# @use: sets prompt to expect input string to match item in list
+		input_choices = filter(None, input_choices)
+
+		# @parameter: <input_request>, @type: <str/dict>
+		# @use: acts as string to inform user what input is expected or required
+		input_request = strings.Pretty(**strings.AssignPrettyKeys(input_request))
+
+		# @parameter: <argument_divider>, @type: <str/dict>
+		# @use: separates user input choices
+		argument_divider = strings.Pretty(**strings.AssignPrettyKeys(argument_divider))
+
+		# set input prompt request string
+		request_string = strings.Concatenate(self.__name(), ' ', input_request)
+		# set request options string
+		request_options = argument_divider.join([strings.Pretty(**strings.AssignPrettyKeys(choice)) for choice in input_choices])
+
+		# @return: @type: <str>
+		return raw_input(strings.Concatenate(request_string, ' ', request_options, ' ') if bool(request_options) else strings.Concatenate(request_string, ' '))
 
 
 	def __name (self):
@@ -151,5 +173,6 @@ class Persona (object):
 
 if __name__ == '__main__':
 	
-	#strings.Log(Persona().ask(dank = 'memes'))	
-	strings.Log(Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'}))
+	strings.Log(Persona().ask('a', 'b'))	
+	#strings.Log(Persona(name = '[terminal]:', attributes = ['RED', 'BOLD']).say('hello!', {'string':'all system go!', 'tag': 1, 'attributes': 'BOLD'}))
+	
