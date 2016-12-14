@@ -50,6 +50,7 @@ STYLES = {
 FILTER = r'\{\{{0,2}[^\{\{]+\}\}{0,2}'
 SYNTAX = r'{{|}}'
 BEAUTIFIED = r'\x1b[^m]*m'
+SPLIT = r'[\.\,\/\|]'
 
 
 
@@ -78,7 +79,7 @@ def ApplyStyle (string = 'HELLO', attributes = []):
 	"""Sets string argument to contain colour, weight or style formatting. 
 	
 	Formatting styles can be supplied as a string, list or tuple.
-	Sequence arguments are expected to contain strings referring to their formatting reference. 
+	Strings or sequence arguments as attributes expected to match keys in style dictionary. 
 	"""
 
 	# named function arguments #
@@ -89,7 +90,7 @@ def ApplyStyle (string = 'HELLO', attributes = []):
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
 	# Used for selecting escaped formatting strings from styles dictionary.
-	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else [str(attributes).upper()]
+	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else map(str.upper, re.compile(SPLIT).split(attributes))
 
 	# @return: @type: <str>
 	return Concatenate(''.join([STYLES[attr] for attr in attributes if attr in STYLES]), string, END) 
@@ -111,19 +112,49 @@ def EraseStyle (string = '\033[91mHELLO\033[0m', attributes = []):
 
 	# @parameter: <attributes>, @type: <str/list/tuple>
 	# Used for selecting escaped formatting strings from styles dictionary.
-	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else [str(attributes).upper()]
+	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else map(str.upper, re.compile(SPLIT).split(attributes))
 
 	# set string substitutions for found styles
 	string = re.sub(r'|'.join(map(re.escape, [STYLES[key] for key in filter(None, attributes)])), '', string)
 
 	# @return: @type: <str>
-	return Concatenate(string, END) if re.compile(BEAUTIFIED).match(string) and END not in string else re.sub(re.escape(END), '', string)
+	return Concatenate(string, END) if re.compile(BEAUTIFIED).match(string) and END not in string else string.replace(END, '')
 
+
+def Pretty (string = 'HELLO', attributes = [], tag = False):
+	"""Sets substrings in string argument to be replaced with formatting. 
+	
+	Formatting styles can be supplied as a string, list or tuple.
+	Substrings encased in '{{}}' are formatted to contain colour, weight or style formatting.
+	Entire string can receive formatting if tag is set to true and no formatting identifiers present within string.
+	"""
+	
+	# @parameter: <string>, @type: <str>
+	# Used as anchor for formatting attribute assignment.
+	string = str(string) if type(string) not in [list, tuple] else Concatenate(*string)
+
+	# @parameter: <attributes>, @type: <str/list/tuple>
+	# Used for selecting escaped formatting strings from styles dictionary.
+	attributes = map(str.upper, attributes) if type(attributes) in [list, tuple] else map(str.upper, re.compile(SPLIT).split(attributes))
+
+	# set formatting identifier if required
+	string = Concatenate('{{', string, '}}') if tag and not re.compile(SYNTAX).search(string) else string
+
+	# set list containing substrings which require formatting
+	matches = re.findall(FILTER, string, re.DOTALL)
+
+	# iterate over substrings
+	for i in range(0, len(matches)):
+		# substitute identifiers with formatted string using defined attributes
+		string = re.sub(matches[i], AssignStyle(re.sub(SYNTAX, '', matches[i]), attributes), string)
+	
+	# @return: @type: <str>
+	return re.sub(SYNTAX, '', string)
 
 
 
 
 if __name__ == '__main__':
 
-	print(repr(EraseStyle(ApplyStyle('hello', ['RED', 'BLINK']), ['BLINK','RED'])))
+	print(ApplyStyle('hello', 'red|blink.bold')), print(repr(EraseStyle(ApplyStyle('world', ['BLUE']), 'BLUE')))
 	
