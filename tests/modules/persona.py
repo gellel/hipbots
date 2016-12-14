@@ -33,24 +33,29 @@ class Persona (object):
 		args = list(args)
 
 		# @parameter: <**kwargs:input_request>, @type: <str/dict>
-		# @use: serves as the primary request string from user prompt
+		# @use: serves as the primary request string for user prompt
 		input_request = kwargs.get('input_request', 'please enter your desired input selection')
 
-		# @parameter: <**kwargs:input_confirm>, @type: <str/dict>
-		# @use: (optional)
-		input_confirm = kwargs.get('input_confirm', None)
+		# @parameter: <**kwargs:input_success>, @type: <str/dict>
+		# @use: (optional) acts as an expression of user input from prompt function and input handler
+		input_success = kwargs.get('input_success', None)
 
-		# @parameter: <**kwargs:input_reject>, @type: <str/dict>
-		# @use: (optional) notifies user that submission is not an accepted if supplied and blocks input submission
-		input_reject = kwargs.get('input_reject', None)
+		# @parameter: <**kwargs:input_fail>, @type: <str/dict>
+		# @use: (optional) acts as an expression of incorrect input from prompt function and input handler
+		input_fail = kwargs.get('input_fail', None)
 
 		# @parameter: <**kwargs:input_null>, @type: <str/dict>
-		# @use: expresses empty input submissions
+		# @use: expresses empty input submissions from prompt function
 		input_null = kwargs.get('input_null', 'empty')
 
 		# @parameter: <**kwargs:input_accept>, @type: <str/dict>
-		# @use: acts as input pattern for confirming that input subission was correct
+		# @use: acts as input pattern for flagging that input submission was correct
 		input_accept = kwargs.get('input_accept', 'yes')
+
+		# @parameter: <**kwargs:input_reject>, @type: <str/dict>
+		# @use: acts as input pattern for flagging that input submission was incorrect
+		input_reject = kwargs.get('input_reject', 'no')
+
 
 
 	def say (self, *args, **kwargs):
