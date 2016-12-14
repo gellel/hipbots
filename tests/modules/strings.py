@@ -69,7 +69,7 @@ def Log (*args, **kwargs):
 	# @use: (optional) arguments required for printing
 	args = list(args)
 
-	# @parameter: <**kwargs:as_type>, @type: <str>
+	# @parameter: <**kwargs:as_type>, @type: <function/structure>
 	# @use: (optional) sets argument to be printed as required format
 	as_type = kwargs.get('as_type', None)
 
